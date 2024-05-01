@@ -1,4 +1,4 @@
-package org.jfm.usecase.pedido;
+package org.jfm.domain.ports;
 
 import org.jfm.domain.entities.Pedido;
 import java.util.List;
@@ -11,6 +11,3 @@ public interface PedidoRepository {
     public Pedido Editar(Pedido pedido);
     public void Remover(int id);
 };
-
-
-github.com/programadriano/ts-hexagon-architecture/tree/main/src

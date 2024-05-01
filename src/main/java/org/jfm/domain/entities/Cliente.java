@@ -1,20 +1,8 @@
 package org.jfm.domain.entities;
 
-import org.hibernate.annotations.NamedQueries;
-import org.hibernate.annotations.NamedQuery;
-import jakarta.persistence.Entity;
 import java.time.Instant;
 
-@Entity
-@NamedQueries({
-    @NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM Cliente c"),
-    @NamedQuery(name = "Cliente.findById", query = "SELECT c FROM Cliente c WHERE c.id = :id"),
-    @NamedQuery(name = "Cliente.findByNome", query = "SELECT c FROM Cliente c WHERE c.nome = :nome"),
-    @NamedQuery(name = "Cliente.findByCpf", query = "SELECT c FROM Cliente c WHERE c.cpf = :cpf"),
-    @NamedQuery(name = "Cliente.findByEmail", query = "SELECT c FROM Cliente c WHERE c.email = :email"),
-    @NamedQuery(name = "Cliente.findAtivos", query = "SELECT c FROM Cliente c WHERE c.ativo = true"),
-    @NamedQuery(name = "Cliente.findInativos", query = "SELECT c FROM Cliente c WHERE c.ativo = false")
-})
+
 public class Cliente {
   private int id;
   private String nome;
@@ -24,9 +12,7 @@ public class Cliente {
   private Instant dataAtualizacao;
   private boolean ativo;
 
-  public Cliente() {
-    super();
-  }
+  public Cliente() {}; // TODO: constructor vazio?
 
   public Cliente(int id, String nome, String cpf, String email, Instant dataCriacao, Instant dataAtualizacao,
       boolean ativo) {

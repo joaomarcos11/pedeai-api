@@ -1,4 +1,4 @@
-package org.jfm.usecase.ingrediente;
+package org.jfm.domain.ports;
 
 import org.jfm.domain.entities.Ingrediente;
 import java.util.List;
