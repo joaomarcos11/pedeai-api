@@ -1,3 +1,10 @@
+# Rascunho Filipe
+
+`docker run --name pedeai-postgres -p 5432:5432 -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=pedeai -d postgres`
+
+`docker run -p 8023:80 -e 'PGADMIN_DEFAULT_EMAIL=admin@admin.com' -e 'PGADMIN_DEFAULT_PASSWORD=password' -d dpage/pgadmin4`
+
+
 # pedeai-api
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.

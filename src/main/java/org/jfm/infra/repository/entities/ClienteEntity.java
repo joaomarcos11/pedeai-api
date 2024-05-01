@@ -16,7 +16,7 @@ import jakarta.persistence.Table;
     @NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM ClienteEntity c"),
     @NamedQuery(name = "Cliente.findById", query = "SELECT c FROM ClienteEntity c WHERE c.id = :id"),
     @NamedQuery(name = "Cliente.findByCpf", query = "SELECT c FROM ClienteEntity c WHERE c.cpf = :cpf"),
-    @NamedQuery(name = "Cliente.update", query = "UPDATE ClienteEntity c SET c.nome = :nome, c.cpf = :cpf, c.email = :email, c.dataAtualizacao = :dataAtualizacao) WHERE c.id = :id"),
+    @NamedQuery(name = "Cliente.update", query = "UPDATE ClienteEntity c SET c.nome = :nome, c.cpf = :cpf, c.email = :email, c.dataAtualizacao = :dataAtualizacao WHERE c.id = :id"),
     @NamedQuery(name = "Cliente.delete", query = "DELETE FROM ClienteEntity c WHERE c.id = :id"),
 })
 public class ClienteEntity {

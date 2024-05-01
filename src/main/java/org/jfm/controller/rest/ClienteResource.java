@@ -35,24 +35,22 @@ public class ClienteResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response listar() {
-        List<Cliente> clientes = clienteService.listar();
-        return Response.status(Response.Status.OK).entity(clientes).build();
-    };
+    public Response buscar(@QueryParam("cpf") String cpf) {
+        if (cpf == null) {
+            List<Cliente> clientes = clienteService.listar();
+            return Response.status(Response.Status.OK).entity(clientes).build();
+        }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response buscarPorId(@PathParam("id") int id) {
-        Cliente cliente = clienteService.buscarPorId(id);
+        Cliente cliente = clienteService.buscarPorCpf(cpf);
         return Response.status(Response.Status.OK).entity(cliente).build();
     };
 
     @GET
+    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response buscarPorCpf(@QueryParam("cpf") String cpf) {
-        Cliente cliente = clienteService.buscarPorCpf(cpf);
+    public Response buscarPorId(@PathParam("id") int id) {
+        Cliente cliente = clienteService.buscarPorId(id);
         return Response.status(Response.Status.OK).entity(cliente).build();
     };
 

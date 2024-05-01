@@ -6,7 +6,10 @@ import org.jfm.domain.entities.Cliente;
 import org.jfm.domain.ports.ClienteRepository;
 
 public class ClienteService {
+
     ClienteRepository clienteRepository;
+
+    public ClienteService(){};
 
     public Cliente criar(Cliente cliente) {
         // TODO: onde fica a gestão da criação do ID? aqui, automatica pelo banco de dados? definir...

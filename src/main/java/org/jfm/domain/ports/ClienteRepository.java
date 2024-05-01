@@ -1,8 +1,12 @@
 package org.jfm.domain.ports;
 
 import org.jfm.domain.entities.Cliente;
+
+import jakarta.enterprise.context.ApplicationScoped;
+
 import java.util.List;
 
+@ApplicationScoped
 public interface ClienteRepository {
     public Cliente criar(Cliente cliente);
     public List<Cliente> listar();

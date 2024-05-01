@@ -12,6 +12,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
 public class ClienteDtoRepository implements ClienteRepository {
@@ -22,6 +23,7 @@ public class ClienteDtoRepository implements ClienteRepository {
     ClienteMapper clienteMapper;
     
     @Override
+    @Transactional
     public Cliente criar(Cliente cliente) {
         TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.create", ClienteEntity.class);
         query.setParameter("id", cliente.getId());
@@ -36,12 +38,14 @@ public class ClienteDtoRepository implements ClienteRepository {
     }
 
     @Override
+    @Transactional
     public List<Cliente> listar() {
         return entityManager.createNamedQuery("Cliente.findAll", ClienteEntity.class)
         .getResultStream().map(p -> clienteMapper.toDomain(p)).collect(Collectors.toList());
     }
     
     @Override
+    @Transactional
     public Cliente buscarPorId(int id) {
         TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.findById", ClienteEntity.class);
         query.setParameter("id", id);
@@ -50,6 +54,7 @@ public class ClienteDtoRepository implements ClienteRepository {
     }
 
     @Override
+    @Transactional
     public Cliente buscarPorCpf(String cpf) {
         TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.findByCpf", ClienteEntity.class);
         query.setParameter("cpf", cpf);
@@ -58,6 +63,7 @@ public class ClienteDtoRepository implements ClienteRepository {
     }
 
     @Override
+    @Transactional
     public void editar(Cliente cliente) {
         TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.update", ClienteEntity.class);
         query.setParameter("id", cliente.getId());
@@ -72,6 +78,7 @@ public class ClienteDtoRepository implements ClienteRepository {
     }
 
     @Override
+    @Transactional
     public void remover(int id) {
         TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.delete", ClienteEntity.class);
         query.setParameter("id", id);

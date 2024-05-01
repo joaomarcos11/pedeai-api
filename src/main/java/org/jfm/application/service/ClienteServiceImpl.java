@@ -7,10 +7,12 @@ import org.jfm.domain.entities.Cliente;
 import org.jfm.domain.services.ClienteService;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped // TODO: é ApplicationScoped mesmo?
-public class ClienteServiceImpl implements ClientePort{
+public class ClienteServiceImpl implements ClientePort {
 
+    @Inject
     ClienteService clienteService;
 
     @Override
@@ -35,14 +37,14 @@ public class ClienteServiceImpl implements ClientePort{
 
     @Override
     public void editar(Cliente cliente) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'editar'");
+        clienteService.editar(cliente);
+        return;
     }
 
     @Override
     public void remover(int id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'remover'");
+        clienteService.remover(id);
+        return;
     }
     
 }
