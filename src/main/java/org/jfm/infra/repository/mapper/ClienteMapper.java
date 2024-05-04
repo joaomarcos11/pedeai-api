@@ -3,6 +3,11 @@ package org.jfm.infra.repository.mapper;
 import org.jfm.domain.entities.Cliente;
 import org.jfm.infra.repository.entities.ClienteEntity;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
+// TODO: utilizar mapstruct no lugar de mapper de modo manual
+
+@ApplicationScoped
 public class ClienteMapper {
     
     public Cliente toDomain(ClienteEntity cliente) {

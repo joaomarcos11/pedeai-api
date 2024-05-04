@@ -2,8 +2,8 @@ package org.jfm.controller.rest;
 
 import java.util.List;
 
-import org.jfm.application.service.ClienteServiceImpl;
 import org.jfm.domain.entities.Cliente;
+import org.jfm.domain.services.ClienteService;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -22,14 +22,14 @@ import jakarta.ws.rs.core.Response;
 public class ClienteResource {
 
     @Inject
-    ClienteServiceImpl clienteService;
+    ClienteService clienteService;
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response criar(Cliente cliente) {
-        Cliente clienteCriado = clienteService.criar(cliente);
-        return Response.status(Response.Status.CREATED).entity(clienteCriado).build();
+        int clienteId = clienteService.criar(cliente);
+        return Response.status(Response.Status.CREATED).entity(clienteId).build();
     };
 
     @GET
@@ -62,6 +62,7 @@ public class ClienteResource {
     };
 
     @DELETE
+    @Path("/{id}")
     public Response remover(@PathParam("id") int id) {
         clienteService.remover(id);
         return Response.status(Response.Status.OK).build();

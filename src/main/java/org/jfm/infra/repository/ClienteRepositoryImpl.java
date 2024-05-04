@@ -15,26 +15,18 @@ import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
 @ApplicationScoped
-public class ClienteDtoRepository implements ClienteRepository {
+public class ClienteRepositoryImpl implements ClienteRepository {
     
     @Inject
     EntityManager entityManager;
     
+    @Inject
     ClienteMapper clienteMapper;
     
     @Override
     @Transactional
-    public Cliente criar(Cliente cliente) {
-        TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.create", ClienteEntity.class);
-        query.setParameter("id", cliente.getId());
-        query.setParameter("nome", cliente.getNome());
-        query.setParameter("cpf", cliente.getCpf());
-        query.setParameter("email", cliente.getEmail());
-        query.setParameter("dataCriacao", cliente.getDataCriacao());
-        query.setParameter("dataAtualizacao", cliente.getDataAtualizacao());
-        query.setParameter("ativo", cliente.getAtivo());
-        
-        return clienteMapper.toDomain(query.getSingleResult());
+    public void criar(Cliente cliente) {
+        entityManager.persist(clienteMapper.toDto(cliente));
     }
 
     @Override
@@ -73,17 +65,16 @@ public class ClienteDtoRepository implements ClienteRepository {
         query.setParameter("dataAtualizacao", cliente.getDataAtualizacao());
         query.setParameter("ativo", cliente.getAtivo());
 
+        // FIXME: provavelmente a query é diferente
+
         query.executeUpdate(); // TODO: ver isso aqui se é outro tipo de chamado ou conferir se foi executado;
         return;
     }
 
     @Override
     @Transactional
-    public void remover(int id) {
-        TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.delete", ClienteEntity.class);
-        query.setParameter("id", id);
-        
-        query.executeUpdate();
+    public void remover(Cliente cliente) {
+        entityManager.remove(clienteMapper.toDto(cliente)); // FIXME: dando erro ao remover
         return;
     }
     

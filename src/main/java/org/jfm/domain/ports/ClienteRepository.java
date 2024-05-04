@@ -8,10 +8,10 @@ import java.util.List;
 
 @ApplicationScoped
 public interface ClienteRepository {
-    public Cliente criar(Cliente cliente);
+    public void criar(Cliente cliente);
     public List<Cliente> listar();
     public Cliente buscarPorId(int id);
     public Cliente buscarPorCpf(String cpf);
     public void editar(Cliente cliente);
-    public void remover(int id);
+    public void remover(Cliente cliente);
 };
