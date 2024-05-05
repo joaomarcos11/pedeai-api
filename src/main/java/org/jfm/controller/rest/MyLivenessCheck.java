@@ -1,4 +1,4 @@
-package org.jfm;
+package org.jfm.controller.rest;
 
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
