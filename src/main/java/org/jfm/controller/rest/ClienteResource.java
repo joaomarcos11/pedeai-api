@@ -2,6 +2,8 @@ package org.jfm.controller.rest;
 
 import java.util.List;
 
+import org.jfm.controller.rest.dto.ClienteCreateUpdate;
+import org.jfm.controller.rest.mapper.ClienteMapper;
 import org.jfm.domain.entities.Cliente;
 import org.jfm.domain.services.ClienteService;
 
@@ -24,11 +26,15 @@ public class ClienteResource {
     @Inject
     ClienteService clienteService;
 
+    @Inject
+    ClienteMapper clienteMapper;
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response criar(Cliente cliente) {
-        int clienteId = clienteService.criar(cliente);
+    public Response criar(ClienteCreateUpdate cliente) {
+        Cliente clienteEntity = clienteMapper.toEntity(cliente);
+        int clienteId = clienteService.criar(clienteEntity);
         return Response.status(Response.Status.CREATED).entity(clienteId).build();
     };
 
@@ -55,9 +61,12 @@ public class ClienteResource {
     };
 
     @PUT
+    @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response editar(Cliente cliente) {
-        clienteService.editar(cliente);
+    public Response editar(@PathParam("id") int id, ClienteCreateUpdate cliente) {
+        Cliente clienteEntity = clienteMapper.toEntity(cliente);
+        clienteEntity.setId(id);
+        clienteService.editar(clienteEntity);
         return Response.status(Response.Status.OK).build();
     };
 

@@ -43,6 +43,7 @@ public class ClienteService {
     };
 
     public void editar(Cliente cliente){
+        cliente.setDataAtualizacao(Instant.now());
         clienteRepository.editar(cliente);
         return;
     };
