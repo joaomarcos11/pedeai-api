@@ -33,7 +33,7 @@ public class ClienteResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response criar(ClienteCreateUpdate cliente) {
-        Cliente clienteEntity = clienteMapper.toEntity(cliente);
+        Cliente clienteEntity = clienteMapper.toDomain(cliente);
         int clienteId = clienteService.criar(clienteEntity);
         return Response.status(Response.Status.CREATED).entity(clienteId).build();
     };
@@ -64,7 +64,7 @@ public class ClienteResource {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response editar(@PathParam("id") int id, ClienteCreateUpdate cliente) {
-        Cliente clienteEntity = clienteMapper.toEntity(cliente);
+        Cliente clienteEntity = clienteMapper.toDomain(cliente);
         clienteEntity.setId(id);
         clienteService.editar(clienteEntity);
         return Response.status(Response.Status.OK).build();

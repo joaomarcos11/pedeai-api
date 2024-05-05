@@ -12,6 +12,6 @@ public interface ClienteMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "dataCriacao", ignore = true)
     @Mapping(target = "dataAtualizacao", ignore = true)
-    Cliente toEntity(ClienteCreateUpdate cliente);
+    Cliente toDomain(ClienteCreateUpdate cliente);
 
 }

@@ -27,7 +27,7 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     @Override
     @Transactional
     public void criar(Cliente cliente) {
-        entityManager.persist(clienteMapper.toDto(cliente));
+        entityManager.persist(clienteMapper.toEntity(cliente));
     }
 
     @Override
