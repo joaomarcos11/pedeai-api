@@ -11,13 +11,13 @@ public class ClienteService {
 
     ClienteRepository clienteRepository;
 
-    // TODO: trocar por All-Args constructor?
-    public ClienteService (ClienteRepository clienteRepository) {
+    public ClienteService(ClienteRepository clienteRepository) {
         this.clienteRepository = clienteRepository;
     }
 
     public int criar(Cliente cliente) {
-        // TODO: onde fica a gestão da criação do ID? aqui, automatica pelo banco de dados? definir...
+        // TODO: onde fica a gestão da criação do ID? aqui, automatica pelo banco de
+        // dados? definir...
 
         Random rand = new Random(); // TODO: substituir por algo mais prático
 
@@ -29,28 +29,25 @@ public class ClienteService {
         return cliente.getId();
     }
 
-    public List<Cliente> listar(){
+    public List<Cliente> listar() {
         return clienteRepository.listar();
     };
 
-    public Cliente buscarPorId(int id){
-        Cliente cliente = clienteRepository.buscarPorId(id);
-        return cliente;
+    public Cliente buscarPorId(int id) {
+        return clienteRepository.buscarPorId(id);
     };
 
-    public Cliente buscarPorCpf(String cpf){
+    public Cliente buscarPorCpf(String cpf) {
         return clienteRepository.buscarPorCpf(cpf);
     };
 
-    public void editar(Cliente cliente){
+    public void editar(Cliente cliente) {
         cliente.setDataAtualizacao(Instant.now());
         clienteRepository.editar(cliente);
-        return;
     };
 
-    public void remover(int id){
+    public void remover(int id) {
         Cliente cliente = clienteRepository.buscarPorId(id);
         clienteRepository.remover(cliente);
-        return;
     };
 }

@@ -2,7 +2,6 @@ package org.jfm.domain.entities;
 
 import java.time.Instant;
 
-
 public class Cliente {
   private int id;
   private String nome;
@@ -12,7 +11,8 @@ public class Cliente {
   private Instant dataAtualizacao;
   private boolean ativo;
 
-  public Cliente() {}; // TODO: constructor vazio?
+  public Cliente() {
+  }; // TODO: constructor vazio?
 
   public Cliente(int id, String nome, String cpf, String email, Instant dataCriacao, Instant dataAtualizacao,
       boolean ativo) {
