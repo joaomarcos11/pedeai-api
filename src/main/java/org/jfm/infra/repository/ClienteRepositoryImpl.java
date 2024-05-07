@@ -34,7 +34,7 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     @Transactional
     public List<Cliente> listar() {
         return entityManager.createNamedQuery("Cliente.findAll", ClienteEntity.class)
-                .getResultStream().map(p -> clienteMapper.toDomain(p)).collect(Collectors.toList());
+                .getResultStream().map(c -> clienteMapper.toDomain(c)).collect(Collectors.toList());
     }
 
     @Override
