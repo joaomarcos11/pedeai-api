@@ -6,8 +6,9 @@ import java.util.Random;
 
 import org.jfm.domain.entities.Cliente;
 import org.jfm.domain.ports.ClienteRepository;
+import org.jfm.domain.usecases.ClienteUseCase;
 
-public class ClienteService {
+public class ClienteService implements ClienteUseCase {
 
     ClienteRepository clienteRepository;
 
@@ -15,6 +16,7 @@ public class ClienteService {
         this.clienteRepository = clienteRepository;
     }
 
+    @Override
     public int criar(Cliente cliente) {
         // TODO: onde fica a gestão da criação do ID? aqui, automatica pelo banco de
         // dados? definir...
@@ -29,23 +31,28 @@ public class ClienteService {
         return cliente.getId();
     }
 
+    @Override
     public List<Cliente> listar() {
         return clienteRepository.listar();
     };
 
+    @Override
     public Cliente buscarPorId(int id) {
         return clienteRepository.buscarPorId(id);
     };
 
+    @Override
     public Cliente buscarPorCpf(String cpf) {
         return clienteRepository.buscarPorCpf(cpf);
     };
 
+    @Override
     public void editar(Cliente cliente) {
         cliente.setDataAtualizacao(Instant.now());
         clienteRepository.editar(cliente);
     };
 
+    @Override
     public void remover(int id) {
         Cliente cliente = clienteRepository.buscarPorId(id);
         clienteRepository.remover(cliente);

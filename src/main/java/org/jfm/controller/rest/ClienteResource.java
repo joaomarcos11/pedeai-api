@@ -5,7 +5,7 @@ import java.util.List;
 import org.jfm.controller.rest.dto.ClienteCreateUpdate;
 import org.jfm.controller.rest.mapper.ClienteMapper;
 import org.jfm.domain.entities.Cliente;
-import org.jfm.domain.services.ClienteService;
+import org.jfm.domain.usecases.ClienteUseCase;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -24,7 +24,7 @@ import jakarta.ws.rs.core.Response;
 public class ClienteResource {
 
     @Inject
-    ClienteService clienteService;
+    ClienteUseCase clienteUseCase;
 
     @Inject
     ClienteMapper clienteMapper;
@@ -34,7 +34,7 @@ public class ClienteResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response criar(ClienteCreateUpdate cliente) {
         Cliente clienteEntity = clienteMapper.toDomain(cliente);
-        int clienteId = clienteService.criar(clienteEntity);
+        int clienteId = clienteUseCase.criar(clienteEntity);
         return Response.status(Response.Status.CREATED).entity(clienteId).build();
     };
 
@@ -43,11 +43,11 @@ public class ClienteResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response buscar(@QueryParam("cpf") String cpf) {
         if (cpf == null) {
-            List<Cliente> clientes = clienteService.listar();
+            List<Cliente> clientes = clienteUseCase.listar();
             return Response.status(Response.Status.OK).entity(clientes).build();
         }
 
-        Cliente cliente = clienteService.buscarPorCpf(cpf);
+        Cliente cliente = clienteUseCase.buscarPorCpf(cpf);
         return Response.status(Response.Status.OK).entity(cliente).build();
     };
 
@@ -56,7 +56,7 @@ public class ClienteResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response buscarPorId(@PathParam("id") int id) {
-        Cliente cliente = clienteService.buscarPorId(id);
+        Cliente cliente = clienteUseCase.buscarPorId(id);
         return Response.status(Response.Status.OK).entity(cliente).build();
     };
 
@@ -66,14 +66,14 @@ public class ClienteResource {
     public Response editar(@PathParam("id") int id, ClienteCreateUpdate cliente) {
         Cliente clienteEntity = clienteMapper.toDomain(cliente);
         clienteEntity.setId(id);
-        clienteService.editar(clienteEntity);
+        clienteUseCase.editar(clienteEntity);
         return Response.status(Response.Status.OK).build();
     };
 
     @DELETE
     @Path("/{id}")
     public Response remover(@PathParam("id") int id) {
-        clienteService.remover(id);
+        clienteUseCase.remover(id);
         return Response.status(Response.Status.OK).build();
     };
 
