@@ -21,7 +21,7 @@ public class ItemPedidoService {
         return itemPedidoRepository.listar();
     }
 
-    public ItemPedido buscarPorPedidoId(int pedidoId) {
+    public List<ItemPedido> buscarPorPedidoId(int pedidoId) {
         return itemPedidoRepository.buscarPorPedidoId(pedidoId);
     }
 

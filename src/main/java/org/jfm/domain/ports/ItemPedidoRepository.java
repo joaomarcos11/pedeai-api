@@ -9,7 +9,7 @@ public interface ItemPedidoRepository {
 
     public List<ItemPedido> listar();
 
-    public ItemPedido buscarPorPedidoId(int pedidoId);
+    public List<ItemPedido> buscarPorPedidoId(int pedidoId);
     
     // FIXME: avaliar as buscar, pode ter o mesmo item no mesmo pedido????
     public ItemPedido buscarPorPedidoIdItemId(int peididoId, int itemId);

@@ -1,7 +1,7 @@
 package org.jfm.domain.entities;
 
 import java.util.Objects;
-import org.jfm.domain.enums.Categoria;
+import org.jfm.domain.entities.enums.Categoria;
 
 public class Ingrediente {
     private int id;

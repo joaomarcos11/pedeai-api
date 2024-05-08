@@ -1,4 +1,4 @@
-package org.jfm.domain.enums;
+package org.jfm.domain.entities.enums;
 
 public enum StatusPedido {
   INICADO,

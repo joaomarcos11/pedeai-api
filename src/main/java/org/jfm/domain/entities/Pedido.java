@@ -2,7 +2,7 @@ package org.jfm.domain.entities;
 
 import java.time.Instant;
 
-import org.jfm.domain.enums.StatusPedido;
+import org.jfm.domain.entities.enums.StatusPedido;
 
 public class Pedido {
     private int id;

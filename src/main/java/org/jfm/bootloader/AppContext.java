@@ -38,8 +38,9 @@ public class AppContext {
     };
 
     @Produces
-    public ItemService itemService(ItemRepository itemRepository) {
-        return new ItemService(itemRepository);
+    public ItemService itemService(ItemRepository itemRepository, ItemIngredienteService itemIngredienteService,
+            IngredienteService ingredienteService) {
+        return new ItemService(itemRepository, itemIngredienteService, ingredienteService);
     };
 
     // TODO: implementar
@@ -50,8 +51,9 @@ public class AppContext {
     // };
 
     @Produces
-    public PedidoService pedidoService(PedidoRepository pedidoRepository) {
-        return new PedidoService(pedidoRepository);
+    public PedidoService pedidoService(PedidoRepository pedidoRepository, ItemPedidoService itemPedidoService,
+            ItemService itemService) {
+        return new PedidoService(pedidoRepository, itemPedidoService, itemService);
     };
 
 }

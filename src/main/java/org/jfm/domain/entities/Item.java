@@ -1,6 +1,6 @@
 package org.jfm.domain.entities;
 
-import org.jfm.domain.enums.Categoria;
+import org.jfm.domain.entities.enums.Categoria;
 
 public class Item {
     private int id;
