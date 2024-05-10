@@ -1,38 +1,29 @@
 package org.jfm.domain.entities;
 
-import java.time.Instant;
+import java.util.UUID;
 
 import org.jfm.domain.entities.enums.StatusPedido;
 
 public class Pedido {
-    private int id;
+    private UUID id;
     private int idCliente;
     private StatusPedido status;
-    private Instant iniciado;
-    private Instant concluido;
-    private int preco;
-    private boolean delivery;
 
     public Pedido() {
         super();
     }
 
-    public Pedido(int id, int idCliente, StatusPedido status, Instant iniciado, Instant concluido, int preco,
-            boolean delivery) {
+    public Pedido(UUID id, int idCliente, StatusPedido status) {
         this.id = id;
         this.idCliente = idCliente;
         this.status = status;
-        this.iniciado = iniciado;
-        this.concluido = concluido;
-        this.preco = preco;
-        this.delivery = delivery;
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -52,44 +43,9 @@ public class Pedido {
         this.status = status;
     }
 
-    public Instant getIniciado() {
-        return iniciado;
-    }
-
-    public void setIniciado(Instant iniciado) {
-        this.iniciado = iniciado;
-    }
-
-    public Instant getConcluido() {
-        return concluido;
-    }
-
-    public void setConcluido(Instant concluido) {
-        this.concluido = concluido;
-    }
-
-    public int getPreco() {
-        return preco;
-    }
-
-    public void setPreco(int preco) {
-        this.preco = preco;
-    }
-
-    public boolean isDelivery() {
-        return delivery;
-    }
-
-    public void setDelivery(boolean delivery) {
-        this.delivery = delivery;
-    }
-
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + id;
-        return result;
+        return this.id.hashCode(); // TODO: ver se não fiz caca
     }
 
     @Override
@@ -101,7 +57,7 @@ public class Pedido {
         if (getClass() != obj.getClass())
             return false;
         Pedido other = (Pedido) obj;
-        if (id != other.id)
+        if (!this.id.equals(other.id)) // TODO: ver se não fiz caca
             return false;
         return true;
     }

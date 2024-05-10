@@ -1,6 +1,7 @@
 package org.jfm.infra.repository;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.jfm.domain.entities.Cliente;
@@ -39,7 +40,7 @@ public class ClienteRepositoryImpl implements ClienteRepository {
 
     @Override
     @Transactional
-    public Cliente buscarPorId(int id) {
+    public Cliente buscarPorId(UUID id) {
         TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.findById", ClienteEntity.class);
         query.setParameter("id", id);
 

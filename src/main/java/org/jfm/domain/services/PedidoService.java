@@ -1,9 +1,8 @@
 package org.jfm.domain.services;
 
 import java.util.List;
-import java.util.Random;
+import java.util.UUID;
 
-import org.jfm.domain.entities.ItemPedido;
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.ports.PedidoRepository;
 
@@ -11,22 +10,16 @@ public class PedidoService {
 
     PedidoRepository pedidoRepository;
 
-    // TODO: adicionei isso aqui, ver como funciona os agregados...
-    ItemPedidoService itemPedidoService;
-
-    // TODO: adicionei isso aqui, ver como funciona os agregados...
+    // TODO: ver como funciona os agregados
     ItemService itemService;
 
-    public PedidoService(PedidoRepository pedidoRepository, ItemPedidoService itemPedidoService, ItemService itemService) {
+    public PedidoService(PedidoRepository pedidoRepository, ItemService itemService) {
         this.pedidoRepository = pedidoRepository;
-        this.itemPedidoService = itemPedidoService;
         this.itemService = itemService;
     }
 
-    public int criar(Pedido pedido) {
-        Random rand = new Random();
-
-        pedido.setId(rand.nextInt());
+    public UUID criar(Pedido pedido) {
+        pedido.setId(UUID.randomUUID());
         pedidoRepository.criar(pedido);
 
         return pedido.getId();
@@ -36,19 +29,12 @@ public class PedidoService {
         return pedidoRepository.listar();
     };
 
-    public Pedido buscarPorId(int id) {
+    public Pedido buscarPorId(UUID id) {
         return pedidoRepository.buscarPorId(id);
     };
 
     public void editar(Pedido pedido) {
         pedidoRepository.editar(pedido);
     };
-
-    // ---
-
-    // listar itens pedido relacionados
-    public List<ItemPedido> listarItemPedidoRelacionado(Pedido pedido) {
-        return itemPedidoService.buscarPorPedidoId(pedido.getId());
-    }
 
 }

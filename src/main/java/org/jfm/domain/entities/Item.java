@@ -1,11 +1,12 @@
 package org.jfm.domain.entities;
 
+import java.util.UUID;
+
 import org.jfm.domain.entities.enums.Categoria;
 
 public class Item {
-    private int id;
+    private UUID id;
     private String nome;
-    private String descricao;
     private int preco;
     private Categoria idCategoria;
 
@@ -13,19 +14,18 @@ public class Item {
         super();
     }
 
-    public Item(int id, String nome, String descricao, int preco, Categoria idCategoria) {
+    public Item(UUID id, String nome, int preco, Categoria idCategoria) {
         this.id = id;
         this.nome = nome;
-        this.descricao = descricao;
         this.preco = preco;
         this.idCategoria = idCategoria;
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -35,14 +35,6 @@ public class Item {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
     }
 
     public int getPreco() {
@@ -63,10 +55,7 @@ public class Item {
 
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + id;
-        return result;
+        return this.id.hashCode(); // TODO: ver se não fiz caca
     }
 
     @Override
@@ -78,7 +67,7 @@ public class Item {
         if (getClass() != obj.getClass())
             return false;
         Item other = (Item) obj;
-        if (id != other.id)
+        if (!this.id.equals(other.id)) // TODO: ver se não fiz caca
             return false;
         return true;
     }

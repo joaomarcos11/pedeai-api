@@ -3,6 +3,7 @@ package org.jfm.domain.services;
 import java.time.Instant;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import org.jfm.domain.entities.Cliente;
 import org.jfm.domain.ports.ClienteRepository;
@@ -17,13 +18,8 @@ public class ClienteService implements ClienteUseCase {
     }
 
     @Override
-    public int criar(Cliente cliente) {
-        // TODO: onde fica a gestão da criação do ID? aqui, automatica pelo banco de
-        // dados? definir...
-
-        Random rand = new Random(); // TODO: substituir por algo mais prático
-
-        cliente.setId(rand.nextInt());
+    public UUID criar(Cliente cliente) {
+        cliente.setId(UUID.randomUUID());
         cliente.setDataCriacao(Instant.now());
         cliente.setDataAtualizacao(null);
         clienteRepository.criar(cliente);
@@ -37,7 +33,7 @@ public class ClienteService implements ClienteUseCase {
     };
 
     @Override
-    public Cliente buscarPorId(int id) {
+    public Cliente buscarPorId(UUID id) {
         return clienteRepository.buscarPorId(id);
     };
 
@@ -53,7 +49,7 @@ public class ClienteService implements ClienteUseCase {
     };
 
     @Override
-    public void remover(int id) {
+    public void remover(UUID id) {
         Cliente cliente = clienteRepository.buscarPorId(id);
         clienteRepository.remover(cliente);
     };

@@ -1,9 +1,10 @@
 package org.jfm.domain.entities;
 
 import java.time.Instant;
+import java.util.UUID;
 
 public class Cliente {
-  private int id;
+  private UUID id;
   private String nome;
   private String cpf;
   private String email;
@@ -14,7 +15,7 @@ public class Cliente {
   public Cliente() {
   }; // TODO: constructor vazio?
 
-  public Cliente(int id, String nome, String cpf, String email, Instant dataCriacao, Instant dataAtualizacao,
+  public Cliente(UUID id, String nome, String cpf, String email, Instant dataCriacao, Instant dataAtualizacao,
       boolean ativo) {
     this.id = id;
     this.nome = nome;
@@ -25,11 +26,11 @@ public class Cliente {
     this.ativo = ativo;
   }
 
-  public int getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 
@@ -83,10 +84,7 @@ public class Cliente {
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + id;
-    return result;
+    return this.id.hashCode(); // TODO: ver se não fiz caca aqui
   }
 
   @Override
@@ -98,7 +96,7 @@ public class Cliente {
     if (getClass() != obj.getClass())
       return false;
     Cliente other = (Cliente) obj;
-    if (id != other.id)
+    if (!this.id.equals(other.id)) // TODO: ver se não fiz caca aqui
       return false;
     return true;
   }

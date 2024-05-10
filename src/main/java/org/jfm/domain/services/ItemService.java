@@ -1,36 +1,22 @@
 package org.jfm.domain.services;
 
 import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
-import org.jfm.domain.entities.Ingrediente;
 import org.jfm.domain.entities.Item;
-import org.jfm.domain.entities.ItemIngrediente;
+import org.jfm.domain.entities.enums.Categoria;
 import org.jfm.domain.ports.ItemRepository;
 
 public class ItemService {
 
     ItemRepository itemRepository;
 
-    // TODO: adicionei isso aqui, ver como funciona os agregados...
-    ItemIngredienteService itemIngredienteService;
-
-    // TODO: adicionei isso aqui, ver como funciona os agregados...
-    IngredienteService ingredienteService;
-
-    public ItemService(ItemRepository itemRepository, ItemIngredienteService itemIngredienteService,
-            IngredienteService ingredienteService) {
+    public ItemService(ItemRepository itemRepository) {
         this.itemRepository = itemRepository;
-        this.itemIngredienteService = itemIngredienteService;
-        this.ingredienteService = ingredienteService;
     }
 
-    public int criar(Item item) {
-        // FIXME: ver como é feita a implementação dos ids
-        Random rand = new Random();
-
-        item.setId(rand.nextInt());
+    public UUID criar(Item item) {
+        item.setId(UUID.randomUUID());
         itemRepository.criar(item);
 
         return item.getId();
@@ -40,7 +26,7 @@ public class ItemService {
         return itemRepository.listar();
     }
 
-    public Item buscarPorId(int id) {
+    public Item buscarPorId(UUID id) {
         return itemRepository.buscarPorId(id);
     }
 
@@ -48,21 +34,15 @@ public class ItemService {
         itemRepository.editar(item);
     }
 
-    public void remover(int id) {
+    public void remover(UUID id) {
         Item item = itemRepository.buscarPorId(id);
         itemRepository.remover(item);
     }
 
     // ---
 
-    // listar ingredientes válidos para o item
-    public List<Ingrediente> listarIngredientesRelacionados(Item item) {
-        List<ItemIngrediente> itemIngredientes = itemIngredienteService.buscarPorItemId(item.getId());
-        return itemIngredientes.stream().map(i -> ingredienteService.buscarPorId(i.getIdItem()))
-                .collect(Collectors.toList());
+    public List<Item> listarCategoria(Categoria categoria) {
+        return itemRepository.listarPorCategoria(categoria);
     }
-
-    // verificar se ingrediente é valido para Item
-    // TODO: fazer esse tipo de verificação?
 
 }

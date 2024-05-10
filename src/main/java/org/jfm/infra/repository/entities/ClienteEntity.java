@@ -1,6 +1,7 @@
 package org.jfm.infra.repository.entities;
 
 import java.time.Instant;
+import java.util.UUID;
 
 import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
@@ -25,7 +26,7 @@ import lombok.Setter;
 public class ClienteEntity {
 
     @Id
-    private int id;
+    private UUID id;
     private String nome, cpf, email;
     private Instant dataCriacao, dataAtualizacao;
     private boolean ativo;
