@@ -5,19 +5,17 @@ import java.util.UUID;
 
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.ports.PedidoRepository;
+import org.jfm.domain.usecases.PedidoUseCase;
 
-public class PedidoService {
+public class PedidoService implements PedidoUseCase {
 
     PedidoRepository pedidoRepository;
 
-    // TODO: ver como funciona os agregados
-    ItemService itemService;
-
-    public PedidoService(PedidoRepository pedidoRepository, ItemService itemService) {
+    public PedidoService(PedidoRepository pedidoRepository) {
         this.pedidoRepository = pedidoRepository;
-        this.itemService = itemService;
     }
 
+    @Override
     public UUID criar(Pedido pedido) {
         pedido.setId(UUID.randomUUID());
         pedidoRepository.criar(pedido);
@@ -25,14 +23,17 @@ public class PedidoService {
         return pedido.getId();
     };
 
+    @Override
     public List<Pedido> listar() {
         return pedidoRepository.listar();
     };
 
+    @Override
     public Pedido buscarPorId(UUID id) {
         return pedidoRepository.buscarPorId(id);
     };
 
+    @Override
     public void editar(Pedido pedido) {
         pedidoRepository.editar(pedido);
     };

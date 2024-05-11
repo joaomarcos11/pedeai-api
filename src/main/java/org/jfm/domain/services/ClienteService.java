@@ -2,7 +2,6 @@ package org.jfm.domain.services;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import org.jfm.domain.entities.Cliente;

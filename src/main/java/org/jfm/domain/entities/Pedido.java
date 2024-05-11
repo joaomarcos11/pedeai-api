@@ -9,10 +9,6 @@ public class Pedido {
     private int idCliente;
     private StatusPedido status;
 
-    public Pedido() {
-        super();
-    }
-
     public Pedido(UUID id, int idCliente, StatusPedido status) {
         this.id = id;
         this.idCliente = idCliente;
@@ -45,7 +41,10 @@ public class Pedido {
 
     @Override
     public int hashCode() {
-        return this.id.hashCode(); // TODO: ver se não fiz caca
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
     }
 
     @Override
@@ -57,7 +56,10 @@ public class Pedido {
         if (getClass() != obj.getClass())
             return false;
         Pedido other = (Pedido) obj;
-        if (!this.id.equals(other.id)) // TODO: ver se não fiz caca
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
             return false;
         return true;
     }

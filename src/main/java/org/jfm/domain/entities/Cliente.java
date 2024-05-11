@@ -84,7 +84,10 @@ public class Cliente {
 
   @Override
   public int hashCode() {
-    return this.id.hashCode(); // TODO: ver se não fiz caca aqui
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
   }
 
   @Override
