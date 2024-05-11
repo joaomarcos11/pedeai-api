@@ -1,11 +1,14 @@
 package org.jfm.infra.repository.entities;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import org.jfm.domain.entities.enums.Status;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
@@ -26,4 +29,7 @@ public class PedidoEntity {
     private UUID id;
     private UUID idCliente;
     private Status status;
+
+    @ManyToMany(mappedBy = "pedidos")
+    private Set<ItemEntity> items = new HashSet<>();
 }
