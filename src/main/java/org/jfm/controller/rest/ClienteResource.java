@@ -1,8 +1,9 @@
 package org.jfm.controller.rest;
 
 import java.util.List;
+import java.util.UUID;
 
-import org.jfm.controller.rest.dto.ClienteCreateUpdate;
+import org.jfm.controller.rest.dto.ClienteCreateUpdateDTO;
 import org.jfm.controller.rest.mapper.ClienteMapper;
 import org.jfm.domain.entities.Cliente;
 import org.jfm.domain.usecases.ClienteUseCase;
@@ -20,7 +21,7 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-@Path("/cliente")
+@Path("/clientes")
 public class ClienteResource {
 
     @Inject
@@ -32,10 +33,10 @@ public class ClienteResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response criar(ClienteCreateUpdate cliente) {
+    public Response criar(ClienteCreateUpdateDTO cliente) {
         Cliente clienteEntity = clienteMapper.toDomain(cliente);
-        int clienteId = clienteUseCase.criar(clienteEntity);
-        return Response.status(Response.Status.CREATED).entity(clienteId).build();
+        UUID idCliente = clienteUseCase.criar(clienteEntity);
+        return Response.status(Response.Status.CREATED).entity(idCliente).build();
     };
 
     @GET
@@ -55,7 +56,7 @@ public class ClienteResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response buscarPorId(@PathParam("id") int id) {
+    public Response buscarPorId(@PathParam("id") UUID id) {
         Cliente cliente = clienteUseCase.buscarPorId(id);
         return Response.status(Response.Status.OK).entity(cliente).build();
     };
@@ -63,7 +64,7 @@ public class ClienteResource {
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response editar(@PathParam("id") int id, ClienteCreateUpdate cliente) {
+    public Response editar(@PathParam("id") UUID id, ClienteCreateUpdateDTO cliente) {
         Cliente clienteEntity = clienteMapper.toDomain(cliente);
         clienteEntity.setId(id);
         clienteUseCase.editar(clienteEntity);
@@ -72,7 +73,7 @@ public class ClienteResource {
 
     @DELETE
     @Path("/{id}")
-    public Response remover(@PathParam("id") int id) {
+    public Response remover(@PathParam("id") UUID id) {
         clienteUseCase.remover(id);
         return Response.status(Response.Status.OK).build();
     };

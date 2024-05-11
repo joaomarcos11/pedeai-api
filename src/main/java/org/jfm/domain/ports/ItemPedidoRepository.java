@@ -1,15 +1,13 @@
 package org.jfm.domain.ports;
 
 import java.util.List;
-import java.util.UUID;
-
 import org.jfm.domain.entities.Item;
-import org.jfm.domain.valueObjects.ItemPedido;
+import org.jfm.domain.entities.Pedido;
 
 public interface ItemPedidoRepository {
-    public void criar(ItemPedido itemPedido);
+    public void criar(Item item, Pedido pedido);
 
-    public List<Item> listarPorPedidoId(UUID idPedido);
+    public List<Item> listarPorPedido(Pedido pedido);
 
-    public void remover(ItemPedido itemPedido);
+    public void remover(Item item, Pedido pedido);
 };

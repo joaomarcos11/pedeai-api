@@ -9,7 +9,7 @@ import org.jfm.domain.valueObjects.ItemPedido;
 public interface ItemPedidoUseCase {
     public void adicionarItemAoPedido(ItemPedido itemPedido);
 
-    public List<Item> listarItensDoPedido(UUID idPedido);
+    public List<Item> listarItensDoPedidoPeloId(UUID idPedido);
 
     public void removerItemDoPedido(ItemPedido itemPedido);
 };
