@@ -33,17 +33,4 @@ public class AppContext {
         return new ItemPedidoService(itemPedidoRepository, itemService, pedidoService);
     };
 
-    // // TODO: implementar
-    // // @Produces
-    // // public PagamentoService pagamentoService(PagamentoRepository
-    // // pagamentoRepository) {
-    // // return new PagamentoService(pagamentoRepository);
-    // // };
-
-    // @Produces
-    // public PedidoService pedidoService(PedidoRepository pedidoRepository, ItemPedidoService itemPedidoService,
-    //         ItemService itemService) {
-    //     return new PedidoService(pedidoRepository, itemPedidoService, itemService);
-    // };
-
 }
