@@ -2,14 +2,14 @@ package org.jfm.domain.entities;
 
 import java.util.UUID;
 
-import org.jfm.domain.entities.enums.StatusPedido;
+import org.jfm.domain.entities.enums.Status;
 
 public class Pedido {
     private UUID id;
-    private int idCliente;
-    private StatusPedido status;
+    private UUID idCliente;
+    private Status status;
 
-    public Pedido(UUID id, int idCliente, StatusPedido status) {
+    public Pedido(UUID id, UUID idCliente, Status status) {
         this.id = id;
         this.idCliente = idCliente;
         this.status = status;
@@ -23,19 +23,19 @@ public class Pedido {
         this.id = id;
     }
 
-    public int getIdCliente() {
+    public UUID getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(int idCliente) {
+    public void setIdCliente(UUID idCliente) {
         this.idCliente = idCliente;
     }
 
-    public StatusPedido getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(StatusPedido status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

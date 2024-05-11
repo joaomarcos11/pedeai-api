@@ -24,11 +24,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ClienteEntity {
-
     @Id
     private UUID id;
     private String nome, cpf, email;
     private Instant dataCriacao, dataAtualizacao;
     private boolean ativo;
-
 };

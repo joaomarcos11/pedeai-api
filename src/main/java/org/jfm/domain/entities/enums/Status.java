@@ -1,6 +1,6 @@
 package org.jfm.domain.entities.enums;
 
-public enum StatusPedido {
+public enum Status {
   INICADO,
   CANCELADO,
   PAGO,

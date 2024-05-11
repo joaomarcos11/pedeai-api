@@ -7,9 +7,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(config = QuarkusMappingConfig.class)
 public interface ClienteMapper {
-
     Cliente toDomain(ClienteEntity cliente);
 
     ClienteEntity toEntity(Cliente cliente);
-
 }
