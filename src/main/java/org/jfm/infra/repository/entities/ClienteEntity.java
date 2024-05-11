@@ -1,6 +1,5 @@
 package org.jfm.infra.repository.entities;
 
-import java.time.Instant;
 import java.util.UUID;
 
 import org.hibernate.annotations.NamedQueries;

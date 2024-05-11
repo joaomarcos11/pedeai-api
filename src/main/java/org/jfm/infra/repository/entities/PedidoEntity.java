@@ -29,7 +29,6 @@ import lombok.Setter;
 public class PedidoEntity {
     @Id
     private UUID id;
-    // private UUID idCliente;
     private Status status;
 
     @ManyToOne
@@ -37,5 +36,5 @@ public class PedidoEntity {
     private ClienteEntity cliente;
 
     @ManyToMany(mappedBy = "pedidos")
-    private Set<ItemEntity> items = new HashSet<>();
+    private Set<ItemEntity> itens = new HashSet<>();
 }

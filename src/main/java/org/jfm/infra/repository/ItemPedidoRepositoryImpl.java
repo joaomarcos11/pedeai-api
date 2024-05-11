@@ -43,7 +43,7 @@ public class ItemPedidoRepositoryImpl implements ItemPedidoRepository{
     @Transactional
     public List<Item> listarPorPedido(Pedido pedido) { // TODO: ver se passando o Pedido direto fica mais fácil
         PedidoEntity pedidoEntity = entityManager.find(PedidoEntity.class, pedido.getId());
-        Set<ItemEntity> itens = pedidoEntity.getItems();
+        Set<ItemEntity> itens = pedidoEntity.getItens();
         return itens.stream().map(i -> itemMapper.toDomain(i)).collect(Collectors.toList());
     }
 
