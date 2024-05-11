@@ -1,7 +1,7 @@
 package org.jfm.domain.entities.enums;
 
 public enum Status {
-  INICADO,
+  INICIADO,
   CANCELADO,
   PAGO,
   PREPARANDO,

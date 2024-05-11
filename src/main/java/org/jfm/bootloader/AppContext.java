@@ -29,8 +29,8 @@ public class AppContext {
     };
     
     @Produces
-    public ItemPedidoService itemPedidoService(ItemService itemService, PedidoService pedidoService) {
-        return new ItemPedidoService(itemService, pedidoService);
+    public ItemPedidoService itemPedidoService(ItemPedidoRepository itemPedidoRepository, ItemService itemService, PedidoService pedidoService) {
+        return new ItemPedidoService(itemPedidoRepository, itemService, pedidoService);
     };
 
     // // TODO: implementar

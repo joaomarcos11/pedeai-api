@@ -3,7 +3,7 @@ package org.jfm.controller.rest;
 import java.util.List;
 import java.util.UUID;
 
-import org.jfm.controller.rest.dto.ClienteCreateUpdateDTO;
+import org.jfm.controller.rest.dto.ClienteDto;
 import org.jfm.controller.rest.mapper.ClienteMapper;
 import org.jfm.domain.entities.Cliente;
 import org.jfm.domain.usecases.ClienteUseCase;
@@ -33,7 +33,7 @@ public class ClienteResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response criar(ClienteCreateUpdateDTO cliente) {
+    public Response criar(ClienteDto cliente) {
         Cliente clienteEntity = clienteMapper.toDomain(cliente);
         UUID idCliente = clienteUseCase.criar(clienteEntity);
         return Response.status(Response.Status.CREATED).entity(idCliente).build();
@@ -64,7 +64,7 @@ public class ClienteResource {
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response editar(@PathParam("id") UUID id, ClienteCreateUpdateDTO cliente) {
+    public Response editar(@PathParam("id") UUID id, ClienteDto cliente) {
         Cliente clienteEntity = clienteMapper.toDomain(cliente);
         clienteEntity.setId(id);
         clienteUseCase.editar(clienteEntity);

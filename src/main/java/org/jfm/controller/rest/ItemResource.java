@@ -3,7 +3,7 @@ package org.jfm.controller.rest;
 import java.util.List;
 import java.util.UUID;
 
-import org.jfm.controller.rest.dto.ItemDTO;
+import org.jfm.controller.rest.dto.ItemCreateUpdateDto;
 import org.jfm.controller.rest.mapper.ItemMapper;
 import org.jfm.domain.entities.Item;
 import org.jfm.domain.entities.enums.Categoria;
@@ -34,7 +34,7 @@ public class ItemResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response criar(ItemDTO item) {
+    public Response criar(ItemCreateUpdateDto item) {
         Item itemEntity = itemMapper.toDomain(item);
         UUID idItem = itemUseCase.criar(itemEntity);
         return Response.status(Response.Status.CREATED).entity(idItem).build();
@@ -65,7 +65,7 @@ public class ItemResource {
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response editar(@PathParam("id") UUID id, ItemDTO item) {
+    public Response editar(@PathParam("id") UUID id, ItemCreateUpdateDto item) {
         Item itemEntity = itemMapper.toDomain(item);
         itemEntity.setId(id);
         itemUseCase.editar(itemEntity);

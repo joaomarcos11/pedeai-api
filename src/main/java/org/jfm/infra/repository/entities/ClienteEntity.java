@@ -18,7 +18,7 @@ import lombok.Setter;
         @NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM ClienteEntity c"),
         @NamedQuery(name = "Cliente.findById", query = "SELECT c FROM ClienteEntity c WHERE c.id = :id"),
         @NamedQuery(name = "Cliente.findByCpf", query = "SELECT c FROM ClienteEntity c WHERE c.cpf = :cpf"),
-        @NamedQuery(name = "Cliente.update", query = "UPDATE ClienteEntity c SET c.nome = :nome, c.cpf = :cpf, c.email = :email, c.dataAtualizacao = :dataAtualizacao, c.ativo = :ativo WHERE c.id = :id"),
+        @NamedQuery(name = "Cliente.update", query = "UPDATE ClienteEntity c SET c.nome = :nome, c.cpf = :cpf, c.email = :email, c.ativo = :ativo WHERE c.id = :id"),
         @NamedQuery(name = "Cliente.delete", query = "DELETE FROM ClienteEntity c WHERE c.id = :id"),
 })
 @Getter
@@ -27,6 +27,5 @@ public class ClienteEntity {
     @Id
     private UUID id;
     private String nome, cpf, email;
-    private Instant dataCriacao, dataAtualizacao;
     private boolean ativo;
 };

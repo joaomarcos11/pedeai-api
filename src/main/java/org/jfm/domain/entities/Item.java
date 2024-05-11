@@ -8,17 +8,17 @@ public class Item {
     private UUID id;
     private String nome;
     private int preco;
-    private Categoria idCategoria;
+    private Categoria categoria;
 
     public Item() {
         super();
     }
 
-    public Item(UUID id, String nome, int preco, Categoria idCategoria) {
+    public Item(UUID id, String nome, int preco, Categoria categoria) {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
-        this.idCategoria = idCategoria;
+        this.categoria = categoria;
     }
 
     public UUID getId() {
@@ -45,12 +45,12 @@ public class Item {
         this.preco = preco;
     }
 
-    public Categoria getIdCategoria() {
-        return idCategoria;
+    public Categoria getCategoria() {
+        return categoria;
     }
 
-    public void setIdCategoria(Categoria idCategoria) {
-        this.idCategoria = idCategoria;
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 
     @Override

@@ -25,6 +25,7 @@ import lombok.Setter;
         @NamedQuery(name = "Item.findById", query = "SELECT i FROM ItemEntity i WHERE i.id = :id"),
         @NamedQuery(name = "Item.update", query = "UPDATE ItemEntity i SET i.nome = :nome, i.preco = :preco, i.categoria = :categoria WHERE i.id = :id"),
         @NamedQuery(name = "Item.delete", query = "DELETE FROM ItemEntity i WHERE i.id = :id"),
+        @NamedQuery(name = "Item.findByCategoria", query = "SELECT i FROM ItemEntity i WHERE i.categoria = :categoria"),
 })
 @Getter
 @Setter

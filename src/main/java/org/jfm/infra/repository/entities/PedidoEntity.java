@@ -8,7 +8,9 @@ import org.jfm.domain.entities.enums.Status;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
@@ -20,15 +22,19 @@ import lombok.Setter;
 @NamedQueries({
         @NamedQuery(name = "Pedido.findAll", query = "SELECT p FROM PedidoEntity p"),
         @NamedQuery(name = "Pedido.findById", query = "SELECT p FROM PedidoEntity p WHERE p.id = :id"),
-        @NamedQuery(name = "Pedido.update", query = "UPDATE PedidoEntity p SET")
+        @NamedQuery(name = "Pedido.update", query = "UPDATE PedidoEntity p SET p.status = :status WHERE p.id = :id")
 })
 @Getter
 @Setter
 public class PedidoEntity {
     @Id
     private UUID id;
-    private UUID idCliente;
+    // private UUID idCliente;
     private Status status;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private ClienteEntity cliente;
 
     @ManyToMany(mappedBy = "pedidos")
     private Set<ItemEntity> items = new HashSet<>();

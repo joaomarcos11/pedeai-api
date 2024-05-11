@@ -18,7 +18,8 @@ public class ItemPedidoService implements ItemPedidoUseCase {
     PedidoService pedidoService;
 
     
-    public ItemPedidoService(ItemService itemService, PedidoService pedidoService) {
+    public ItemPedidoService(ItemPedidoRepository itemPedidoRepository, ItemService itemService, PedidoService pedidoService) {
+        this.itemPedidoRepository = itemPedidoRepository;
         this.itemService = itemService;
         this.pedidoService = pedidoService;
     }

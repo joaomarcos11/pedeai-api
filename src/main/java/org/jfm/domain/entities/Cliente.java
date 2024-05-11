@@ -1,6 +1,5 @@
 package org.jfm.domain.entities;
 
-import java.time.Instant;
 import java.util.UUID;
 
 public class Cliente {
@@ -8,21 +7,16 @@ public class Cliente {
   private String nome;
   private String cpf;
   private String email;
-  private Instant dataCriacao;
-  private Instant dataAtualizacao;
   private boolean ativo;
 
   public Cliente() {
   }; // TODO: constructor vazio?
 
-  public Cliente(UUID id, String nome, String cpf, String email, Instant dataCriacao, Instant dataAtualizacao,
-      boolean ativo) {
+  public Cliente(UUID id, String nome, String cpf, String email, boolean ativo) {
     this.id = id;
     this.nome = nome;
     this.cpf = cpf;
     this.email = email;
-    this.dataCriacao = dataCriacao;
-    this.dataAtualizacao = dataAtualizacao;
     this.ativo = ativo;
   }
 
@@ -56,22 +50,6 @@ public class Cliente {
 
   public void setEmail(String email) {
     this.email = email;
-  }
-
-  public Instant getDataCriacao() {
-    return dataCriacao;
-  }
-
-  public void setDataCriacao(Instant dataCriacao) {
-    this.dataCriacao = dataCriacao;
-  }
-
-  public Instant getDataAtualizacao() {
-    return dataAtualizacao;
-  }
-
-  public void setDataAtualizacao(Instant dataAtualizacao) {
-    this.dataAtualizacao = dataAtualizacao;
   }
 
   public boolean getAtivo() {

@@ -1,6 +1,6 @@
 package org.jfm.controller.rest.dto;
 
-public record ClienteCreateUpdateDTO(
+public record ClienteDto (
         String nome,
         String cpf,
         String email,

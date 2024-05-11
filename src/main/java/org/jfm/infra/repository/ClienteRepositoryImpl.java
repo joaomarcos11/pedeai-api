@@ -64,7 +64,6 @@ public class ClienteRepositoryImpl implements ClienteRepository {
         query.setParameter("nome", cliente.getNome());
         query.setParameter("cpf", cliente.getCpf());
         query.setParameter("email", cliente.getEmail());
-        query.setParameter("dataAtualizacao", cliente.getDataAtualizacao());
         query.setParameter("ativo", cliente.getAtivo());
 
         query.executeUpdate(); // TODO: utilizar o return para verificar alguma coisa?

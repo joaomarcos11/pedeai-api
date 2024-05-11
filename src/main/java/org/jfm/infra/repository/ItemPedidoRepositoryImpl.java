@@ -12,10 +12,12 @@ import org.jfm.infra.repository.entities.PedidoEntity;
 import org.jfm.infra.repository.mapper.ItemMapper;
 import org.jfm.infra.repository.mapper.PedidoMapper;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
+@ApplicationScoped
 public class ItemPedidoRepositoryImpl implements ItemPedidoRepository{
 
     @Inject

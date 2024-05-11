@@ -19,8 +19,6 @@ public class ClienteService implements ClienteUseCase {
     @Override
     public UUID criar(Cliente cliente) {
         cliente.setId(UUID.randomUUID());
-        cliente.setDataCriacao(Instant.now());
-        cliente.setDataAtualizacao(null);
         clienteRepository.criar(cliente);
 
         return cliente.getId();
@@ -43,7 +41,6 @@ public class ClienteService implements ClienteUseCase {
 
     @Override
     public void editar(Cliente cliente) {
-        cliente.setDataAtualizacao(Instant.now());
         clienteRepository.editar(cliente);
     };
 
