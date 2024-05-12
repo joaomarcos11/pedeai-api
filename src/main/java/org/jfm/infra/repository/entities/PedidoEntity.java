@@ -22,7 +22,8 @@ import lombok.Setter;
 @NamedQueries({
         @NamedQuery(name = "Pedido.findAll", query = "SELECT p FROM PedidoEntity p"),
         @NamedQuery(name = "Pedido.findById", query = "SELECT p FROM PedidoEntity p WHERE p.id = :id"),
-        @NamedQuery(name = "Pedido.update", query = "UPDATE PedidoEntity p SET p.status = :status WHERE p.id = :id")
+        @NamedQuery(name = "Pedido.findByStatus", query = "SELECT p FROM PedidoEntity p WHERE p.status = :status"),
+        @NamedQuery(name = "Pedido.update", query = "UPDATE PedidoEntity p SET p.status = :status WHERE p.id = :id"),
 })
 @Getter
 @Setter

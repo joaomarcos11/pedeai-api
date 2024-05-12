@@ -1,5 +1,6 @@
 package org.jfm.controller.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -9,6 +10,7 @@ import org.jfm.controller.rest.dto.PedidoDto;
 import org.jfm.controller.rest.dto.PedidoUpdateDto;
 import org.jfm.controller.rest.mapper.PedidoMapper;
 import org.jfm.domain.entities.Pedido;
+import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.usecases.ItemPedidoUseCase;
 import org.jfm.domain.usecases.PedidoUseCase;
 import org.jfm.domain.valueObjects.ItemPedido;
@@ -21,10 +23,13 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 @Path("/pedidos")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class PedidoResource {
 
     @Inject
@@ -37,20 +42,22 @@ public class PedidoResource {
     PedidoMapper pedidoMapper;
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response criar(PedidoCreateDto pedido) {
         Pedido pedidoEntity = pedidoMapper.toDomain(pedido);
         UUID idPedido = pedidoUseCase.criar(pedidoEntity);
         return Response.status(Response.Status.CREATED).entity(idPedido).build();
     }
 
-    // FIXME: retornar PedidoDto...
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response buscar() {
-        List<Pedido> pedidos = pedidoUseCase.listar();
+    public Response buscar(@QueryParam("status") Status status) {
+        List<Pedido> pedidos = new ArrayList<>();
+
+        if (status == null) {
+            pedidos = pedidoUseCase.listar();
+        } else {
+            pedidos = pedidoUseCase.listarPorStatus(status);
+        }
+
         List<PedidoDto> pedidosDto = pedidos.stream().map(p -> pedidoMapper.toDto(p)).collect(Collectors.toList());
         for (PedidoDto pedido : pedidosDto) { // TODO: forma mais elegante de forEach?
             pedido.setItens(itemPedidoUseCase.listarItensDoPedidoPeloId(pedido.getId()));
@@ -61,8 +68,6 @@ public class PedidoResource {
 
     @GET
     @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response buscarPorId(@PathParam("id") UUID id) {
         Pedido pedido = pedidoUseCase.buscarPorId(id);
         PedidoDto pedidoDto = pedidoMapper.toDto(pedido);
@@ -72,7 +77,6 @@ public class PedidoResource {
 
     @PUT
     @Path("/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response editar(@PathParam("id") UUID id, PedidoUpdateDto pedido) {
         Pedido pedidoEntity = pedidoMapper.toDomain(pedido);
         pedidoEntity.setId(id);
@@ -82,8 +86,6 @@ public class PedidoResource {
 
     @POST
     @Path("/{id}/adicionar-item")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response adicionarItem(@PathParam("id") UUID id, UUID idItem) {
         ItemPedido itemPedido = new ItemPedido(idItem, id);
         itemPedidoUseCase.adicionarItemAoPedido(itemPedido);
@@ -92,8 +94,6 @@ public class PedidoResource {
 
     @POST
     @Path("/{id}/remover-item")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response removerItem(@PathParam("id") UUID id, UUID idItem) {
         ItemPedido itemPedido = new ItemPedido(idItem, id);
         itemPedidoUseCase.removerItemDoPedido(itemPedido);

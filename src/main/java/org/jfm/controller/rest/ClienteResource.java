@@ -22,6 +22,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 @Path("/clientes")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class ClienteResource {
 
     @Inject
@@ -31,8 +33,6 @@ public class ClienteResource {
     ClienteMapper clienteMapper;
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response criar(ClienteDto cliente) {
         Cliente clienteEntity = clienteMapper.toDomain(cliente);
         UUID idCliente = clienteUseCase.criar(clienteEntity);
@@ -40,8 +40,6 @@ public class ClienteResource {
     };
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response buscar(@QueryParam("cpf") String cpf) {
         if (cpf == null) {
             List<Cliente> clientes = clienteUseCase.listar();
@@ -54,8 +52,6 @@ public class ClienteResource {
 
     @GET
     @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response buscarPorId(@PathParam("id") UUID id) {
         Cliente cliente = clienteUseCase.buscarPorId(id);
         return Response.status(Response.Status.OK).entity(cliente).build();
@@ -63,7 +59,6 @@ public class ClienteResource {
 
     @PUT
     @Path("/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response editar(@PathParam("id") UUID id, ClienteDto cliente) {
         Cliente clienteEntity = clienteMapper.toDomain(cliente);
         clienteEntity.setId(id);

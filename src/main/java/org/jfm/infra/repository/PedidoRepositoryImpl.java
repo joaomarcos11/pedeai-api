@@ -5,6 +5,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.jfm.domain.entities.Pedido;
+import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.ports.PedidoRepository;
 import org.jfm.infra.repository.entities.PedidoEntity;
 import org.jfm.infra.repository.mapper.PedidoMapper;
@@ -45,6 +46,15 @@ public class PedidoRepositoryImpl implements PedidoRepository {
         query.setParameter("id", id);
 
         return pedidoMapper.toDomain(query.getSingleResult());
+    }
+
+    @Override
+    @Transactional
+    public List<Pedido> listarPorStatus(Status status) {
+        TypedQuery<PedidoEntity> query = entityManager.createNamedQuery("Pedido.findByStatus", PedidoEntity.class);
+        query.setParameter("status", status);
+
+        return query.getResultStream().map(p -> pedidoMapper.toDomain(p)).collect(Collectors.toList());
     }
 
     @Override

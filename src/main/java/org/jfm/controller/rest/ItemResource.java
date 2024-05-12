@@ -23,6 +23,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 @Path("/itens")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 public class ItemResource {
 
     @Inject
@@ -32,8 +34,6 @@ public class ItemResource {
     ItemMapper itemMapper;
 
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response criar(ItemCreateUpdateDto item) {
         Item itemEntity = itemMapper.toDomain(item);
         UUID idItem = itemUseCase.criar(itemEntity);
@@ -41,8 +41,6 @@ public class ItemResource {
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response buscar(@QueryParam("categoria") Categoria categoria) {
         if (categoria == null) {
             List<Item> itens = itemUseCase.listar();
@@ -55,8 +53,6 @@ public class ItemResource {
 
     @GET
     @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response buscarPorId(@PathParam("id") UUID id) {
         Item item = itemUseCase.buscarPorId(id);
         return Response.status(Response.Status.OK).entity(item).build();
@@ -64,7 +60,6 @@ public class ItemResource {
 
     @PUT
     @Path("/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
     public Response editar(@PathParam("id") UUID id, ItemCreateUpdateDto item) {
         Item itemEntity = itemMapper.toDomain(item);
         itemEntity.setId(id);
