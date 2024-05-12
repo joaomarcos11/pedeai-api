@@ -7,6 +7,8 @@ import org.jfm.controller.rest.dto.ClienteDto;
 import org.jfm.controller.rest.mapper.ClienteMapper;
 import org.jfm.domain.entities.Cliente;
 import org.jfm.domain.usecases.ClienteUseCase;
+import org.jfm.exception.ApiException;
+import org.jfm.util.ValidatorUtil;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -34,9 +36,18 @@ public class ClienteResource {
 
     @POST
     public Response criar(ClienteDto cliente) {
-        Cliente clienteEntity = clienteMapper.toDomain(cliente);
-        UUID idCliente = clienteUseCase.criar(clienteEntity);
-        return Response.status(Response.Status.CREATED).entity(idCliente).build();
+        ValidatorUtil validator = new ValidatorUtil();
+
+        validator.validateClienteDto(cliente);
+        validator.validateClienteExists(cliente);
+        
+        try {
+            Cliente clienteEntity = clienteMapper.toDomain(cliente);
+            UUID idCliente = clienteUseCase.criar(clienteEntity);
+            return Response.status(Response.Status.CREATED).entity(idCliente).build();
+        } catch (Exception e) {
+            throw new ApiException("Aconteceu um erro, tente novamente", Response.Status.INTERNAL_SERVER_ERROR, e);
+        }
     };
 
     @GET

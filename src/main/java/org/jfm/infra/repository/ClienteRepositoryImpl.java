@@ -58,6 +58,15 @@ public class ClienteRepositoryImpl implements ClienteRepository {
 
     @Override
     @Transactional
+    public Cliente buscarPorEmail(String email) {
+        TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.findByEmail", ClienteEntity.class);
+        query.setParameter("email", email);
+
+        return clienteMapper.toDomain(query.getSingleResult());
+    }
+
+    @Override
+    @Transactional
     public void editar(Cliente cliente) {
         Query query = entityManager.createNamedQuery("Cliente.update");
         query.setParameter("id", cliente.getId());

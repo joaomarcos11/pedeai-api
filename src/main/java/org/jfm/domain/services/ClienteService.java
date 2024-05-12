@@ -39,6 +39,11 @@ public class ClienteService implements ClienteUseCase {
     };
 
     @Override
+    public Cliente buscarPorEmail(String email) {
+        return clienteRepository.buscarPorEmail(email);
+    };
+
+    @Override
     public void editar(Cliente cliente) {
         clienteRepository.editar(cliente);
     };

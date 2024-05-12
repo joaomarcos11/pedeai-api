@@ -14,6 +14,8 @@ public interface ClienteUseCase {
 
     public Cliente buscarPorCpf(String cpf);
 
+    public Cliente buscarPorEmail(String email);
+
     public void editar(Cliente cliente);
 
     public void remover(UUID id);
