@@ -12,6 +12,7 @@ import org.jfm.infra.repository.mapper.ClienteMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
@@ -41,28 +42,41 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     @Override
     @Transactional
     public Cliente buscarPorId(UUID id) {
-        TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.findById", ClienteEntity.class);
-        query.setParameter("id", id);
+        try {
+            TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.findById", ClienteEntity.class);
+            query.setParameter("id", id);
+    
+            return clienteMapper.toDomain(query.getSingleResult());
+        }  catch (NoResultException e) {
+            return null;
+        }
 
-        return clienteMapper.toDomain(query.getSingleResult());
     }
 
     @Override
     @Transactional
     public Cliente buscarPorCpf(String cpf) {
-        TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.findByCpf", ClienteEntity.class);
-        query.setParameter("cpf", cpf);
+        try {
+            TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.findByCpf", ClienteEntity.class);
+            query.setParameter("cpf", cpf);
 
-        return clienteMapper.toDomain(query.getSingleResult());
+            return clienteMapper.toDomain(query.getSingleResult());
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override
     @Transactional
     public Cliente buscarPorEmail(String email) {
-        TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.findByEmail", ClienteEntity.class);
-        query.setParameter("email", email);
+        try {
+            TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.findByEmail", ClienteEntity.class);
+            query.setParameter("email", email);
 
-        return clienteMapper.toDomain(query.getSingleResult());
+            return clienteMapper.toDomain(query.getSingleResult());
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

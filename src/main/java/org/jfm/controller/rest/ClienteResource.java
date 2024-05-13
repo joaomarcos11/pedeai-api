@@ -36,11 +36,10 @@ public class ClienteResource {
 
     @POST
     public Response criar(ClienteDto cliente) {
-        ValidatorUtil validator = new ValidatorUtil();
 
-        validator.validateClienteDto(cliente);
-        validator.validateClienteExists(cliente);
-        
+        ValidatorUtil.validateClienteDto(cliente);
+        validateClienteExists(cliente);
+
         try {
             Cliente clienteEntity = clienteMapper.toDomain(cliente);
             UUID idCliente = clienteUseCase.criar(clienteEntity);
@@ -52,12 +51,16 @@ public class ClienteResource {
 
     @GET
     public Response buscar(@QueryParam("cpf") String cpf) {
-        if (cpf == null) {
-            List<Cliente> clientes = clienteUseCase.listar();
-            return Response.status(Response.Status.OK).entity(clientes).build();
-        }
+        // if (cpf == null) {
+        //     List<Cliente> clientes = clienteUseCase.listar();
+        //     return Response.status(Response.Status.OK).entity(clientes).build();
+        // }
 
         Cliente cliente = clienteUseCase.buscarPorCpf(cpf);
+        if (cliente == null) {
+            throw new ApiException("Dados inválidos (COD1014 - cpf nao encontrado)", Response.Status.NOT_FOUND);
+        }
+
         return Response.status(Response.Status.OK).entity(cliente).build();
     };
 
@@ -65,13 +68,28 @@ public class ClienteResource {
     @Path("/{id}")
     public Response buscarPorId(@PathParam("id") UUID id) {
         Cliente cliente = clienteUseCase.buscarPorId(id);
+
+        if (cliente == null) {
+            throw new ApiException("Dados inválidos (COD1010 - id nao encontrado)", Response.Status.NOT_FOUND);
+        }
+
         return Response.status(Response.Status.OK).entity(cliente).build();
     };
 
     @PUT
     @Path("/{id}")
-    public Response editar(@PathParam("id") UUID id, ClienteDto cliente) {
-        Cliente clienteEntity = clienteMapper.toDomain(cliente);
+    public Response editar(@PathParam("id") UUID id, ClienteDto clienteDto) {
+        Cliente cliente = clienteUseCase.buscarPorId(id);
+
+        if (cliente == null) {
+            throw new ApiException("Dados inválidos (COD1010 - id nao encontrado)", Response.Status.NOT_FOUND);
+        }
+        
+        if (!cliente.getAtivo()) {
+            throw new ApiException("Operação inválida (COD1013 - cliente inativo)", Response.Status.METHOD_NOT_ALLOWED);
+        }
+
+        Cliente clienteEntity = clienteMapper.toDomain(clienteDto);
         clienteEntity.setId(id);
         clienteUseCase.editar(clienteEntity);
         return Response.status(Response.Status.OK).build();
@@ -80,8 +98,36 @@ public class ClienteResource {
     @DELETE
     @Path("/{id}")
     public Response remover(@PathParam("id") UUID id) {
+        Cliente cliente = clienteUseCase.buscarPorId(id);
+        if (cliente == null) {
+            throw new ApiException("Dados inválidos (COD1010 - id nao encontrado)", Response.Status.NOT_FOUND);
+        }
+
         clienteUseCase.remover(id);
         return Response.status(Response.Status.OK).build();
     };
+
+    private void validateClienteExists(ClienteDto clienteDto) {
+        validateCpfExists(clienteDto.cpf());
+        validateEmailExists(clienteDto.email());
+    }
+
+    private void validateCpfExists(String cpf) {
+        Cliente cliente = clienteUseCase.buscarPorCpf(cpf);
+        if (cliente == null) {
+            return;
+        }
+        
+        throw new ApiException("Dados inválidos (COD1011 - cpf ja existe)", Response.Status.NOT_FOUND);
+    }
+    
+    private void validateEmailExists(String email) {
+        Cliente cliente = clienteUseCase.buscarPorEmail(email);
+        if (cliente == null) {
+            return;
+        }
+
+        throw new ApiException("Dados inválidos (COD1012 - email ja existe)", Response.Status.NOT_FOUND);
+    }
 
 }
