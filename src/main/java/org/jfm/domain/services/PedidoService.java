@@ -3,6 +3,7 @@ package org.jfm.domain.services;
 import java.util.List;
 import java.util.UUID;
 
+import org.jfm.domain.entities.Item;
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.ports.PedidoRepository;
@@ -13,10 +14,11 @@ public class PedidoService implements PedidoUseCase {
 
     PedidoRepository pedidoRepository;
 
-    PedidoPayment PedidoPayment;
+    PedidoPayment pedidoPayment;
 
-    public PedidoService(PedidoRepository pedidoRepository) {
+    public PedidoService(PedidoRepository pedidoRepository, PedidoPayment pedidoPayment) {
         this.pedidoRepository = pedidoRepository;
+        this.pedidoPayment = pedidoPayment;
     }
 
     @Override
@@ -49,7 +51,9 @@ public class PedidoService implements PedidoUseCase {
 
     @Override
     public boolean pagar(Pedido pedido) {
-        PedidoPayment.pagar(pedido.getPreco()); // TODO: mover para o ItemPedido.
+        return this.pedidoPayment(
+                pedido.getItens().stream().map(i -> i.getPreco()).reduce(0, (subtotal, element) -> subtotal + element));
+                // TODO: arrumar essa gambiarra aqui.
     }
 
 }

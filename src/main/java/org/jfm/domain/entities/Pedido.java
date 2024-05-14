@@ -1,5 +1,6 @@
 package org.jfm.domain.entities;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.jfm.domain.entities.enums.Status;
@@ -8,6 +9,7 @@ public class Pedido {
     private UUID id;
     private UUID idCliente;
     private Status status;
+    private List<Item> itens;
 
     public Pedido(UUID id, UUID idCliente, Status status) {
         this.id = id;
@@ -37,6 +39,18 @@ public class Pedido {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public List<Item> getItens() {
+        return this.itens;
+    }
+
+    public void addItem(Item item) {
+        this.itens.add(item);
+    }
+
+    public void removeItem(Item item) {
+        this.itens.remove(item);
     }
 
     @Override
