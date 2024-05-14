@@ -52,7 +52,7 @@ public class ItemPedidoRepositoryImpl implements ItemPedidoRepository{
     public void remover(Item item, Pedido pedido) {
         ItemEntity itemEntity = entityManager.find(ItemEntity.class, item.getId());
         PedidoEntity pedidoEntity = entityManager.find(PedidoEntity.class, pedido.getId());
-        itemEntity.getPedidos().remove(pedidoEntity);
+        // itemEntity.getPedidos().remove(pedidoEntity);
         entityManager.persist(itemEntity);
     }
     

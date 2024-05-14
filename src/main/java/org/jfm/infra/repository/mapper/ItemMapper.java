@@ -10,6 +10,6 @@ import org.mapstruct.Mapping;
 public interface ItemMapper {
     Item toDomain(ItemEntity item);
 
-    @Mapping(target = "pedidos", ignore = true)
+    // @Mapping(target = "pedidos", ignore = true)
     ItemEntity toEntity(Item item);
 }

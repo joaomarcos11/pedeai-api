@@ -12,6 +12,6 @@ public interface PedidoMapper {
     Pedido toDomain(PedidoEntity pedido);
 
     @Mapping(target = "cliente", ignore = true)
-    @Mapping(target = "itens", ignore = true)
+    // @Mapping(target = "itens", ignore = true)
     PedidoEntity toEntity(Pedido pedido);
 }

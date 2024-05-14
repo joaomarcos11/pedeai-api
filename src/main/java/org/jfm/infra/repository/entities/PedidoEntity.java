@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,6 +37,9 @@ public class PedidoEntity {
     @JoinColumn(name = "cliente_id")
     private ClienteEntity cliente;
 
-    @ManyToMany(mappedBy = "pedidos")
-    private Set<ItemEntity> itens = new HashSet<>();
+    // @ManyToMany(mappedBy = "pedidos")
+    // private Set<ItemEntity> itens = new HashSet<>();
+
+    @OneToMany(mappedBy = "pedido")
+    private Set<ItemPedidoEntity> itemPedidos = new HashSet<>();
 }
