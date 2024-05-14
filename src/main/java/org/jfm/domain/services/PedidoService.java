@@ -6,11 +6,14 @@ import java.util.UUID;
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.ports.PedidoRepository;
+import org.jfm.domain.ports.PedidoPayment;
 import org.jfm.domain.usecases.PedidoUseCase;
 
 public class PedidoService implements PedidoUseCase {
 
     PedidoRepository pedidoRepository;
+
+    PedidoPayment PedidoPayment;
 
     public PedidoService(PedidoRepository pedidoRepository) {
         this.pedidoRepository = pedidoRepository;
@@ -43,5 +46,10 @@ public class PedidoService implements PedidoUseCase {
     public void editar(Pedido pedido) {
         pedidoRepository.editar(pedido);
     };
+
+    @Override
+    public boolean pagar(Pedido pedido) {
+        PedidoPayment.pagar(pedido.getPreco()); // TODO: mover para o ItemPedido.
+    }
 
 }
