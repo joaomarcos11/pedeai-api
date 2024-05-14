@@ -1,94 +1,63 @@
 package org.jfm.domain.entities;
 
-import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
 
-import org.jfm.domain.enums.StatusPedido;
+import org.jfm.domain.entities.enums.Status;
 
 public class Pedido {
-    private int id;
-    private int idCliente;
-    private StatusPedido status;
-    private Instant iniciado;
-    private Instant concluido;
-    private int preco;
-    private boolean delivery;
+    private UUID id;
+    private UUID idCliente;
+    private Status status;
+    private List<Item> itens;
 
-    public Pedido() {
-        super();
-    }
-
-    public Pedido(int id, int idCliente, StatusPedido status, Instant iniciado, Instant concluido, int preco,
-            boolean delivery) {
+    public Pedido(UUID id, UUID idCliente, Status status) {
         this.id = id;
         this.idCliente = idCliente;
         this.status = status;
-        this.iniciado = iniciado;
-        this.concluido = concluido;
-        this.preco = preco;
-        this.delivery = delivery;
     }
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public int getIdCliente() {
+    public UUID getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(int idCliente) {
+    public void setIdCliente(UUID idCliente) {
         this.idCliente = idCliente;
     }
 
-    public StatusPedido getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(StatusPedido status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
-    public Instant getIniciado() {
-        return iniciado;
+    public List<Item> getItens() {
+        return this.itens;
     }
 
-    public void setIniciado(Instant iniciado) {
-        this.iniciado = iniciado;
+    public void addItem(Item item) {
+        this.itens.add(item);
     }
 
-    public Instant getConcluido() {
-        return concluido;
-    }
-
-    public void setConcluido(Instant concluido) {
-        this.concluido = concluido;
-    }
-
-    public int getPreco() {
-        return preco;
-    }
-
-    public void setPreco(int preco) {
-        this.preco = preco;
-    }
-
-    public boolean isDelivery() {
-        return delivery;
-    }
-
-    public void setDelivery(boolean delivery) {
-        this.delivery = delivery;
+    public void removeItem(Item item) {
+        this.itens.remove(item);
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + id;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
         return result;
     }
 
@@ -101,9 +70,12 @@ public class Pedido {
         if (getClass() != obj.getClass())
             return false;
         Pedido other = (Pedido) obj;
-        if (id != other.id)
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
             return false;
         return true;
     }
-    
+
 }

@@ -1,49 +1,30 @@
 package org.jfm.domain.entities;
 
-import org.hibernate.annotations.NamedQueries;
-import org.hibernate.annotations.NamedQuery;
-import jakarta.persistence.Entity;
-import java.time.Instant;
+import java.util.UUID;
 
-@Entity
-@NamedQueries({
-    @NamedQuery(name = "Cliente.findAll", query = "SELECT c FROM Cliente c"),
-    @NamedQuery(name = "Cliente.findById", query = "SELECT c FROM Cliente c WHERE c.id = :id"),
-    @NamedQuery(name = "Cliente.findByNome", query = "SELECT c FROM Cliente c WHERE c.nome = :nome"),
-    @NamedQuery(name = "Cliente.findByCpf", query = "SELECT c FROM Cliente c WHERE c.cpf = :cpf"),
-    @NamedQuery(name = "Cliente.findByEmail", query = "SELECT c FROM Cliente c WHERE c.email = :email"),
-    @NamedQuery(name = "Cliente.findAtivos", query = "SELECT c FROM Cliente c WHERE c.ativo = true"),
-    @NamedQuery(name = "Cliente.findInativos", query = "SELECT c FROM Cliente c WHERE c.ativo = false")
-})
 public class Cliente {
-  private int id;
+  private UUID id;
   private String nome;
   private String cpf;
   private String email;
-  private Instant dataCriacao;
-  private Instant dataAtualizacao;
   private boolean ativo;
 
   public Cliente() {
-    super();
-  }
+  }; // TODO: constructor vazio?
 
-  public Cliente(int id, String nome, String cpf, String email, Instant dataCriacao, Instant dataAtualizacao,
-      boolean ativo) {
+  public Cliente(UUID id, String nome, String cpf, String email, boolean ativo) {
     this.id = id;
     this.nome = nome;
     this.cpf = cpf;
     this.email = email;
-    this.dataCriacao = dataCriacao;
-    this.dataAtualizacao = dataAtualizacao;
     this.ativo = ativo;
   }
 
-  public int getId() {
+  public UUID getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(UUID id) {
     this.id = id;
   }
 
@@ -71,22 +52,6 @@ public class Cliente {
     this.email = email;
   }
 
-  public Instant getDataCriacao() {
-    return dataCriacao;
-  }
-
-  public void setDataCriacao(Instant dataCriacao) {
-    this.dataCriacao = dataCriacao;
-  }
-
-  public Instant getDataAtualizacao() {
-    return dataAtualizacao;
-  }
-
-  public void setDataAtualizacao(Instant dataAtualizacao) {
-    this.dataAtualizacao = dataAtualizacao;
-  }
-
   public boolean getAtivo() {
     return ativo;
   }
@@ -99,7 +64,7 @@ public class Cliente {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + id;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
     return result;
   }
 
@@ -112,7 +77,7 @@ public class Cliente {
     if (getClass() != obj.getClass())
       return false;
     Cliente other = (Cliente) obj;
-    if (id != other.id)
+    if (!this.id.equals(other.id)) // TODO: ver se não fiz caca aqui
       return false;
     return true;
   }
