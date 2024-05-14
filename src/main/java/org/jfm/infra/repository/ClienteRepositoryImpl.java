@@ -5,6 +5,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.jfm.domain.entities.Cliente;
+import org.jfm.domain.exceptions.EntityNotFoundException;
 import org.jfm.domain.ports.ClienteRepository;
 import org.jfm.infra.repository.entities.ClienteEntity;
 import org.jfm.infra.repository.mapper.ClienteMapper;
@@ -12,6 +13,7 @@ import org.jfm.infra.repository.mapper.ClienteMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
@@ -41,10 +43,14 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     @Override
     @Transactional
     public Cliente buscarPorId(UUID id) {
-        TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.findById", ClienteEntity.class);
-        query.setParameter("id", id);
-
-        return clienteMapper.toDomain(query.getSingleResult());
+        try {
+            TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.findById", ClienteEntity.class);
+            query.setParameter("id", id);
+    
+            return clienteMapper.toDomain(query.getSingleResult());
+        } catch (NoResultException e) {
+            throw new EntityNotFoundException("cliente não encontrado");
+        }
     }
 
     @Override
