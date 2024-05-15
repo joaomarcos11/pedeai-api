@@ -1,4 +1,4 @@
-package org.jfm.infra.repository;
+package org.jfm.infra.repository.adaptersql;
 
 import java.util.List;
 import java.util.UUID;
@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.ports.PedidoRepository;
-import org.jfm.infra.repository.entities.PedidoEntity;
-import org.jfm.infra.repository.mapper.PedidoMapper;
+import org.jfm.infra.repository.adaptersql.entities.PedidoEntity;
+import org.jfm.infra.repository.adaptersql.mapper.PedidoMapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

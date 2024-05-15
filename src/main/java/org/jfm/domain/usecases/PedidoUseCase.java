@@ -16,4 +16,6 @@ public interface PedidoUseCase {
     public List<Pedido> listarPorStatus(Status status);
 
     public void editar(Pedido pedido);
+
+    public boolean pagar(Pedido pedido);
 }

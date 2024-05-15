@@ -100,4 +100,11 @@ public class PedidoResource {
         return Response.status(Response.Status.OK).build();
     }
 
+    @GET
+    @Path("/{id}/pagar")
+    public Response pagar(@PathParam("id") UUID id) {
+        itemPedidoUseCase.pagar(id); // TODO: implementar
+        return Response.status(Response.Status.OK).build();
+    }
+
 }

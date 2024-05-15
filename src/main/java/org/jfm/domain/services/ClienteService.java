@@ -33,6 +33,10 @@ public class ClienteService implements ClienteUseCase {
         }
 
         cliente.setId(UUID.randomUUID());
+        cliente.validar();
+
+        // TODO: verificar se não tem duplicata.
+
         clienteRepository.criar(cliente);
 
         return cliente.getId();

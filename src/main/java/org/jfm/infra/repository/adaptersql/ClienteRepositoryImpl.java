@@ -1,4 +1,4 @@
-package org.jfm.infra.repository;
+package org.jfm.infra.repository.adaptersql;
 
 import java.util.List;
 import java.util.UUID;
@@ -8,8 +8,8 @@ import org.jfm.domain.entities.Cliente;
 import org.jfm.domain.exceptions.EntityNotFoundException;
 import org.jfm.domain.exceptions.ErrosSistemaEnum;
 import org.jfm.domain.ports.ClienteRepository;
-import org.jfm.infra.repository.entities.ClienteEntity;
-import org.jfm.infra.repository.mapper.ClienteMapper;
+import org.jfm.infra.repository.adaptersql.entities.ClienteEntity;
+import org.jfm.infra.repository.adaptersql.mapper.ClienteMapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

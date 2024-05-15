@@ -3,6 +3,7 @@ package org.jfm.bootloader;
 import org.jfm.domain.ports.ClienteRepository;
 import org.jfm.domain.ports.ItemPedidoRepository;
 import org.jfm.domain.ports.ItemRepository;
+import org.jfm.domain.ports.PedidoPayment;
 import org.jfm.domain.ports.PedidoRepository;
 import org.jfm.domain.services.ClienteService;
 import org.jfm.domain.services.ItemPedidoService;
@@ -19,8 +20,8 @@ public class AppContext {
     };
 
     @Produces
-    public PedidoService pedidoService(PedidoRepository pedidoRepository) {
-        return new PedidoService(pedidoRepository);
+    public PedidoService pedidoService(PedidoRepository pedidoRepository, PedidoPayment pedidoPayment) {
+        return new PedidoService(pedidoRepository, pedidoPayment);
     }
     
     @Produces

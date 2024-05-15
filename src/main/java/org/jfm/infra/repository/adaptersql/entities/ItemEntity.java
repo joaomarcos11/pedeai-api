@@ -1,4 +1,4 @@
-package org.jfm.infra.repository.entities;
+package org.jfm.infra.repository.adaptersql.entities;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,8 +37,12 @@ public class ItemEntity {
     private int preco;
     private Categoria categoria;
 
-    @ManyToMany(cascade = { CascadeType.ALL }) // TODO: verificar esse tipo de cascade e outras variaveis
-    @JoinTable(name = "itens_pedidos", joinColumns = { @JoinColumn(name = "item_id") }, inverseJoinColumns = {
-            @JoinColumn(name = "pedido_id") })
-    Set<PedidoEntity> pedidos = new HashSet<>();
+//     @ManyToMany(cascade = { CascadeType.ALL }) // TODO: verificar esse tipo de cascade e outras variaveis
+//     @JoinTable(name = "itens_pedidos", joinColumns = { @JoinColumn(name = "item_id") }, inverseJoinColumns = {
+//             @JoinColumn(name = "pedido_id") })
+//     Set<PedidoEntity> pedidos = new HashSet<>();
+
+    @OneToMany(mappedBy = "item")
+    private Set<ItemPedidoEntity> itemPedidos = new HashSet<>();
+
 }

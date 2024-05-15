@@ -1,4 +1,4 @@
-package org.jfm.infra.repository.entities;
+package org.jfm.infra.repository.adaptersql.entities;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -9,10 +9,10 @@ import org.jfm.domain.entities.enums.Status;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -36,6 +36,9 @@ public class PedidoEntity {
     @JoinColumn(name = "cliente_id")
     private ClienteEntity cliente;
 
-    @ManyToMany(mappedBy = "pedidos")
-    private Set<ItemEntity> itens = new HashSet<>();
+    // @ManyToMany(mappedBy = "pedidos")
+    // private Set<ItemEntity> itens = new HashSet<>();
+
+    @OneToMany(mappedBy = "pedido")
+    private Set<ItemPedidoEntity> itemPedidos = new HashSet<>();
 }
