@@ -5,6 +5,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.jfm.domain.entities.Cliente;
+import org.jfm.domain.exceptions.EntityNotFoundException;
+import org.jfm.domain.exceptions.ErrosSistemaEnum;
 import org.jfm.domain.ports.ClienteRepository;
 import org.jfm.infra.repository.entities.ClienteEntity;
 import org.jfm.infra.repository.mapper.ClienteMapper;
@@ -48,9 +50,8 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     
             return clienteMapper.toDomain(query.getSingleResult());
         }  catch (NoResultException e) {
-            return null;
+            throw new EntityNotFoundException(ErrosSistemaEnum.CLIENTE_NOT_FOUND.getMessage());
         }
-
     }
 
     @Override

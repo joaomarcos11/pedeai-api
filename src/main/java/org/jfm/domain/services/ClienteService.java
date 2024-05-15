@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.UUID;
 
 import org.jfm.domain.entities.Cliente;
+import org.jfm.domain.exceptions.EntityConflictException;
+import org.jfm.domain.exceptions.EntityNotFoundException;
+import org.jfm.domain.exceptions.ErrosSistemaEnum;
 import org.jfm.domain.ports.ClienteRepository;
 import org.jfm.domain.usecases.ClienteUseCase;
 
@@ -17,6 +20,18 @@ public class ClienteService implements ClienteUseCase {
 
     @Override
     public UUID criar(Cliente cliente) {
+        cliente.validar();
+        
+        Cliente clienteBuscadoPorCpf = this.clienteRepository.buscarPorCpf(cliente.getCpf());
+        if (clienteBuscadoPorCpf != null) {
+            throw new EntityConflictException(ErrosSistemaEnum.CLIENTE_CPF_EMAIL_CONFLICT.getMessage());
+        }
+
+        Cliente clienteBuscadoPorEmail = this.clienteRepository.buscarPorEmail(cliente.getEmail());
+        if (clienteBuscadoPorEmail != null) {
+            throw new EntityConflictException(ErrosSistemaEnum.CLIENTE_CPF_EMAIL_CONFLICT.getMessage());
+        }
+
         cliente.setId(UUID.randomUUID());
         clienteRepository.criar(cliente);
 
@@ -35,12 +50,22 @@ public class ClienteService implements ClienteUseCase {
 
     @Override
     public Cliente buscarPorCpf(String cpf) {
-        return clienteRepository.buscarPorCpf(cpf);
+        Cliente cliente = clienteRepository.buscarPorCpf(cpf);
+        if (cliente == null) {
+            throw new EntityNotFoundException(ErrosSistemaEnum.CLIENTE_NOT_FOUND.getMessage());
+        }
+
+        return cliente;
     };
 
     @Override
     public Cliente buscarPorEmail(String email) {
-        return clienteRepository.buscarPorEmail(email);
+        Cliente cliente = clienteRepository.buscarPorEmail(email);
+        if (cliente == null) {
+            throw new EntityNotFoundException(ErrosSistemaEnum.CLIENTE_NOT_FOUND.getMessage());
+        }
+
+        return cliente;
     };
 
     @Override
