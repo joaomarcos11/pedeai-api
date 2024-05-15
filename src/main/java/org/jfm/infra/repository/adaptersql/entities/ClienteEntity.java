@@ -1,4 +1,4 @@
-package org.jfm.infra.repository.entities;
+package org.jfm.infra.repository.adaptersql.entities;
 
 import java.util.UUID;
 

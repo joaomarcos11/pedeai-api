@@ -7,7 +7,7 @@ import org.jfm.domain.entities.Item;
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.ports.ItemPedidoRepository;
 import org.jfm.domain.usecases.ItemPedidoUseCase;
-import org.jfm.domain.valueObjects.ItemPedido;
+import org.jfm.domain.valueobjects.ItemPedido;
 
 public class ItemPedidoService implements ItemPedidoUseCase {
 

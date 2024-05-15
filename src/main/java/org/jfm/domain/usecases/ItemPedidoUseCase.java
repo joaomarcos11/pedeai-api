@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.jfm.domain.entities.Item;
-import org.jfm.domain.valueObjects.ItemPedido;
+import org.jfm.domain.valueobjects.ItemPedido;
 
 public interface ItemPedidoUseCase {
     public void adicionarItemAoPedido(ItemPedido itemPedido);

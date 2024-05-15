@@ -35,7 +35,7 @@ public class ItemPedidoRepositoryImpl implements ItemPedidoRepository{
         // TODO: substituir os findById pelo entityManager.find()
         ItemEntity itemEntity = entityManager.find(ItemEntity.class, item.getId());
         PedidoEntity pedidoEntity = entityManager.find(PedidoEntity.class, pedido.getId());
-        itemEntity.getPedidos().add(pedidoEntity);
+        // itemEntity.getPedidos().add(pedidoEntity);
         entityManager.persist(itemEntity); // TODO: precisa adicionar isso aqui?
     }
 
@@ -43,8 +43,9 @@ public class ItemPedidoRepositoryImpl implements ItemPedidoRepository{
     @Transactional
     public List<Item> listarPorPedido(Pedido pedido) { // TODO: ver se passando o Pedido direto fica mais fácil
         PedidoEntity pedidoEntity = entityManager.find(PedidoEntity.class, pedido.getId());
-        Set<ItemEntity> itens = pedidoEntity.getItens();
-        return itens.stream().map(i -> itemMapper.toDomain(i)).collect(Collectors.toList());
+        // Set<ItemEntity> itens = pedidoEntity.getItens();
+        // return itens.stream().map(i -> itemMapper.toDomain(i)).collect(Collectors.toList());
+        return null;
     }
 
     @Override

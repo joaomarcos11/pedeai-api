@@ -1,4 +1,4 @@
-package org.jfm.domain.valueObjects;
+package org.jfm.domain.valueobjects;
 
 import java.util.UUID;
 

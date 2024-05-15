@@ -70,20 +70,6 @@ public class Cliente {
     this.ativo = ativo;
   }
 
-  public void validar() {
-    if (this.nome == null || this.nome.isBlank()) {
-      throw new EntityException("Campo nome vazio");
-    }
-    
-    if (this.cpf == null || this.cpf.isBlank()) {
-      throw new EntityException("Campo cpf vazio");
-    }
-
-    if (this.email == null || this.email.isBlank()) {
-      throw new EntityException("Campo email vazio");
-    }
-  }
-
   @Override
   public int hashCode() {
     final int prime = 31;

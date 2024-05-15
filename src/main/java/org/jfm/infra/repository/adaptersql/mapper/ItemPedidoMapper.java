@@ -1,7 +1,7 @@
 package org.jfm.infra.repository.adaptersql.mapper;
 
 // import org.jfm.bootloader.QuarkusMappingConfig;
-// import org.jfm.domain.valueObjects.ItemPedido;
+// import org.jfm.domain.valueobjects.ItemPedido;
 // import org.jfm.infra.repository.entities.ItemPedidoEntity;
 // import org.mapstruct.Mapper;
 

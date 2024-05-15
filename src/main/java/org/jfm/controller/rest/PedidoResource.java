@@ -13,7 +13,7 @@ import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.usecases.ItemPedidoUseCase;
 import org.jfm.domain.usecases.PedidoUseCase;
-import org.jfm.domain.valueObjects.ItemPedido;
+import org.jfm.domain.valueobjects.ItemPedido;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -100,11 +100,11 @@ public class PedidoResource {
         return Response.status(Response.Status.OK).build();
     }
 
-    @GET
-    @Path("/{id}/pagar")
-    public Response pagar(@PathParam("id") UUID id) {
-        itemPedidoUseCase.pagar(id); // TODO: implementar
-        return Response.status(Response.Status.OK).build();
-    }
+    // @GET
+    // @Path("/{id}/pagar")
+    // public Response pagar(@PathParam("id") UUID id) {
+    //     itemPedidoUseCase.pagar(id); // TODO: implementar
+    //     return Response.status(Response.Status.OK).build();
+    // }
 
 }
