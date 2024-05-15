@@ -1,4 +1,4 @@
-package org.jfm.infra.repository.entities;
+package org.jfm.infra.repository.adaptersql.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

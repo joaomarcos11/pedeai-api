@@ -1,8 +1,8 @@
-package org.jfm.infra.repository.mapper;
+package org.jfm.infra.repository.adaptersql.mapper;
 
 import org.jfm.bootloader.QuarkusMappingConfig;
 import org.jfm.domain.entities.Pedido;
-import org.jfm.infra.repository.entities.PedidoEntity;
+import org.jfm.infra.repository.adaptersql.entities.PedidoEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

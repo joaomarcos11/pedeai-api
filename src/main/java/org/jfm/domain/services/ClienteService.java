@@ -18,6 +18,10 @@ public class ClienteService implements ClienteUseCase {
     @Override
     public UUID criar(Cliente cliente) {
         cliente.setId(UUID.randomUUID());
+        cliente.validar();
+
+        // TODO: verificar se não tem duplicata.
+
         clienteRepository.criar(cliente);
 
         return cliente.getId();

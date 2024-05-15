@@ -1,4 +1,4 @@
-package org.jfm.infra.repository.mapper;
+package org.jfm.infra.repository.adaptersql.mapper;
 
 // import org.jfm.bootloader.QuarkusMappingConfig;
 // import org.jfm.domain.valueObjects.ItemPedido;

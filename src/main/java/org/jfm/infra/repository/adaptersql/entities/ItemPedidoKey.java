@@ -1,6 +1,4 @@
-package org.jfm.infra.repository.entities;
-
-import java.io.Serializable;
+package org.jfm.infra.repository.adaptersql.entities;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;

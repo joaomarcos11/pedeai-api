@@ -1,4 +1,4 @@
-package org.jfm.infra.repository;
+package org.jfm.infra.repository.adaptersql;
 
 import java.util.List;
 import java.util.UUID;
@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import org.jfm.domain.entities.Item;
 import org.jfm.domain.entities.enums.Categoria;
 import org.jfm.domain.ports.ItemRepository;
-import org.jfm.infra.repository.entities.ItemEntity;
-import org.jfm.infra.repository.mapper.ItemMapper;
+import org.jfm.infra.repository.adaptersql.entities.ItemEntity;
+import org.jfm.infra.repository.adaptersql.mapper.ItemMapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -19,6 +19,7 @@ import jakarta.transaction.Transactional;
 
 @ApplicationScoped
 public class ItemRepositoryImpl implements ItemRepository {
+
     @Inject
     EntityManager entityManager;
 

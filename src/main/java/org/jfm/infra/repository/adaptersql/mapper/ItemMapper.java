@@ -1,10 +1,9 @@
-package org.jfm.infra.repository.mapper;
+package org.jfm.infra.repository.adaptersql.mapper;
 
 import org.jfm.bootloader.QuarkusMappingConfig;
 import org.jfm.domain.entities.Item;
-import org.jfm.infra.repository.entities.ItemEntity;
+import org.jfm.infra.repository.adaptersql.entities.ItemEntity;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(config = QuarkusMappingConfig.class)
 public interface ItemMapper {

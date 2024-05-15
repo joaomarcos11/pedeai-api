@@ -1,4 +1,4 @@
-package org.jfm.infra.repository;
+package org.jfm.infra.repository.adaptersql;
 
 import java.util.List;
 import java.util.Set;
@@ -7,10 +7,10 @@ import java.util.stream.Collectors;
 import org.jfm.domain.entities.Item;
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.ports.ItemPedidoRepository;
-import org.jfm.infra.repository.entities.ItemEntity;
-import org.jfm.infra.repository.entities.PedidoEntity;
-import org.jfm.infra.repository.mapper.ItemMapper;
-import org.jfm.infra.repository.mapper.PedidoMapper;
+import org.jfm.infra.repository.adaptersql.entities.ItemEntity;
+import org.jfm.infra.repository.adaptersql.entities.PedidoEntity;
+import org.jfm.infra.repository.adaptersql.mapper.ItemMapper;
+import org.jfm.infra.repository.adaptersql.mapper.PedidoMapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
