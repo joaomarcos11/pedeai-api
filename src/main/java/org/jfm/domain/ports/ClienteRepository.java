@@ -14,6 +14,8 @@ public interface ClienteRepository {
 
     public Cliente buscarPorCpf(String cpf);
 
+    public Cliente buscarPorEmail(String cpf);
+
     public void editar(Cliente cliente);
 
     public void remover(Cliente cliente);

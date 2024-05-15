@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.jfm.domain.entities.Cliente;
 import org.jfm.domain.exceptions.EntityNotFoundException;
+import org.jfm.domain.exceptions.ErrosSistemaEnum;
 import org.jfm.domain.ports.ClienteRepository;
 import org.jfm.infra.repository.adaptersql.entities.ClienteEntity;
 import org.jfm.infra.repository.adaptersql.mapper.ClienteMapper;
@@ -48,18 +49,35 @@ public class ClienteRepositoryImpl implements ClienteRepository {
             query.setParameter("id", id);
     
             return clienteMapper.toDomain(query.getSingleResult());
-        } catch (NoResultException e) {
-            throw new EntityNotFoundException("cliente não encontrado");
+        }  catch (NoResultException e) {
+            throw new EntityNotFoundException(ErrosSistemaEnum.CLIENTE_NOT_FOUND.getMessage());
         }
     }
 
     @Override
     @Transactional
     public Cliente buscarPorCpf(String cpf) {
-        TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.findByCpf", ClienteEntity.class);
-        query.setParameter("cpf", cpf);
+        try {
+            TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.findByCpf", ClienteEntity.class);
+            query.setParameter("cpf", cpf);
 
-        return clienteMapper.toDomain(query.getSingleResult());
+            return clienteMapper.toDomain(query.getSingleResult());
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    @Transactional
+    public Cliente buscarPorEmail(String email) {
+        try {
+            TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.findByEmail", ClienteEntity.class);
+            query.setParameter("email", email);
+
+            return clienteMapper.toDomain(query.getSingleResult());
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

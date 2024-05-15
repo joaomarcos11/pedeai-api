@@ -6,6 +6,8 @@ import java.util.regex.Pattern;
 
 import org.jfm.domain.exceptions.Exceptions.InvalidEntityException;
 
+import org.jfm.domain.exceptions.EntityException;
+
 public class Cliente {
   private UUID id;
   private String nome;
@@ -66,6 +68,20 @@ public class Cliente {
 
   public void setAtivo(boolean ativo) {
     this.ativo = ativo;
+  }
+
+  public void validar() {
+    if (this.nome == null || this.nome.isBlank()) {
+      throw new EntityException("Campo nome vazio");
+    }
+    
+    if (this.cpf == null || this.cpf.isBlank()) {
+      throw new EntityException("Campo cpf vazio");
+    }
+
+    if (this.email == null || this.email.isBlank()) {
+      throw new EntityException("Campo email vazio");
+    }
   }
 
   @Override
