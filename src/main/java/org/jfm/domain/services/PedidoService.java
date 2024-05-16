@@ -6,12 +6,15 @@ import java.util.UUID;
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.ports.PedidoRepository;
+import org.jfm.domain.ports.ClienteRepository;
 import org.jfm.domain.ports.PedidoPayment;
 import org.jfm.domain.usecases.PedidoUseCase;
 
 public class PedidoService implements PedidoUseCase {
 
     PedidoRepository pedidoRepository;
+
+    ClienteRepository clienteRepository;
 
     PedidoPayment pedidoPayment;
 
@@ -22,6 +25,10 @@ public class PedidoService implements PedidoUseCase {
 
     @Override
     public UUID criar(Pedido pedido) {
+        if (pedido.getIdCliente() != null) {
+            clienteRepository.buscarPorId(pedido.getIdCliente());
+        }
+
         pedido.setId(UUID.randomUUID());
         pedidoRepository.criar(pedido);
 
