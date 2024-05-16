@@ -93,25 +93,26 @@ public class Cliente {
   }
 
   public void validar() {
-    if (this.nome.isBlank() || this.nome.isEmpty()) {
-      throw new InvalidEntityException("o nome não pode ser vazio");
+    if (this.nome == null || this.nome.isBlank()) {
+      throw new InvalidEntityException("Campo nome não pode ser vazio");
     }
 
     if (this.nome.length() <= 3) {
-      throw new InvalidEntityException("o nome de conter mais de 3 caracteres");
+      throw new InvalidEntityException("Campo nome deve conter mais de 3 caracteres");
     }
 
     this.nome = this.nome.toUpperCase();
 
     Matcher matcher = CPF_VALIDATION.matcher(this.cpf);
-    if (!matcher.matches()) {
-      throw new InvalidEntityException("cpf inválido");
+    if (this.cpf == null || this.cpf.isBlank() || !matcher.matches()) {
+      throw new InvalidEntityException("Campo CPF inválido");
     }
 
     matcher = EMAIL_VALIDATION.matcher(this.email);
-    if (!matcher.matches()) {
-      throw new InvalidEntityException("email inválido");
+    if (this.email == null || this.email.isBlank() || !matcher.matches()) {
+      throw new InvalidEntityException("Campo email inválido");
     }
   }
 
 }
+ 

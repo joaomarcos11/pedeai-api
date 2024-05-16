@@ -3,6 +3,7 @@ package org.jfm.domain.entities;
 import java.util.UUID;
 
 import org.jfm.domain.entities.enums.Categoria;
+import org.jfm.domain.exceptions.Exceptions.InvalidEntityException;
 
 public class Item {
     private UUID id;
@@ -76,6 +77,18 @@ public class Item {
         } else if (!id.equals(other.id))
             return false;
         return true;
+    }
+
+    public void validar() {
+        if (this.nome == null || this.nome.isBlank()) {
+           throw new InvalidEntityException("Campo nome não pode ser vazio"); 
+        }
+
+        if (this.preco < 0 ) {
+           throw new InvalidEntityException("Campo preço inválido"); 
+        }
+
+        //TODO - Pode criar Item sem Categoria vinculado?
     }
 
 }
