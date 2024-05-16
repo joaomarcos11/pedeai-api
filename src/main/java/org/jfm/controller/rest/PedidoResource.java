@@ -11,6 +11,8 @@ import org.jfm.controller.rest.dto.PedidoUpdateDto;
 import org.jfm.controller.rest.mapper.PedidoMapper;
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;
+import org.jfm.domain.exceptions.ErrosSistemaEnum;
+import org.jfm.domain.exceptions.ParamException;
 import org.jfm.domain.usecases.ItemPedidoUseCase;
 import org.jfm.domain.usecases.PedidoUseCase;
 import org.jfm.domain.valueobjects.ItemPedido;
@@ -50,6 +52,10 @@ public class PedidoResource {
 
     @GET
     public Response buscar(@QueryParam("status") Status status) {
+        // if (status == null) {
+        //     throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+        // }
+        
         List<Pedido> pedidos = new ArrayList<>();
 
         if (status == null) {
@@ -69,6 +75,10 @@ public class PedidoResource {
     @GET
     @Path("/{id}")
     public Response buscarPorId(@PathParam("id") UUID id) {
+        if (id == null || id.toString().isEmpty()) {
+            throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+        }
+
         Pedido pedido = pedidoUseCase.buscarPorId(id);
         PedidoDto pedidoDto = pedidoMapper.toDto(pedido);
         pedidoDto.setItens(itemPedidoUseCase.listarItensDoPedidoPeloId(id));
@@ -78,6 +88,10 @@ public class PedidoResource {
     @PUT
     @Path("/{id}")
     public Response editar(@PathParam("id") UUID id, PedidoUpdateDto pedido) {
+        if (id == null || id.toString().isEmpty()) {
+            throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+        }
+
         Pedido pedidoEntity = pedidoMapper.toDomain(pedido);
         pedidoEntity.setId(id);
         pedidoUseCase.editar(pedidoEntity);
@@ -87,6 +101,10 @@ public class PedidoResource {
     @POST
     @Path("/{id}/adicionar-item")
     public Response adicionarItem(@PathParam("id") UUID id, UUID idItem) {
+        if (id == null || id.toString().isEmpty()) {
+            throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+        }
+
         ItemPedido itemPedido = new ItemPedido(idItem, id);
         itemPedidoUseCase.adicionarItemAoPedido(itemPedido);
         return Response.status(Response.Status.OK).build();
@@ -95,6 +113,10 @@ public class PedidoResource {
     @POST
     @Path("/{id}/remover-item")
     public Response removerItem(@PathParam("id") UUID id, UUID idItem) {
+        if (id == null || id.toString().isEmpty()) {
+            throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+        }
+
         ItemPedido itemPedido = new ItemPedido(idItem, id);
         itemPedidoUseCase.removerItemDoPedido(itemPedido);
         return Response.status(Response.Status.OK).build();

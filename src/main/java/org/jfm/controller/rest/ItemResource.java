@@ -7,6 +7,8 @@ import org.jfm.controller.rest.dto.ItemCreateUpdateDto;
 import org.jfm.controller.rest.mapper.ItemMapper;
 import org.jfm.domain.entities.Item;
 import org.jfm.domain.entities.enums.Categoria;
+import org.jfm.domain.exceptions.ErrosSistemaEnum;
+import org.jfm.domain.exceptions.ParamException;
 import org.jfm.domain.usecases.ItemUseCase;
 
 import jakarta.inject.Inject;
@@ -54,6 +56,10 @@ public class ItemResource {
     @GET
     @Path("/{id}")
     public Response buscarPorId(@PathParam("id") UUID id) {
+        if (id == null || id.toString().isEmpty()) {
+            throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+        }
+
         Item item = itemUseCase.buscarPorId(id);
         return Response.status(Response.Status.OK).entity(item).build();
     }
@@ -61,6 +67,10 @@ public class ItemResource {
     @PUT
     @Path("/{id}")
     public Response editar(@PathParam("id") UUID id, ItemCreateUpdateDto item) {
+        if (id == null || id.toString().isEmpty()) {
+            throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+        }
+
         Item itemEntity = itemMapper.toDomain(item);
         itemEntity.setId(id);
         itemUseCase.editar(itemEntity);
@@ -70,6 +80,10 @@ public class ItemResource {
     @DELETE
     @Path("/{id}")
     public Response remover(@PathParam("id") UUID id) {
+        if (id == null || id.toString().isEmpty()) {
+            throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+        }
+
         itemUseCase.remover(id);
         return Response.status(Response.Status.OK).build();
     }
