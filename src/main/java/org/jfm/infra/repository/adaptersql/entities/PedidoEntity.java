@@ -36,9 +36,7 @@ public class PedidoEntity {
     @JoinColumn(name = "cliente_id")
     private ClienteEntity cliente;
 
-    // @ManyToMany(mappedBy = "pedidos")
-    // private Set<ItemEntity> itens = new HashSet<>();
-
     @OneToMany(mappedBy = "pedido")
-    private Set<ItemPedidoEntity> itemPedidos = new HashSet<>();
+    Set<ItemPedidoEntity> itemPedidos;
+
 }

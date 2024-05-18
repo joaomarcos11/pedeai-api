@@ -8,12 +8,8 @@ import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.NamedQuery;
 import org.jfm.domain.entities.enums.Categoria;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -31,18 +27,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ItemEntity {
+
     @Id
     private UUID id;
     private String nome;
     private int preco;
     private Categoria categoria;
 
-//     @ManyToMany(cascade = { CascadeType.ALL }) // TODO: verificar esse tipo de cascade e outras variaveis
-//     @JoinTable(name = "itens_pedidos", joinColumns = { @JoinColumn(name = "item_id") }, inverseJoinColumns = {
-//             @JoinColumn(name = "pedido_id") })
-//     Set<PedidoEntity> pedidos = new HashSet<>();
-
     @OneToMany(mappedBy = "item")
-    private Set<ItemPedidoEntity> itemPedidos = new HashSet<>();
+    Set<ItemPedidoEntity> itemPedidos;
 
 }

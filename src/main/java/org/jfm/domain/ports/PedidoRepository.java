@@ -1,5 +1,6 @@
 package org.jfm.domain.ports;
 
+import org.jfm.domain.entities.Item;
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;
 
@@ -16,4 +17,10 @@ public interface PedidoRepository {
     public List<Pedido> listarPorStatus(Status status);
 
     public void editar(Pedido pedido);
+
+    public void adicionarItemAoPedido(Item item, Pedido pedido, int quantidade);
+
+    public List<Item> listarItensDoPedido(Pedido pedido);
+
+    public void removerItemDoPedido(Item item, Pedido pedido, int quantidade);
 };

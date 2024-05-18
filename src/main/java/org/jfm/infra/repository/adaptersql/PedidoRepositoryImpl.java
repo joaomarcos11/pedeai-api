@@ -4,12 +4,16 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.jfm.domain.entities.Item;
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.exceptions.EntityNotFoundException;
 import org.jfm.domain.exceptions.ErrorSqlException;
 import org.jfm.domain.exceptions.ErrosSistemaEnum;
 import org.jfm.domain.ports.PedidoRepository;
+import org.jfm.domain.valueobjects.ItemPedido;
+import org.jfm.infra.repository.adaptersql.entities.ItemEntity;
+import org.jfm.infra.repository.adaptersql.entities.ItemPedidoEntity;
 import org.jfm.infra.repository.adaptersql.entities.PedidoEntity;
 import org.jfm.infra.repository.adaptersql.mapper.PedidoMapper;
 
@@ -21,7 +25,6 @@ import jakarta.persistence.PersistenceException;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.NotFoundException;
 
 @ApplicationScoped
 public class PedidoRepositoryImpl implements PedidoRepository {
@@ -85,7 +88,6 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     @Transactional
     public void editar(Pedido pedido) {
         try {
-
             Query query = entityManager.createNamedQuery("Pedido.update");
             query.setParameter("id", pedido.getId());
             // query.setParameter("idCliente", pedido.getIdCliente());
@@ -94,6 +96,45 @@ public class PedidoRepositoryImpl implements PedidoRepository {
             query.executeUpdate();
         } catch (PersistenceException e) {
             throw new ErrorSqlException(ErrosSistemaEnum.DATABASE_ERROR.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public void adicionarItemAoPedido(Item item, Pedido pedido, int quantidade) {
+        try {
+            ItemEntity itemEntity = entityManager.find(ItemEntity.class, item.getId());
+            PedidoEntity pedidoEntity = entityManager.find(PedidoEntity.class, pedido.getId());
+
+            ItemPedidoEntity itemPedidoEntity = new ItemPedidoEntity();
+            itemPedidoEntity.setItem(itemEntity);
+            itemPedidoEntity.setPedido(pedidoEntity);
+            itemPedidoEntity.setQuantidade(quantidade); 
+
+            entityManager.persist(itemPedidoEntity);
+        } catch (PersistenceException e) {
+            throw new ErrorSqlException(ErrosSistemaEnum.DATABASE_ERROR.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public List<Item> listarItensDoPedido(Pedido pedido) {
+        try {
+            TypedQuery<ItemPedidoEntity> itemPedido = entityManager.createNamedQuery("ItemPedido.findByPedidoId", ItemPedidoEntity.class);
+
+        } catch () {
+
+        }
+    }
+
+    @Override
+    @Transactional
+    public void removerItemDoPedido(Item item, Pedido pedido, int quantidade) {
+        try {
+
+        } catch() {
+
         }
     }
 

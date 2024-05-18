@@ -3,23 +3,29 @@ package org.jfm.domain.services;
 import java.util.List;
 import java.util.UUID;
 
+import org.jfm.domain.entities.Item;
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.ports.PedidoRepository;
 import org.jfm.domain.ports.ClienteRepository;
+import org.jfm.domain.ports.ItemRepository;
 import org.jfm.domain.ports.PedidoPayment;
 import org.jfm.domain.usecases.PedidoUseCase;
+import org.jfm.domain.valueobjects.ItemPedido;
 
 public class PedidoService implements PedidoUseCase {
 
     PedidoRepository pedidoRepository;
 
+    ItemRepository itemRepository;
+
     ClienteRepository clienteRepository;
 
     PedidoPayment pedidoPayment;
 
-    public PedidoService(PedidoRepository pedidoRepository, PedidoPayment pedidoPayment) {
+    public PedidoService(PedidoRepository pedidoRepository, ItemRepository itemRepository, PedidoPayment pedidoPayment) {
         this.pedidoRepository = pedidoRepository;
+        this.itemRepository = itemRepository;
         this.pedidoPayment = pedidoPayment;
     }
 
@@ -56,12 +62,33 @@ public class PedidoService implements PedidoUseCase {
     };
 
     @Override
-    public boolean pagar(Pedido pedido) {
+    public boolean pagar(UUID idPedido) {
+        Pedido pedido = pedidoRepository.buscarPorId(idPedido);
         int valorTotal = pedido.getItens().stream().map(i -> i.getPreco()).reduce(0,
                 (subtotal, element) -> subtotal + element);
 
         byte[] info = pedidoPayment.criarPagamento(valorTotal); // TODO: mock simples
         return pedidoPayment.pagar(info);
+    }
+
+    @Override
+    public void adicionarItemAoPedido(UUID idItem, UUID idPedido, int quantidade) {
+        Pedido pedido = pedidoRepository.buscarPorId(idPedido);
+        Item item = itemRepository.buscarPorId(idItem);
+        pedidoRepository.adicionarItemAoPedido(item, pedido, quantidade);
+    };
+
+    @Override
+    public List<Item> listarItensDoPedidoPeloId(UUID idPedido) {
+        Pedido pedido = pedidoRepository.buscarPorId(idPedido);
+        return pedidoRepository.listarItensDoPedido(pedido);
+    }
+
+    @Override
+    public void removerItemDoPedido(UUID idItem, UUID idPedido, int quantidade) {
+        Pedido pedido = pedidoRepository.buscarPorId(idPedido);
+        Item item = itemRepository.buscarPorId(idItem);
+        pedidoRepository.removerItemDoPedido(item, pedido, quantidade);
     }
 
 }
