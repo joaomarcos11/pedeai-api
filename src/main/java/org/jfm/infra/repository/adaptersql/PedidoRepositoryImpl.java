@@ -122,9 +122,8 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     public List<Item> listarItensDoPedido(Pedido pedido) {
         try {
             TypedQuery<ItemPedidoEntity> itemPedido = entityManager.createNamedQuery("ItemPedido.findByPedidoId", ItemPedidoEntity.class);
-
-        } catch () {
-
+        } catch (PersistenceException e) {
+            throw new ErrorSqlException(ErrosSistemaEnum.DATABASE_ERROR.getMessage());
         }
     }
 
@@ -132,9 +131,9 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     @Transactional
     public void removerItemDoPedido(Item item, Pedido pedido, int quantidade) {
         try {
-
-        } catch() {
-
+            // ToDo
+        } catch (PersistenceException e) {
+            throw new ErrorSqlException(ErrosSistemaEnum.DATABASE_ERROR.getMessage());
         }
     }
 
