@@ -9,6 +9,7 @@ import org.jfm.domain.services.ClienteService;
 import org.jfm.domain.services.ItemPedidoService;
 import org.jfm.domain.services.ItemService;
 import org.jfm.domain.services.PedidoService;
+import org.jfm.domain.usecases.ClienteUseCase;
 
 import jakarta.enterprise.inject.Produces;
 
@@ -19,14 +20,15 @@ public class AppContext {
         return new ClienteService(clienteRepository);
     };
 
-    @Produces
-    public PedidoService pedidoService(PedidoRepository pedidoRepository, PedidoPayment pedidoPayment) {
-        return new PedidoService(pedidoRepository, pedidoPayment);
-    }
     
     @Produces
     public ItemService itemService(ItemRepository itemRepository) {
         return new ItemService(itemRepository);
+    };
+
+    @Produces
+    public PedidoService pedidoService(PedidoRepository pedidoRepository, ClienteUseCase clienteUseCase, ItemService itemService, PedidoPayment pedidoPayment) {
+        return new PedidoService(pedidoRepository, clienteUseCase, itemService, pedidoPayment);
     };
     
     @Produces

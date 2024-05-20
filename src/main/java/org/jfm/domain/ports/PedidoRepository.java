@@ -5,6 +5,7 @@ import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public interface PedidoRepository {
@@ -18,9 +19,11 @@ public interface PedidoRepository {
 
     public void editar(Pedido pedido);
 
-    public void adicionarItemAoPedido(Item item, Pedido pedido, int quantidade);
+    // public void adicionarItemAoPedido(Item item, Pedido pedido, int quantidade);
 
-    public List<Item> listarItensDoPedido(Pedido pedido);
+    public Map<Item, Integer> listarItensDoPedido(Pedido pedido);
 
-    public void removerItemDoPedido(Item item, Pedido pedido, int quantidade);
+    public void editarItensDoPedido(Pedido pedido);
+
+    // public void removerItemDoPedido(Item item, Pedido pedido, int quantidade);
 };

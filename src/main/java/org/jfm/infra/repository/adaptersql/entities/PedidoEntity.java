@@ -1,6 +1,5 @@
 package org.jfm.infra.repository.adaptersql.entities;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -37,6 +36,6 @@ public class PedidoEntity {
     private ClienteEntity cliente;
 
     @OneToMany(mappedBy = "pedido")
-    Set<ItemPedidoEntity> itemPedidos;
+    Set<ItemPedidoEntity> itens;
 
 }

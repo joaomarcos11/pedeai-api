@@ -6,8 +6,6 @@ import java.util.regex.Pattern;
 
 import org.jfm.domain.exceptions.Exceptions.InvalidEntityException;
 
-import org.jfm.domain.exceptions.EntityException;
-
 public class Cliente {
   private UUID id;
   private String nome;

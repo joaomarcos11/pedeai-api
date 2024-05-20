@@ -2,6 +2,7 @@ package org.jfm.controller.rest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -15,8 +16,6 @@ import org.jfm.domain.exceptions.ErrosSistemaEnum;
 import org.jfm.domain.exceptions.ParamException;
 import org.jfm.domain.usecases.ItemPedidoUseCase;
 import org.jfm.domain.usecases.PedidoUseCase;
-import org.jfm.domain.valueobjects.ItemPedido;
-
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -72,6 +71,8 @@ public class PedidoResource {
         return Response.status(Response.Status.OK).entity(pedidosDto).build();
     }
 
+    // TODO: quando lista tá dando ignore, criar um DTO que não mostre itens
+
     @GET
     @Path("/{id}")
     public Response buscarPorId(@PathParam("id") UUID id) {
@@ -98,27 +99,39 @@ public class PedidoResource {
         return Response.status(Response.Status.OK).build();
     }
 
+    // @POST
+    // @Path("/{id}/adicionar-item")
+    // public Response adicionarItem(@PathParam("id") UUID id, UUID idItem) {
+    //     if (id == null || id.toString().isEmpty()) {
+    //         throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+    //     }
+
+    //     ItemPedido itemPedido = new ItemPedido(idItem, id);
+    //     itemPedidoUseCase.adicionarItemAoPedido(itemPedido);
+    //     return Response.status(Response.Status.OK).build();
+    // }
+
+    // @POST
+    // @Path("/{id}/remover-item")
+    // public Response removerItem(@PathParam("id") UUID id, UUID idItem) {
+    //     if (id == null || id.toString().isEmpty()) {
+    //         throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+    //     }
+
+    //     ItemPedido itemPedido = new ItemPedido(idItem, id);
+    //     itemPedidoUseCase.removerItemDoPedido(itemPedido);
+    //     return Response.status(Response.Status.OK).build();
+    // }
+
     @POST
-    @Path("/{id}/adicionar-item")
-    public Response adicionarItem(@PathParam("id") UUID id, UUID idItem) {
+    @Path("/{id}/editar-itens")
+    public Response editarItens(@PathParam("id") UUID id, Map<UUID, Integer> itemQuantidade) {
         if (id == null || id.toString().isEmpty()) {
             throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
         }
 
-        ItemPedido itemPedido = new ItemPedido(idItem, id);
-        itemPedidoUseCase.adicionarItemAoPedido(itemPedido);
-        return Response.status(Response.Status.OK).build();
-    }
+        pedidoUseCase.editarItensDoPedido(id, itemQuantidade);
 
-    @POST
-    @Path("/{id}/remover-item")
-    public Response removerItem(@PathParam("id") UUID id, UUID idItem) {
-        if (id == null || id.toString().isEmpty()) {
-            throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
-        }
-
-        ItemPedido itemPedido = new ItemPedido(idItem, id);
-        itemPedidoUseCase.removerItemDoPedido(itemPedido);
         return Response.status(Response.Status.OK).build();
     }
 

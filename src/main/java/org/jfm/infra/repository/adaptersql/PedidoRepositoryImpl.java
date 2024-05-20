@@ -1,6 +1,9 @@
 package org.jfm.infra.repository.adaptersql;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -12,9 +15,11 @@ import org.jfm.domain.exceptions.ErrorSqlException;
 import org.jfm.domain.exceptions.ErrosSistemaEnum;
 import org.jfm.domain.ports.PedidoRepository;
 import org.jfm.domain.valueobjects.ItemPedido;
+import org.jfm.infra.repository.adaptersql.entities.ClienteEntity;
 import org.jfm.infra.repository.adaptersql.entities.ItemEntity;
 import org.jfm.infra.repository.adaptersql.entities.ItemPedidoEntity;
 import org.jfm.infra.repository.adaptersql.entities.PedidoEntity;
+import org.jfm.infra.repository.adaptersql.mapper.ItemMapper;
 import org.jfm.infra.repository.adaptersql.mapper.PedidoMapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -35,11 +40,19 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     @Inject
     PedidoMapper pedidoMapper;
 
+    @Inject
+    ItemMapper itemMapper;
+
     @Override
     @Transactional
     public void criar(Pedido pedido) {
         try {
-            entityManager.persist(pedidoMapper.toEntity(pedido));
+            PedidoEntity pedidoEntity = pedidoMapper.toEntityIgnoreClienteAndItens(pedido);
+            if (pedido.getIdCliente() != null) {
+                ClienteEntity clienteEntity = entityManager.find(ClienteEntity.class, pedido.getIdCliente());
+                pedidoEntity.setCliente(clienteEntity);
+            }
+            entityManager.persist(pedidoEntity);
         } catch (PersistenceException e) {
             throw new ErrorSqlException(ErrosSistemaEnum.DATABASE_ERROR.getMessage());
         }
@@ -50,7 +63,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     public List<Pedido> listar() {
         try {
             return entityManager.createNamedQuery("Pedido.findAll", PedidoEntity.class).getResultStream()
-                    .map(p -> pedidoMapper.toDomain(p)).collect(Collectors.toList());
+                    .map(p -> pedidoMapper.toDomainIgnoreItens(p)).collect(Collectors.toList()); // TODO: trocar o mapper
         } catch (PersistenceException e) {
             throw new ErrorSqlException(ErrosSistemaEnum.DATABASE_ERROR.getMessage());
         }
@@ -63,7 +76,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
             TypedQuery<PedidoEntity> query = entityManager.createNamedQuery("Pedido.findById", PedidoEntity.class);
             query.setParameter("id", id);
     
-            return pedidoMapper.toDomain(query.getSingleResult());
+            return pedidoMapper.toDomainIgnoreItens(query.getSingleResult()); // TODO: trocar o mapper
         } catch (NoResultException e) {
             throw new EntityNotFoundException(ErrosSistemaEnum.PEDIDO_NOT_FOUND.getMessage());
         } catch (PersistenceException e) {
@@ -78,7 +91,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
             TypedQuery<PedidoEntity> query = entityManager.createNamedQuery("Pedido.findByStatus", PedidoEntity.class);
             query.setParameter("status", status);
             
-            return query.getResultStream().map(p -> pedidoMapper.toDomain(p)).collect(Collectors.toList());
+            return query.getResultStream().map(p -> pedidoMapper.toDomainIgnoreItens(p)).collect(Collectors.toList()); // TODO: trocar o mapper
         } catch (PersistenceException e) {
             throw new ErrorSqlException(ErrosSistemaEnum.DATABASE_ERROR.getMessage());
         }
@@ -99,43 +112,66 @@ public class PedidoRepositoryImpl implements PedidoRepository {
         }
     }
 
+    // @Override
+    // @Transactional
+    // public void adicionarItemAoPedido(Item item, Pedido pedido, int quantidade) {
+    //     try {
+    //         ItemEntity itemEntity = entityManager.find(ItemEntity.class, item.getId());
+    //         PedidoEntity pedidoEntity = entityManager.find(PedidoEntity.class, pedido.getId());
+
+    //         ItemPedidoEntity itemPedidoEntity = new ItemPedidoEntity();
+    //         itemPedidoEntity.setItem(itemEntity);
+    //         itemPedidoEntity.setPedido(pedidoEntity);
+    //         itemPedidoEntity.setQuantidade(quantidade); 
+
+    //         entityManager.persist(itemPedidoEntity);
+    //     } catch (PersistenceException e) {
+    //         throw new ErrorSqlException(ErrosSistemaEnum.DATABASE_ERROR.getMessage());
+    //     }
+    // }
+
     @Override
     @Transactional
-    public void adicionarItemAoPedido(Item item, Pedido pedido, int quantidade) {
+    public Map<Item, Integer> listarItensDoPedido(Pedido pedido) {
         try {
-            ItemEntity itemEntity = entityManager.find(ItemEntity.class, item.getId());
-            PedidoEntity pedidoEntity = entityManager.find(PedidoEntity.class, pedido.getId());
+            TypedQuery<PedidoEntity> query = entityManager.createNamedQuery("Pedido.findById", PedidoEntity.class);
+            query.setParameter("id", pedido.getId());
 
-            ItemPedidoEntity itemPedidoEntity = new ItemPedidoEntity();
-            itemPedidoEntity.setItem(itemEntity);
-            itemPedidoEntity.setPedido(pedidoEntity);
-            itemPedidoEntity.setQuantidade(quantidade); 
+            PedidoEntity pedidoEntity = query.getSingleResult();
 
-            entityManager.persist(itemPedidoEntity);
-        } catch (PersistenceException e) {
-            throw new ErrorSqlException(ErrosSistemaEnum.DATABASE_ERROR.getMessage());
+            Set<ItemPedidoEntity> itensPedidos = pedidoEntity.getItens();
+
+            Map<Item, Integer> itens = new HashMap<>();
+
+            itensPedidos.forEach(i -> itens.put(itemMapper.toDomain(i.getItem()), Integer.valueOf(i.getQuantidade())));
+
+            // return pedidoEntity.getItemPedidos().stream().collect(Collectors.toMap(itemMapper.toDomain(ItemPedidoEntity::getItem), ItemPedidoEntity::getQuantidade));
+
+            return itens;
+
+        } catch (Exception e) {
+            throw new ErrorSqlException(ErrosSistemaEnum.DATABASE_ERROR.getMessage()); // TODO: trocar essa exception aqui
         }
     }
 
     @Override
     @Transactional
-    public List<Item> listarItensDoPedido(Pedido pedido) {
+    public void editarItensDoPedido(Pedido pedido) {
         try {
-            TypedQuery<ItemPedidoEntity> itemPedido = entityManager.createNamedQuery("ItemPedido.findByPedidoId", ItemPedidoEntity.class);
-
-        } catch () {
-
+            entityManager.persist(pedido);
+        } catch (Exception e) {
+            throw new ErrorSqlException(ErrosSistemaEnum.DATABASE_ERROR.getMessage()); // TODO: trocar essa exception aqui
         }
     }
 
-    @Override
-    @Transactional
-    public void removerItemDoPedido(Item item, Pedido pedido, int quantidade) {
-        try {
+    // @Override
+    // @Transactional
+    // public void removerItemDoPedido(Item item, Pedido pedido, int quantidade) {
+    //     try {
 
-        } catch() {
+    //     } catch() {
 
-        }
-    }
+    //     }
+    // }
 
 }

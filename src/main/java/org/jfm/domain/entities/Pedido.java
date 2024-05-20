@@ -1,6 +1,6 @@
 package org.jfm.domain.entities;
 
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.jfm.domain.entities.enums.Status;
@@ -9,7 +9,7 @@ public class Pedido {
     private UUID id;
     private UUID idCliente;
     private Status status;
-    private List<Item> itens;
+    private Map<Item, Integer> itens; // TODO: trocar por Map<UUID, Integer> ???
 
     public Pedido(UUID id, UUID idCliente, Status status) {
         this.id = id;
@@ -41,17 +41,33 @@ public class Pedido {
         this.status = status;
     }
 
-    public List<Item> getItens() {
+    public Map<Item, Integer> getItens() {
         return this.itens;
     }
 
-    public void addItem(Item item) {
-        this.itens.add(item);
+    public void setItens(Map<Item, Integer> itens) {
+        this.itens = itens;
     }
 
-    public void removeItem(Item item) {
-        this.itens.remove(item);
-    }
+    // public void addItem(Item item, int quantidade) {
+    //     if (this.itens.containsKey(item)) {
+    //         this.itens.put(item, this.itens.get(item) + quantidade);
+    //         return;
+    //     }
+    //     this.itens.put(item, quantidade);
+    // }
+
+    // public void removeItem(Item item, int quantidade) {
+    //     if (!this.itens.containsKey(item)) {
+    //         throw new EntityNotFoundException("item não faz parte do pedido"); // TODO: talvez alterar
+    //     }
+
+    //     if (this.itens.get(item) < quantidade) {
+    //         throw new EntityNotFoundException("quantidade insuficiente"); // FIXME: arrumar esse throw aqui
+    //     }
+
+    //     this.itens.put(item, this.itens.get(item) - quantidade);
+    // }
 
     @Override
     public int hashCode() {
