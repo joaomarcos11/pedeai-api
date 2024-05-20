@@ -1,6 +1,5 @@
 package org.jfm.infra.repository.adaptersql.entities;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
