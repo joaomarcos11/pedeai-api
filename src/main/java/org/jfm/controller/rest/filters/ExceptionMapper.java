@@ -6,6 +6,7 @@ import org.jfm.domain.exceptions.EntityException;
 import org.jfm.domain.exceptions.EntityNotFoundException;
 import org.jfm.domain.exceptions.ErrorDetails;
 import org.jfm.domain.exceptions.ErrorSqlException;
+import org.jfm.domain.exceptions.Exceptions.InvalidEntityException;
 import org.jfm.domain.exceptions.ParamException;
 
 import jakarta.ws.rs.core.Response;
@@ -43,6 +44,13 @@ public class ExceptionMapper {
     @ServerExceptionMapper
     public Response mapException(ErrorSqlException t) {
         return Response.status(Response.Status.BAD_GATEWAY)
+                        .entity(new ErrorDetails(t.getMessage()))
+                        .build();
+    }
+
+    @ServerExceptionMapper
+    public Response mapException(InvalidEntityException t) {
+        return Response.status(Response.Status.BAD_REQUEST)
                         .entity(new ErrorDetails(t.getMessage()))
                         .build();
     }
