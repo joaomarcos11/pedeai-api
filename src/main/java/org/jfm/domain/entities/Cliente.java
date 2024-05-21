@@ -112,5 +112,8 @@ public class Cliente {
     }
   }
 
+  public String handleCpf(String cpf) {
+    return cpf.trim().replaceAll("[^\\w\\s]","");
+  }
 }
  

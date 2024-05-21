@@ -75,7 +75,7 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     
             return clienteMapper.toDomain(query.getSingleResult());
         } catch (NoResultException e) {
-            throw new EntityNotFoundException("cliente não encontrado");
+            return null;
         } catch (PersistenceException e) {
             throw new ErrorSqlException(ErrosSistemaEnum.DATABASE_ERROR.getMessage());
         }
@@ -84,10 +84,16 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     @Override
     @Transactional
     public Cliente buscarPorEmail(String email) {
-        TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.findByEmail", ClienteEntity.class);
-        query.setParameter("email", email);
-
-        return clienteMapper.toDomain(query.getSingleResult());
+        try {
+            TypedQuery<ClienteEntity> query = entityManager.createNamedQuery("Cliente.findByEmail", ClienteEntity.class);
+            query.setParameter("email", email);
+    
+            return clienteMapper.toDomain(query.getSingleResult());
+        } catch (NoResultException e) {
+            return null;
+        } catch (PersistenceException e) {
+            throw new ErrorSqlException(ErrosSistemaEnum.DATABASE_ERROR.getMessage());
+        }
     }
 
     @Override
