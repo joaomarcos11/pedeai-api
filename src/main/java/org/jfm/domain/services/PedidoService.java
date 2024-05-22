@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.jfm.domain.entities.Item;
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.exceptions.EntityNotFoundException;
@@ -48,7 +47,10 @@ public class PedidoService implements PedidoUseCase {
 
     @Override
     public List<Pedido> listar() {
-        return pedidoRepository.listar();
+        // return pedidoRepository.listar();
+        List<Pedido> pedidos = pedidoRepository.listar();
+        System.out.println("listar PedidoService: " + pedidos.get(0).getItens()); // TODO: remover
+        return pedidos;
     };
 
     @Override
@@ -77,12 +79,45 @@ public class PedidoService implements PedidoUseCase {
         return pedidoPayment.pagar(info);
     }
 
+    @Override
+    public void editarItensDoPedido(UUID idPedido, Map<UUID, Integer> itemQuantidade) {
+        Pedido pedido = pedidoRepository.buscarPorId(idPedido);
+        // List<UUID> itens = itemUseCase.listar().stream().map(i -> i.getId()).collect(Collectors.toList());
+
+        // System.out.println("PedidoService: " + pedido.getItens());
+
+        pedido.setItens(itemQuantidade);
+
+        // for (UUID id : itemQuantidade.keySet()) {
+        //     Integer quantidade = itemQuantidade.get(id);
+        //     if (quantidade < 0) {
+        //         throw new EntityNotFoundException("quantidade não pode ser menor que zero."); // TODO: trocar exception
+        //     } else if (quantidade > 0) {
+        //         if (!itens.contains(id)) {
+        //             throw new EntityNotFoundException("item " + id.toString() + " não encontrado.");
+        //         }
+        //         pedido.getItens().put(id, quantidade);
+        //     } else {
+        //         if (pedido.getItens().containsKey(id)) {
+        //             pedido.getItens().remove(id);
+        //         } else {
+        //             throw new EntityNotFoundException("item não consta no pedido."); // TODO: trocar exception
+        //         }
+        //     }
+        // }
+
+        // System.out.println("PedidoService depois tratamento: " + pedido.getItens());
+
+        pedidoRepository.editarItensDoPedido(pedido);
+
+    }
+
+    /*
     public void editarItensDoPedido(UUID idPedido, Map<UUID, Integer> itemQuantidade) {
         Pedido pedido = pedidoRepository.buscarPorId(idPedido);
         Map<Item, Integer> itensDoPedido = pedidoRepository.listarItensDoPedido(pedido);
-
         Map<UUID, Integer> itensDoPedidoUuid = itensDoPedido.entrySet().stream().collect(Collectors.toMap(e -> e.getKey().getId(), e -> e.getValue()));
-
+        
         for (UUID id : itemQuantidade.keySet()) {
             Integer quantidade = itemQuantidade.get(id);
 
@@ -102,37 +137,11 @@ public class PedidoService implements PedidoUseCase {
                 }
             }
         }
-
-
-
-
-
-            // if (quantidade > 0) {
-            //     for (Item item : itensDoPedido.keySet()) {
-            //         if (item.getId().equals(id)) {
-            //             pedido.getItens().put(item, quantidade);
-            //         }
-            //     }
-            // }
-            
-            // if (quantidade == 0) {                
-            //     for (Item item : itensDoPedido.keySet()) {
-            //         if (item.getId().equals(id)) {
-            //             continue;
-            //         }
-            //     }
-            //     throw new EntityNotFoundException("item não consta no pedido");
-            // }
-
-
-        // TODO:  adicionar condicional para remover caso a quantidade seja zero
-
-
-
-        // pedido.setItens(itemQuantidade);
+        
         pedidoRepository.editarItensDoPedido(pedido);
     }
-
+    */
+    
     // @Override
     // public void adicionarItemAoPedido(UUID idItem, UUID idPedido, int quantidade) {
     //     Pedido pedido = pedidoRepository.buscarPorId(idPedido);

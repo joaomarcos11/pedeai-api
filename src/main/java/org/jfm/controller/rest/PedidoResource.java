@@ -14,7 +14,7 @@ import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.exceptions.ErrosSistemaEnum;
 import org.jfm.domain.exceptions.ParamException;
-import org.jfm.domain.usecases.ItemPedidoUseCase;
+// import org.jfm.domain.usecases.ItemPedidoUseCase;
 import org.jfm.domain.usecases.PedidoUseCase;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -36,8 +36,8 @@ public class PedidoResource {
     @Inject
     PedidoUseCase pedidoUseCase;
 
-    @Inject
-    ItemPedidoUseCase itemPedidoUseCase;
+    // @Inject
+    // ItemPedidoUseCase itemPedidoUseCase;
 
     @Inject
     PedidoMapper pedidoMapper;
@@ -63,10 +63,12 @@ public class PedidoResource {
             pedidos = pedidoUseCase.listarPorStatus(status);
         }
 
+        System.out.println("buscar PedidoResource: " + pedidos.get(0).getItens());
+
         List<PedidoDto> pedidosDto = pedidos.stream().map(p -> pedidoMapper.toDto(p)).collect(Collectors.toList());
-        for (PedidoDto pedido : pedidosDto) { // TODO: forma mais elegante de forEach?
-            pedido.setItens(itemPedidoUseCase.listarItensDoPedidoPeloId(pedido.getId()));
-        }
+        // for (PedidoDto pedido : pedidosDto) { // TODO: forma mais elegante de forEach?
+        //     pedido.setItens(itemPedidoUseCase.listarItensDoPedidoPeloId(pedido.getId()));
+        // }
 
         return Response.status(Response.Status.OK).entity(pedidosDto).build();
     }
@@ -81,8 +83,8 @@ public class PedidoResource {
         }
 
         Pedido pedido = pedidoUseCase.buscarPorId(id);
-        PedidoDto pedidoDto = pedidoMapper.toDto(pedido);
-        pedidoDto.setItens(itemPedidoUseCase.listarItensDoPedidoPeloId(id));
+        // PedidoDto pedidoDto = pedidoMapper.toDto(pedido); // TODO: melhor isso aqui
+        // pedidoDto.setItens(itemPedidoUseCase.listarItensDoPedidoPeloId(id));
         return Response.status(Response.Status.OK).entity(pedido).build();
     }
 

@@ -33,7 +33,7 @@ public class ItemEntity {
     private int preco;
     private Categoria categoria;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "id.item")
     Set<ItemPedidoEntity> itemPedidos;
 
 }

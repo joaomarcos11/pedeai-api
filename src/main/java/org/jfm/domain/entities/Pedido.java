@@ -9,7 +9,7 @@ public class Pedido {
     private UUID id;
     private UUID idCliente;
     private Status status;
-    private Map<Item, Integer> itens; // TODO: trocar por Map<UUID, Integer> ???
+    private Map<UUID, Integer> itens;
 
     public Pedido(UUID id, UUID idCliente, Status status) {
         this.id = id;
@@ -41,33 +41,13 @@ public class Pedido {
         this.status = status;
     }
 
-    public Map<Item, Integer> getItens() {
+    public Map<UUID, Integer> getItens() {
         return this.itens;
     }
 
-    public void setItens(Map<Item, Integer> itens) {
+    public void setItens(Map<UUID, Integer> itens) {
         this.itens = itens;
     }
-
-    // public void addItem(Item item, int quantidade) {
-    //     if (this.itens.containsKey(item)) {
-    //         this.itens.put(item, this.itens.get(item) + quantidade);
-    //         return;
-    //     }
-    //     this.itens.put(item, quantidade);
-    // }
-
-    // public void removeItem(Item item, int quantidade) {
-    //     if (!this.itens.containsKey(item)) {
-    //         throw new EntityNotFoundException("item não faz parte do pedido"); // TODO: talvez alterar
-    //     }
-
-    //     if (this.itens.get(item) < quantidade) {
-    //         throw new EntityNotFoundException("quantidade insuficiente"); // FIXME: arrumar esse throw aqui
-    //     }
-
-    //     this.itens.put(item, this.itens.get(item) - quantidade);
-    // }
 
     @Override
     public int hashCode() {
