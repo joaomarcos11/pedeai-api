@@ -43,20 +43,14 @@ public class ClienteResource {
 
     @GET
     public Response buscar(@QueryParam("cpf") String cpf) {
-        if (cpf == null || cpf.isBlank()) {
-            throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+        if (cpf == null) {
+            List<Cliente> clientes = clienteUseCase.listar();
+            return Response.status(Response.Status.OK).entity(clientes).build();
         }
 
         Cliente cliente = clienteUseCase.buscarPorCpf(cpf);
         return Response.status(Response.Status.OK).entity(cliente).build();
     };
-
-    @GET
-    @Path("/todos")
-    public Response buscarTodos() {
-        List<Cliente> clientes = clienteUseCase.listar();
-        return Response.status(Response.Status.OK).entity(clientes).build();
-    }
 
     @GET
     @Path("/{id}")
@@ -85,7 +79,7 @@ public class ClienteResource {
     @DELETE
     @Path("/{id}")
     public Response remover(@PathParam("id") UUID id) {
-        if (id == null || id.toString().isEmpty()) {
+        if (id == null) {
             throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
         }
 

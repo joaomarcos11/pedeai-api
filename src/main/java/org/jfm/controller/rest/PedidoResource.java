@@ -2,7 +2,6 @@ package org.jfm.controller.rest;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -96,50 +95,6 @@ public class PedidoResource {
         Pedido pedidoEntity = pedidoMapper.toDomain(pedido);
         pedidoEntity.setId(id);
         pedidoUseCase.editar(pedidoEntity);
-        return Response.status(Response.Status.OK).build();
     }
-
-    // @POST
-    // @Path("/{id}/adicionar-item")
-    // public Response adicionarItem(@PathParam("id") UUID id, UUID idItem) {
-    //     if (id == null || id.toString().isEmpty()) {
-    //         throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
-    //     }
-
-    //     ItemPedido itemPedido = new ItemPedido(idItem, id);
-    //     itemPedidoUseCase.adicionarItemAoPedido(itemPedido);
-    //     return Response.status(Response.Status.OK).build();
-    // }
-
-    // @POST
-    // @Path("/{id}/remover-item")
-    // public Response removerItem(@PathParam("id") UUID id, UUID idItem) {
-    //     if (id == null || id.toString().isEmpty()) {
-    //         throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
-    //     }
-
-    //     ItemPedido itemPedido = new ItemPedido(idItem, id);
-    //     itemPedidoUseCase.removerItemDoPedido(itemPedido);
-    //     return Response.status(Response.Status.OK).build();
-    // }
-
-    @POST
-    @Path("/{id}/editar-itens")
-    public Response editarItens(@PathParam("id") UUID id, Map<UUID, Integer> itemQuantidade) {
-        if (id == null || id.toString().isEmpty()) {
-            throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
-        }
-
-        pedidoUseCase.editarItensDoPedido(id, itemQuantidade);
-
-        return Response.status(Response.Status.OK).build();
-    }
-
-    // @GET
-    // @Path("/{id}/pagar")
-    // public Response pagar(@PathParam("id") UUID id) {
-    //     itemPedidoUseCase.pagar(id); // TODO: implementar
-    //     return Response.status(Response.Status.OK).build();
-    // }
 
 }

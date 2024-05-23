@@ -1,16 +1,19 @@
 package org.jfm.domain.entities;
 
+import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
 
 import org.jfm.domain.entities.enums.Status;
+import org.jfm.domain.exceptions.EntityInvalidException;
 
 public class Pedido {
     private UUID id;
     private UUID idCliente;
     private Status status;
-    private Map<Item, Integer> itens; // TODO: trocar por Map<UUID, Integer> ???
-
+    private Map<UUID, Integer> itens;
+    private Instant dataCriacao;
+    
     public Pedido(UUID id, UUID idCliente, Status status) {
         this.id = id;
         this.idCliente = idCliente;
@@ -41,33 +44,27 @@ public class Pedido {
         this.status = status;
     }
 
-    public Map<Item, Integer> getItens() {
+    public Map<UUID, Integer> getItens() {
         return this.itens;
     }
 
-    public void setItens(Map<Item, Integer> itens) {
+    public void setItens(Map<UUID, Integer> itens) {
         this.itens = itens;
     }
 
-    // public void addItem(Item item, int quantidade) {
-    //     if (this.itens.containsKey(item)) {
-    //         this.itens.put(item, this.itens.get(item) + quantidade);
-    //         return;
-    //     }
-    //     this.itens.put(item, quantidade);
-    // }
+    public Instant getDataCriacao() {
+        return this.dataCriacao;
+    }
 
-    // public void removeItem(Item item, int quantidade) {
-    //     if (!this.itens.containsKey(item)) {
-    //         throw new EntityNotFoundException("item não faz parte do pedido"); // TODO: talvez alterar
-    //     }
+    public void setDataCriacao(Instant dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
 
-    //     if (this.itens.get(item) < quantidade) {
-    //         throw new EntityNotFoundException("quantidade insuficiente"); // FIXME: arrumar esse throw aqui
-    //     }
-
-    //     this.itens.put(item, this.itens.get(item) - quantidade);
-    // }
+    public void validar() {
+        if (this.itens == null) {
+            throw new EntityInvalidException("pedido deve conter itens");
+        }
+    }
 
     @Override
     public int hashCode() {
