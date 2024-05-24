@@ -1,38 +1,53 @@
 package org.jfm.domain.valueobjects;
 
-import java.util.UUID;
+import org.jfm.domain.entities.Item;
+import org.jfm.domain.entities.Pedido;
 
 public class ItemPedido {
-    private UUID idPedido;
-    private UUID idItem;
-    
-    public ItemPedido(UUID idPedido, UUID idItem) {
-        this.idPedido = idPedido;
-        this.idItem = idItem;
+
+    private ItemPedidoChave id = new ItemPedidoChave();
+
+    private int quantidade;
+
+    public ItemPedido() {
     }
 
-    public UUID getIdPedido() {
-        return idPedido;
+    public ItemPedido(Item item, Pedido pedido, int quantidade) {
+        id.setItem(item);
+        id.setPedido(pedido);
+        this.quantidade = quantidade;
     }
 
-    public void setIdPedido(UUID idPedido) {
-        this.idPedido = idPedido;
+    public Item getItem() {
+        return id.getItem();
     }
 
-    public UUID getIdItem() {
-        return idItem;
+    public void setItem(Item item) {
+        id.setItem(item);
     }
 
-    public void setIdItem(UUID idItem) {
-        this.idItem = idItem;
+    public Pedido getPedido() {
+        return id.getPedido();
+    }
+
+    public void setPedido(Pedido pedido) {
+        id.setPedido(pedido);
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((idPedido == null) ? 0 : idPedido.hashCode());
-        result = prime * result + ((idItem == null) ? 0 : idItem.hashCode());
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + quantidade;
         return result;
     }
 
@@ -45,17 +60,14 @@ public class ItemPedido {
         if (getClass() != obj.getClass())
             return false;
         ItemPedido other = (ItemPedido) obj;
-        if (idPedido == null) {
-            if (other.idPedido != null)
+        if (id == null) {
+            if (other.id != null)
                 return false;
-        } else if (!idPedido.equals(other.idPedido))
+        } else if (!id.equals(other.id))
             return false;
-        if (idItem == null) {
-            if (other.idItem != null)
-                return false;
-        } else if (!idItem.equals(other.idItem))
+        if (quantidade != other.quantidade)
             return false;
         return true;
     }
-    
+
 }

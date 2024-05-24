@@ -1,44 +1,47 @@
 package org.jfm.infra.repository.adaptersql.entities;
 
 import java.io.Serializable;
-import java.util.UUID;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.Data;
 
 @Embeddable
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 public class ItemPedidoKey implements Serializable {
 
-    @Column(name = "pedido_id")
-    UUID pedidoId;
+    private static final long serialVersionUID = 1L;
 
-    @Column(name = "item_id")
-    UUID itemId;
+    @ManyToOne
+    @JoinColumn(name = "item_id")
+    private ItemEntity item;
 
-    // private static final long serialVersionUID = 1L;
+    @ManyToOne
+    @JoinColumn(name = "pedido_id")
+    private PedidoEntity pedido;
 
-    // @ManyToOne
-    // @MapsId("pedidoId")
-    // @JoinColumn(name = "pedido_id")
-    // private PedidoEntity pedido;
+    public ItemPedidoKey() {
+    }
 
-    // @ManyToOne
-    // @MapsId("itemId")
-    // @JoinColumn(name = "item_id")
-    // private ItemEntity item;
+    public ItemPedidoKey(ItemEntity item, PedidoEntity pedido) {
+        this.item = item;
+        this.pedido = pedido;
+    }
 
-    // public ItemPedidoKey() {
-    // }
+    public ItemEntity getItem() {
+        return item;
+    }
 
-    // public ItemPedidoKey(PedidoEntity pedido, ItemEntity item) {
-    //     this.pedido = pedido;
-    //     this.item = item;
-    // }
-    
+    public void setItem(ItemEntity item) {
+        this.item = item;
+    }
+
+    public PedidoEntity getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(PedidoEntity pedido) {
+        this.pedido = pedido;
+    }
 }

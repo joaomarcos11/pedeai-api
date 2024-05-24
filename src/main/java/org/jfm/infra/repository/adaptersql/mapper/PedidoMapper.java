@@ -16,5 +16,4 @@ public interface PedidoMapper {
     @Mapping(target = "itens", ignore = true)
     @Mapping(target = "cliente", ignore = true)
     PedidoEntity toEntityIgnoreClienteAndItens(Pedido pedido);
-
 }

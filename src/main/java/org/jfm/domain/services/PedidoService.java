@@ -6,16 +6,15 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.jfm.domain.entities.Cliente;
 import org.jfm.domain.entities.Item;
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;
-import org.jfm.domain.exceptions.EntityNotFoundException;
 import org.jfm.domain.ports.PedidoRepository;
 import org.jfm.domain.usecases.ClienteUseCase;
 import org.jfm.domain.usecases.ItemUseCase;
 import org.jfm.domain.ports.PedidoPayment;
 import org.jfm.domain.usecases.PedidoUseCase;
+import org.jfm.domain.valueobjects.ItemPedido;
 
 public class PedidoService implements PedidoUseCase {
 
@@ -27,7 +26,8 @@ public class PedidoService implements PedidoUseCase {
 
     PedidoPayment pedidoPayment;
 
-    public PedidoService(PedidoRepository pedidoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase, PedidoPayment pedidoPayment) {
+    public PedidoService(PedidoRepository pedidoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase,
+            PedidoPayment pedidoPayment) {
         this.pedidoRepository = pedidoRepository;
         this.clienteUseCase = clienteUseCase;
         this.itemUseCase = itemUseCase;
@@ -35,33 +35,29 @@ public class PedidoService implements PedidoUseCase {
     }
 
     @Override
-    public UUID criar(Pedido pedido) {
+    public Pedido criar(Pedido pedido) {
         pedido.validar();
+
+        Pedido novoPedido = new Pedido();
 
         if (pedido.getIdCliente() != null) {
             clienteUseCase.buscarPorId(pedido.getIdCliente());
+            novoPedido.setIdCliente(pedido.getIdCliente());
         }
 
-        Map<UUID, Integer> itens = itemUseCase.listar().stream().collect(Collectors.toMap(Item::getId, Item::getPreco));
+        novoPedido.setId(UUID.randomUUID());
+        novoPedido.setDataCriacao(Instant.now());
+        novoPedido.setStatus(Status.AGUARDANDO_PAGAMENTO);
 
-        int precoFinal = 0;
-
-        for (UUID idItem : pedido.getItens().keySet()) {
-            if (!itens.containsKey(idItem)) {
-                throw new EntityNotFoundException("id item " + idItem.toString() + " não existe");
-            }
-            precoFinal = precoFinal + itens.get(idItem);
+        for (ItemPedido ip : pedido.getItens()) {
+            Item item = itemUseCase.buscarPorId(ip.getItem().getId());
+            ItemPedido itemPedido = new ItemPedido(item, pedido, ip.getQuantidade());
+            novoPedido.getItens().add(itemPedido);
         }
 
-        pedido.setId(UUID.randomUUID());
-        pedido.setDataCriacao(Instant.now());
-        
-        pagar(pedido.getId(), precoFinal);
-        pedido.setStatus(Status.PAGO);
-        
-        pedidoRepository.criar(pedido);
+        pedidoRepository.criar(novoPedido);
 
-        return pedido.getId();
+        return novoPedido;
     };
 
     @Override

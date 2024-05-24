@@ -13,8 +13,8 @@ import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.exceptions.ErrosSistemaEnum;
 import org.jfm.domain.exceptions.ParamException;
-import org.jfm.domain.usecases.ItemPedidoUseCase;
 import org.jfm.domain.usecases.PedidoUseCase;
+
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -36,9 +36,6 @@ public class PedidoResource {
     PedidoUseCase pedidoUseCase;
 
     @Inject
-    ItemPedidoUseCase itemPedidoUseCase;
-
-    @Inject
     PedidoMapper pedidoMapper;
 
     @POST
@@ -51,9 +48,9 @@ public class PedidoResource {
     @GET
     public Response buscar(@QueryParam("status") Status status) {
         // if (status == null) {
-        //     throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+        // throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
         // }
-        
+
         List<Pedido> pedidos = new ArrayList<>();
 
         if (status == null) {
@@ -95,6 +92,6 @@ public class PedidoResource {
         Pedido pedidoEntity = pedidoMapper.toDomain(pedido);
         pedidoEntity.setId(id);
         pedidoUseCase.editar(pedidoEntity);
+        return Response.status(Response.Status.OK).entity(pedidoEntity).build();
     }
-
 }

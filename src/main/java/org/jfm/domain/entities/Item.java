@@ -1,15 +1,21 @@
 package org.jfm.domain.entities;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.jfm.domain.entities.enums.Categoria;
 import org.jfm.domain.exceptions.Exceptions.InvalidEntityException;
+import org.jfm.domain.valueobjects.ItemPedido;
 
 public class Item {
     private UUID id;
     private String nome;
     private int preco;
     private Categoria categoria;
+
+    private Set<ItemPedido> itemPedidos = new HashSet<>();
 
     public Item() {
         super();
@@ -54,6 +60,14 @@ public class Item {
         this.categoria = categoria;
     }
 
+    public Set<ItemPedido> getItemPedidos() {
+        return itemPedidos;
+    }
+
+    public List<Pedido> getPedidos() {
+        return itemPedidos.stream().map(x -> x.getPedido()).toList();
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -81,14 +95,14 @@ public class Item {
 
     public void validar() {
         if (this.nome == null || this.nome.isBlank()) {
-           throw new InvalidEntityException("Campo nome não pode ser vazio"); 
+            throw new InvalidEntityException("Campo nome não pode ser vazio");
         }
 
-        if (this.preco < 0 ) {
-           throw new InvalidEntityException("Campo preço inválido"); 
+        if (this.preco < 0) {
+            throw new InvalidEntityException("Campo preço inválido");
         }
 
-        //TODO - Pode criar Item sem Categoria vinculado?
+        // TODO - Pode criar Item sem Categoria vinculado?
     }
 
 }

@@ -1,8 +1,6 @@
 package org.jfm.infra.repository.adaptersql;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.jfm.domain.entities.Item;
 import org.jfm.domain.entities.Pedido;
@@ -18,7 +16,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
 @ApplicationScoped
-public class ItemPedidoRepositoryImpl implements ItemPedidoRepository{
+public class ItemPedidoRepositoryImpl implements ItemPedidoRepository {
 
     @Inject
     EntityManager entityManager;
@@ -32,7 +30,6 @@ public class ItemPedidoRepositoryImpl implements ItemPedidoRepository{
     @Override
     @Transactional
     public void criar(Item item, Pedido pedido) {
-        // TODO: substituir os findById pelo entityManager.find()
         ItemEntity itemEntity = entityManager.find(ItemEntity.class, item.getId());
         PedidoEntity pedidoEntity = entityManager.find(PedidoEntity.class, pedido.getId());
         // itemEntity.getPedidos().add(pedidoEntity);
@@ -44,7 +41,8 @@ public class ItemPedidoRepositoryImpl implements ItemPedidoRepository{
     public List<Item> listarPorPedido(Pedido pedido) { // TODO: ver se passando o Pedido direto fica mais fácil
         PedidoEntity pedidoEntity = entityManager.find(PedidoEntity.class, pedido.getId());
         // Set<ItemEntity> itens = pedidoEntity.getItens();
-        // return itens.stream().map(i -> itemMapper.toDomain(i)).collect(Collectors.toList());
+        // return itens.stream().map(i ->
+        // itemMapper.toDomain(i)).collect(Collectors.toList());
         return null;
     }
 
@@ -56,5 +54,5 @@ public class ItemPedidoRepositoryImpl implements ItemPedidoRepository{
         // itemEntity.getPedidos().remove(pedidoEntity);
         entityManager.persist(itemEntity);
     }
-    
+
 }
