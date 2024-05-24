@@ -55,7 +55,7 @@ public class ClienteResource {
     @GET
     @Path("/{id}")
     public Response buscarPorId(@PathParam("id") UUID id) {
-        if (id == null || id.toString().isEmpty()) {
+        if (id == null) {
             throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
         }
 

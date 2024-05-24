@@ -49,11 +49,7 @@ public class PedidoResource {
     }
 
     @GET
-    public Response buscar(@QueryParam("status") Status status) {
-        // if (status == null) {
-        //     throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
-        // }
-        
+    public Response buscar(@QueryParam("status") Status status) {        
         List<Pedido> pedidos = new ArrayList<>();
 
         if (status == null) {
@@ -63,19 +59,17 @@ public class PedidoResource {
         }
 
         List<PedidoDto> pedidosDto = pedidos.stream().map(p -> pedidoMapper.toDto(p)).collect(Collectors.toList());
-        for (PedidoDto pedido : pedidosDto) { // TODO: forma mais elegante de forEach?
+        for (PedidoDto pedido : pedidosDto) {
             pedido.setItens(itemPedidoUseCase.listarItensDoPedidoPeloId(pedido.getId()));
         }
 
         return Response.status(Response.Status.OK).entity(pedidosDto).build();
     }
 
-    // TODO: quando lista tá dando ignore, criar um DTO que não mostre itens
-
     @GET
     @Path("/{id}")
     public Response buscarPorId(@PathParam("id") UUID id) {
-        if (id == null || id.toString().isEmpty()) {
+        if (id == null) {
             throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
         }
 
@@ -88,13 +82,15 @@ public class PedidoResource {
     @PUT
     @Path("/{id}")
     public Response editar(@PathParam("id") UUID id, PedidoUpdateDto pedido) {
-        if (id == null || id.toString().isEmpty()) {
+        if (id == null) {
             throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
         }
 
         Pedido pedidoEntity = pedidoMapper.toDomain(pedido);
         pedidoEntity.setId(id);
         pedidoUseCase.editar(pedidoEntity);
+
+        return Response.status(Response.Status.OK).build();
     }
 
 }

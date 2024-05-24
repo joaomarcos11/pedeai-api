@@ -56,7 +56,7 @@ public class ItemResource {
     @GET
     @Path("/{id}")
     public Response buscarPorId(@PathParam("id") UUID id) {
-        if (id == null || id.toString().isEmpty()) {
+        if (id == null) {
             throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
         }
 
@@ -67,7 +67,7 @@ public class ItemResource {
     @PUT
     @Path("/{id}")
     public Response editar(@PathParam("id") UUID id, ItemCreateUpdateDto item) {
-        if (id == null || id.toString().isEmpty()) {
+        if (id == null) {
             throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
         }
 
