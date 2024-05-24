@@ -62,7 +62,7 @@ public class Pedido {
 
     public void validar() {
         if (this.itens == null) {
-            throw new EntityInvalidException("pedido deve conter itens");
+            throw new EntityInvalidException("pedido deve conter itens"); // TODO: talvez trocar essa exception
         }
     }
 

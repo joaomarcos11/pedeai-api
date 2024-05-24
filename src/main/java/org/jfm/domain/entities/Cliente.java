@@ -68,6 +68,32 @@ public class Cliente {
     this.ativo = ativo;
   }
 
+  public void validar() {
+    if (this.nome == null || this.nome.isBlank()) {
+      throw new InvalidEntityException("nome deve conter mais de 3 caracteres");
+    }
+
+    if (this.nome.length() <= 3) {
+      throw new InvalidEntityException("nome deve conter mais de 3 caracteres");
+    }
+
+    this.nome = this.nome.toUpperCase();
+
+    Matcher matcher = CPF_VALIDATION.matcher(this.cpf);
+    if (this.cpf == null || this.cpf.isBlank() || !matcher.matches()) {
+      throw new InvalidEntityException("CPF inválido");
+    }
+
+    matcher = EMAIL_VALIDATION.matcher(this.email);
+    if (this.email == null || this.email.isBlank() || !matcher.matches()) {
+      throw new InvalidEntityException("email inválido");
+    }
+  }
+
+  public String handleCpf(String cpf) {
+    return cpf.trim().replaceAll("[^\\w\\s]","");
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -90,30 +116,5 @@ public class Cliente {
     return true;
   }
 
-  public void validar() {
-    if (this.nome == null || this.nome.isBlank()) {
-      throw new InvalidEntityException("Campo nome não pode ser vazio");
-    }
-
-    if (this.nome.length() <= 3) {
-      throw new InvalidEntityException("Campo nome deve conter mais de 3 caracteres");
-    }
-
-    this.nome = this.nome.toUpperCase();
-
-    Matcher matcher = CPF_VALIDATION.matcher(this.cpf);
-    if (this.cpf == null || this.cpf.isBlank() || !matcher.matches()) {
-      throw new InvalidEntityException("Campo CPF inválido");
-    }
-
-    matcher = EMAIL_VALIDATION.matcher(this.email);
-    if (this.email == null || this.email.isBlank() || !matcher.matches()) {
-      throw new InvalidEntityException("Campo email inválido");
-    }
-  }
-
-  public String handleCpf(String cpf) {
-    return cpf.trim().replaceAll("[^\\w\\s]","");
-  }
 }
  

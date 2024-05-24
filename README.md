@@ -4,6 +4,12 @@
 
 `docker run -p 8023:80 -e 'PGADMIN_DEFAULT_EMAIL=admin@admin.com' -e 'PGADMIN_DEFAULT_PASSWORD=password' -d dpage/pgadmin4`
 
+para buildar a aplicação containerizada
+`docker build -f src/main/docker/Dockerfile.multistage -t pedeai-api .`
+
+para rodar a aplicação containerizada
+`docker run -i --rm -p 8080:8080 pedeai-ai`
+
 
 # pedeai-api
 
