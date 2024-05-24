@@ -54,6 +54,16 @@ public class Item {
         this.categoria = categoria;
     }
 
+    public void validar() {
+        if (this.nome == null || this.nome.isBlank()) {
+           throw new InvalidEntityException("nome não pode ser vazio"); 
+        }
+
+        if (this.preco < 0 ) {
+           throw new InvalidEntityException("preço não pode ser negativo"); 
+        }
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -77,18 +87,6 @@ public class Item {
         } else if (!id.equals(other.id))
             return false;
         return true;
-    }
-
-    public void validar() {
-        if (this.nome == null || this.nome.isBlank()) {
-           throw new InvalidEntityException("Campo nome não pode ser vazio"); 
-        }
-
-        if (this.preco < 0 ) {
-           throw new InvalidEntityException("Campo preço inválido"); 
-        }
-
-        //TODO - Pode criar Item sem Categoria vinculado?
     }
 
 }
