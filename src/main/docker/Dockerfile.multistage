@@ -20,6 +20,7 @@ RUN chmod 775 /work /work/application \
   && chmod -R "g+rwX" /work \
   && chown -R 1001:root /work
 
+# TODO: testar se esse EXPOSE é necess´rio pois já está definido no compose.yaml
 EXPOSE 8080
 USER 1001
 

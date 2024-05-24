@@ -19,7 +19,6 @@ public class AppContext {
     public ClienteService clienteService(ClienteRepository clienteRepository) {
         return new ClienteService(clienteRepository);
     };
-
     
     @Produces
     public ItemService itemService(ItemRepository itemRepository) {
