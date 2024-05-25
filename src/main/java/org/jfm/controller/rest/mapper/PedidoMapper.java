@@ -1,10 +1,13 @@
 package org.jfm.controller.rest.mapper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.jfm.bootloader.QuarkusMappingConfig;
+import org.jfm.controller.rest.dto.ItemPedidoCreateDto;
+import org.jfm.controller.rest.dto.ItemPedidoDto;
 import org.jfm.controller.rest.dto.PedidoCreateDto;
 import org.jfm.controller.rest.dto.PedidoDto;
 import org.jfm.controller.rest.dto.PedidoUpdateDto;
@@ -19,9 +22,22 @@ public interface PedidoMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", ignore = true)
-    @Mapping(target = "itens", ignore = true)
     @Mapping(target = "dataCriacao", ignore = true)
+    @Mapping(target = "itens", source = "itensPedidos", qualifiedByName = "itensPedidosListToMap")
     Pedido toDomain(PedidoCreateDto pedido);
+
+    @Named("itensPedidosListToMap")
+    public static Map<Item, Integer> itensPedidosListToMap(List<ItemPedidoCreateDto> itensPedidosDto) {
+        Map<Item, Integer> itensPedidos = new HashMap<>();
+        
+        for (ItemPedidoCreateDto itemPedidoCreateDto : itensPedidosDto) {
+            Item item = new Item();
+            item.setId(itemPedidoCreateDto.idItem());
+            itensPedidos.put(item, itemPedidoCreateDto.quantidade());
+        }
+
+        return itensPedidos;
+    }
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "idCliente", ignore = true)
@@ -33,16 +49,15 @@ public interface PedidoMapper {
     PedidoDto toDto(Pedido pedido);
 
     @Named("itensMapping")
-    public static Map<Item, Integer> itensMapping(Map<UUID, Integer> itens) {
-        Map<Item, Integer> itemQuantidade = new HashMap<>();
-        
-        for (UUID idItem : itens.keySet()) {
-            Item item = new Item();
-            item.setId(idItem);
-            itemQuantidade.put(item, itens.get(idItem));
+    public static List<ItemPedidoDto> itensMapping(Map<Item, Integer> itens) {
+        List<ItemPedidoDto> itensPedidos = new ArrayList<>();
+
+        for (Item item : itens.keySet()) {
+            ItemPedidoDto itemPedidoDto = new ItemPedidoDto(item.getNome(), item.getCategoria(), item.getPreco(), itens.get(item));
+            itensPedidos.add(itemPedidoDto);
         }
 
-        return itemQuantidade;
+        return itensPedidos;
     }
 
 }

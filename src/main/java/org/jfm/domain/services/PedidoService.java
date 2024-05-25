@@ -2,10 +2,7 @@ package org.jfm.domain.services;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
-
 import org.jfm.domain.entities.Item;
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;
@@ -41,15 +38,21 @@ public class PedidoService implements PedidoUseCase {
             clienteUseCase.buscarPorId(pedido.getIdCliente());
         }
 
-        Map<UUID, Integer> itens = itemUseCase.listar().stream().collect(Collectors.toMap(Item::getId, Item::getPreco));
+        List<Item> itens = itemUseCase.listar();
 
         int precoFinal = 0;
 
-        for (UUID idItem : pedido.getItens().keySet()) {
-            if (!itens.containsKey(idItem)) {
-                throw new EntityNotFoundException("id item " + idItem.toString() + " não existe");
+        for (Item item : pedido.getItens().keySet()) {
+            if (!itens.contains(item)) {
+                throw new EntityNotFoundException("item " + item + " não existe");
             }
-            precoFinal = precoFinal + itens.get(idItem);
+
+            // gambiarra // TODO: remover isso aqui?
+            item.setNome(itens.get(itens.indexOf(item)).getNome());
+            item.setCategoria(itens.get(itens.indexOf(item)).getCategoria());
+            item.setPreco(itens.get(itens.indexOf(item)).getPreco());
+
+            precoFinal = precoFinal + item.getPreco();
         }
 
         pedido.setId(UUID.randomUUID());
@@ -57,7 +60,7 @@ public class PedidoService implements PedidoUseCase {
         
         pagar(pedido.getId(), precoFinal);
         pedido.setStatus(Status.PAGO);
-        
+
         pedidoRepository.criar(pedido);
 
         return pedido.getId();

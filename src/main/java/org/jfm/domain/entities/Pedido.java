@@ -11,7 +11,7 @@ public class Pedido {
     private UUID id;
     private UUID idCliente;
     private Status status;
-    private Map<UUID, Integer> itens;
+    private Map<Item, Integer> itens;
     private Instant dataCriacao;
     
     public Pedido(UUID id, UUID idCliente, Status status) {
@@ -44,11 +44,11 @@ public class Pedido {
         this.status = status;
     }
 
-    public Map<UUID, Integer> getItens() {
+    public Map<Item, Integer> getItens() {
         return this.itens;
     }
 
-    public void setItens(Map<UUID, Integer> itens) {
+    public void setItens(Map<Item, Integer> itens) {
         this.itens = itens;
     }
 

@@ -10,9 +10,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Embeddable
+@EqualsAndHashCode
 @Getter
 @Setter
-@EqualsAndHashCode
 public class ItemPedidoKey implements Serializable {
 
     @Column(name = "pedido_id")

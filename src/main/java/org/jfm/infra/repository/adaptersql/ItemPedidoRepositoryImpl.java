@@ -29,6 +29,8 @@ public class ItemPedidoRepositoryImpl implements ItemPedidoRepository{
     @Override
     @Transactional
     public void criar(Item item, Pedido pedido) {
+        // TODO: VER ISSO AQUI
+        // FIXME: VER ISSO AQUI
         // TODO: substituir os findById pelo entityManager.find()
         ItemEntity itemEntity = entityManager.find(ItemEntity.class, item.getId());
         PedidoEntity pedidoEntity = entityManager.find(PedidoEntity.class, pedido.getId());

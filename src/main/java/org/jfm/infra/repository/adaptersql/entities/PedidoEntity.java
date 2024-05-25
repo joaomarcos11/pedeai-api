@@ -41,6 +41,6 @@ public class PedidoEntity {
     private ClienteEntity cliente;
 
     @OneToMany(mappedBy = "pedido")
-    Set<ItemPedidoEntity> itens;
+    Set<ItemPedidoEntity> itensPedidos;
 
 }

@@ -59,9 +59,6 @@ public class PedidoResource {
         }
 
         List<PedidoDto> pedidosDto = pedidos.stream().map(p -> pedidoMapper.toDto(p)).collect(Collectors.toList());
-        // for (PedidoDto pedido : pedidosDto) {
-        //     pedido.setItens(itemPedidoUseCase.listarItensDoPedidoPeloId(pedido.getId()));
-        // }
 
         return Response.status(Response.Status.OK).entity(pedidosDto).build();
     }
