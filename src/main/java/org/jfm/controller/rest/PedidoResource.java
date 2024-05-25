@@ -14,6 +14,7 @@ import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.exceptions.ErrosSistemaEnum;
 import org.jfm.domain.exceptions.ParamException;
 import org.jfm.domain.usecases.PedidoUseCase;
+import org.jfm.infra.repository.adaptersql.entities.PedidoEntity;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -34,37 +35,14 @@ public class PedidoResource {
 
     @Inject
     PedidoUseCase pedidoUseCase;
-
     @Inject
     PedidoMapper pedidoMapper;
 
     @POST
-    public Response criar(PedidoCreateDto pedido) {
-        Pedido pedidoEntity = pedidoMapper.toDomain(pedido);
-        UUID idPedido = pedidoUseCase.criar(pedidoEntity);
-        return Response.status(Response.Status.CREATED).entity(idPedido).build();
-    }
-
-    @GET
-    public Response buscar(@QueryParam("status") Status status) {
-        // if (status == null) {
-        // throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
-        // }
-
-        List<Pedido> pedidos = new ArrayList<>();
-
-        if (status == null) {
-            pedidos = pedidoUseCase.listar();
-        } else {
-            pedidos = pedidoUseCase.listarPorStatus(status);
-        }
-
-        List<PedidoDto> pedidosDto = pedidos.stream().map(p -> pedidoMapper.toDto(p)).collect(Collectors.toList());
-        for (PedidoDto pedido : pedidosDto) { // TODO: forma mais elegante de forEach?
-            pedido.setItens(itemPedidoUseCase.listarItensDoPedidoPeloId(pedido.getId()));
-        }
-
-        return Response.status(Response.Status.OK).entity(pedidosDto).build();
+    public Response criar(PedidoDto pedidoDto) {
+        Pedido pedido = pedidoMapper.toDomain(pedidoDto);
+        pedidoUseCase.criar(pedido);
+        return Response.status(Response.Status.CREATED).entity(pedidoDto).build();
     }
 
     // TODO: quando lista tá dando ignore, criar um DTO que não mostre itens
@@ -75,11 +53,9 @@ public class PedidoResource {
         if (id == null || id.toString().isEmpty()) {
             throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
         }
-
         Pedido pedido = pedidoUseCase.buscarPorId(id);
         PedidoDto pedidoDto = pedidoMapper.toDto(pedido);
-        pedidoDto.setItens(itemPedidoUseCase.listarItensDoPedidoPeloId(id));
-        return Response.status(Response.Status.OK).entity(pedido).build();
+        return Response.status(Response.Status.OK).entity(pedidoDto).build();
     }
 
     @PUT

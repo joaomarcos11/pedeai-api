@@ -11,7 +11,10 @@ import org.mapstruct.Mapping;
 @Mapper(config = QuarkusMappingConfig.class)
 public interface PedidoMapper {
 
-    // Pedido toDomain(PedidoDto pedido);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "idCliente", ignore = true)
+    @Mapping(target = "itens", ignore = true)
+    Pedido toDomain(PedidoDto pedido);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "status", ignore = true)
