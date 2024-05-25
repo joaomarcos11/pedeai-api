@@ -2,8 +2,10 @@ services:
   app:
     environment:
       - DB_NAME=${DB_NAME}
-        DB_USER=${DB_USER}
-        DB_PASS=${DB_PASS}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
     build:
       context: ./../../../
       dockerfile: ./src/main/docker/Dockerfile.multistage
@@ -15,13 +17,13 @@ services:
       - pedeai
 
   db:
+    image: postgres:16.3-alpine3.20
     environment:
       - POSTGRES_DB=${DB_NAME}
-        POSTGRES_USER=${DB_USER}
-        POSTGRES_PASSWORD=${DB_PASS}
-    build:
-      context: .
-      dockerfile: ./Dockerfile.pg
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    volumes:
+      - ./dump.sql:/docker-entrypoint-initdb.d/1-schema.sql
     networks:
       - pedeai
 

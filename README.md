@@ -13,6 +13,8 @@ para buildar a aplicação containerizada
 para rodar a aplicação containerizada
 `docker run -i --rm -p 8080:8080 pedeai-ai`
 
+TODO: lembrar de trocar o root path no application properties
+
 
 # pedeai-api
 
