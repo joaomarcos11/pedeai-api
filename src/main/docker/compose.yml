@@ -5,10 +5,14 @@ services:
         DB_USER=${DB_USER}
         DB_PASS=${DB_PASS}
     build:
-      context: .
-      dockerfile: ./Dockerfile.multistage
+      context: ./../../../
+      dockerfile: ./src/main/docker/Dockerfile.multistage
     ports:
       - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - pedeai
 
   db:
     environment:
@@ -18,9 +22,15 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile.pg
+    networks:
+      - pedeai
 
   adminer:
     image: adminer
     restart: always
     ports:
-      - 8083:8083
+      - 8083:8080
+
+networks:
+  pedeai:
+    driver: bridge

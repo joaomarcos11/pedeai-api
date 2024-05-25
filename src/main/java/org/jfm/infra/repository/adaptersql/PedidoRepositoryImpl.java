@@ -1,6 +1,5 @@
 package org.jfm.infra.repository.adaptersql;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,6 @@ import org.jfm.domain.exceptions.ErrorSqlException;
 import org.jfm.domain.exceptions.ErrosSistemaEnum;
 import org.jfm.domain.ports.PedidoRepository;
 import org.jfm.infra.repository.adaptersql.entities.ClienteEntity;
-import org.jfm.infra.repository.adaptersql.entities.ItemEntity;
 import org.jfm.infra.repository.adaptersql.entities.ItemPedidoEntity;
 import org.jfm.infra.repository.adaptersql.entities.PedidoEntity;
 import org.jfm.infra.repository.adaptersql.mapper.ItemMapper;
@@ -58,7 +56,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
                 entityManager.merge(itemPedidoEntity);
             }
         } catch (PersistenceException e) {
-            System.err.println(e.getMessage());
+            System.err.println(e.getMessage()); // TODO: trocar isso aqui
             throw new ErrorSqlException(ErrosSistemaEnum.DATABASE_ERROR.getMessage());
         }
     }
