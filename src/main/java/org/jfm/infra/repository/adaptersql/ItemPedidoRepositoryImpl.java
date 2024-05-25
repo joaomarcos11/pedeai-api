@@ -1,9 +1,6 @@
 package org.jfm.infra.repository.adaptersql;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.jfm.domain.entities.Item;
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.ports.ItemPedidoRepository;

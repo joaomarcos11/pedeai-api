@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.jfm.domain.entities.Cliente;
 import org.jfm.domain.entities.Item;
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;

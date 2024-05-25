@@ -1,6 +1,7 @@
 package org.jfm.controller.rest.dto;
 
-import java.util.List;
+import java.time.Instant;
+import java.util.Map;
 import java.util.UUID;
 
 import org.jfm.domain.entities.Item;
@@ -15,5 +16,6 @@ public class PedidoDto {
     private UUID id;
     private UUID idCliente;
     private Status status;
-    private List<Item> itens;
+    private Instant dataCriacao;
+    private Map<Item, Integer> itens;
 }

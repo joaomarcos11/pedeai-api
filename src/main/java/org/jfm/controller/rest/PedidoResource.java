@@ -59,9 +59,9 @@ public class PedidoResource {
         }
 
         List<PedidoDto> pedidosDto = pedidos.stream().map(p -> pedidoMapper.toDto(p)).collect(Collectors.toList());
-        for (PedidoDto pedido : pedidosDto) {
-            pedido.setItens(itemPedidoUseCase.listarItensDoPedidoPeloId(pedido.getId()));
-        }
+        // for (PedidoDto pedido : pedidosDto) {
+        //     pedido.setItens(itemPedidoUseCase.listarItensDoPedidoPeloId(pedido.getId()));
+        // }
 
         return Response.status(Response.Status.OK).entity(pedidosDto).build();
     }
@@ -75,8 +75,8 @@ public class PedidoResource {
 
         Pedido pedido = pedidoUseCase.buscarPorId(id);
         PedidoDto pedidoDto = pedidoMapper.toDto(pedido);
-        pedidoDto.setItens(itemPedidoUseCase.listarItensDoPedidoPeloId(id));
-        return Response.status(Response.Status.OK).entity(pedido).build();
+        // pedidoDto.setItens(itemPedidoUseCase.listarItensDoPedidoPeloId(id));
+        return Response.status(Response.Status.OK).entity(pedidoDto).build();
     }
 
     @PUT

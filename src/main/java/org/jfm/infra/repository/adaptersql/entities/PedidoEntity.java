@@ -1,10 +1,12 @@
 package org.jfm.infra.repository.adaptersql.entities;
 
+import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
 
 import org.jfm.domain.entities.enums.Status;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -30,6 +32,9 @@ public class PedidoEntity {
     @Id
     private UUID id;
     private Status status;
+
+    @Column(name = "data_criacao")
+    private Instant dataCriacao;
 
     @ManyToOne
     @JoinColumn(name = "cliente_id")

@@ -19,11 +19,7 @@ public interface PedidoRepository {
 
     public void editar(Pedido pedido);
 
-    // public void adicionarItemAoPedido(Item item, Pedido pedido, int quantidade);
-
     public Map<Item, Integer> listarItensDoPedido(Pedido pedido);
 
     public void editarItensDoPedido(Pedido pedido);
-
-    // public void removerItemDoPedido(Item item, Pedido pedido, int quantidade);
 };

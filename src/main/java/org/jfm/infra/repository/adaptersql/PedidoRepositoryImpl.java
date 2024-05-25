@@ -1,5 +1,6 @@
 package org.jfm.infra.repository.adaptersql;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,6 @@ import org.jfm.domain.exceptions.EntityNotFoundException;
 import org.jfm.domain.exceptions.ErrorSqlException;
 import org.jfm.domain.exceptions.ErrosSistemaEnum;
 import org.jfm.domain.ports.PedidoRepository;
-import org.jfm.domain.valueobjects.ItemPedido;
 import org.jfm.infra.repository.adaptersql.entities.ClienteEntity;
 import org.jfm.infra.repository.adaptersql.entities.ItemEntity;
 import org.jfm.infra.repository.adaptersql.entities.ItemPedidoEntity;
@@ -47,7 +47,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     @Transactional
     public void criar(Pedido pedido) {
         try {
-            PedidoEntity pedidoEntity = pedidoMapper.toEntityIgnoreClienteAndItens(pedido);
+            PedidoEntity pedidoEntity = pedidoMapper.toEntity(pedido, pedido.getId());
             if (pedido.getIdCliente() != null) {
                 ClienteEntity clienteEntity = entityManager.find(ClienteEntity.class, pedido.getIdCliente());
                 pedidoEntity.setCliente(clienteEntity);
@@ -62,8 +62,20 @@ public class PedidoRepositoryImpl implements PedidoRepository {
     @Transactional
     public List<Pedido> listar() {
         try {
-            return entityManager.createNamedQuery("Pedido.findAll", PedidoEntity.class).getResultStream()
-                    .map(p -> pedidoMapper.toDomainIgnoreItens(p)).collect(Collectors.toList()); // TODO: trocar o mapper
+            // List<PedidoEntity> pedidos = entityManager.createNamedQuery("Pedido.findAll", PedidoEntity.class).getResultStream().collect(Collectors.toList());
+            // for (PedidoEntity pedido : pedidos) {
+            //     System.out.println("Pedido id: " + pedido.getId().toString());
+            //     for (ItemPedidoEntity item : pedido.getItens()) {
+            //         System.out.println("item pedido id: " + item.getId());
+            //         System.out.println("item pedido qt: " + item.getQuantidade());
+            //         System.out.println("item pedido item id: " + item.getItem().getId());
+            //         System.out.println("item pedido item nome: " + item.getItem().getNome());
+            //         System.out.println("item pedido item preco: " + item.getItem().getNome());
+            //     }
+            // }
+            // retorna os itens certfinha ^
+
+            return entityManager.createNamedQuery("Pedido.findAll", PedidoEntity.class).getResultStream().map(p -> pedidoMapper.toDomain(p)).collect(Collectors.toList());
         } catch (PersistenceException e) {
             throw new ErrorSqlException(ErrosSistemaEnum.DATABASE_ERROR.getMessage());
         }
@@ -76,7 +88,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
             TypedQuery<PedidoEntity> query = entityManager.createNamedQuery("Pedido.findById", PedidoEntity.class);
             query.setParameter("id", id);
     
-            return pedidoMapper.toDomainIgnoreItens(query.getSingleResult()); // TODO: trocar o mapper
+            return pedidoMapper.toDomain(query.getSingleResult()); // TODO: trocar o mapper
         } catch (NoResultException e) {
             throw new EntityNotFoundException(ErrosSistemaEnum.PEDIDO_NOT_FOUND.getMessage());
         } catch (PersistenceException e) {
@@ -91,7 +103,7 @@ public class PedidoRepositoryImpl implements PedidoRepository {
             TypedQuery<PedidoEntity> query = entityManager.createNamedQuery("Pedido.findByStatus", PedidoEntity.class);
             query.setParameter("status", status);
             
-            return query.getResultStream().map(p -> pedidoMapper.toDomainIgnoreItens(p)).collect(Collectors.toList()); // TODO: trocar o mapper
+            return query.getResultStream().map(p -> pedidoMapper.toDomain(p)).collect(Collectors.toList()); // TODO: trocar o mapper
         } catch (PersistenceException e) {
             throw new ErrorSqlException(ErrosSistemaEnum.DATABASE_ERROR.getMessage());
         }

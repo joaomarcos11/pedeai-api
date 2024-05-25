@@ -20,25 +20,5 @@ public class ItemPedidoKey implements Serializable {
 
     @Column(name = "item_id")
     UUID itemId;
-
-    // private static final long serialVersionUID = 1L;
-
-    // @ManyToOne
-    // @MapsId("pedidoId")
-    // @JoinColumn(name = "pedido_id")
-    // private PedidoEntity pedido;
-
-    // @ManyToOne
-    // @MapsId("itemId")
-    // @JoinColumn(name = "item_id")
-    // private ItemEntity item;
-
-    // public ItemPedidoKey() {
-    // }
-
-    // public ItemPedidoKey(PedidoEntity pedido, ItemEntity item) {
-    //     this.pedido = pedido;
-    //     this.item = item;
-    // }
-    
+        
 }
