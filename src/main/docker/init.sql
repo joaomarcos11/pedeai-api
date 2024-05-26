@@ -1,4 +1,5 @@
-DROP TABLE IF EXISTS "clientes";
+\CONNECT "pedeai";
+
 CREATE TABLE "public"."clientes" (
     "ativo" boolean NOT NULL,
     "id" uuid NOT NULL,
@@ -11,7 +12,6 @@ CREATE TABLE "public"."clientes" (
 INSERT INTO "clientes" ("ativo", "id", "cpf", "email", "nome") VALUES
 ('t',	'63a59178-39f8-4a28-a2c7-989a57ca7b54',	'123.123.123-12',	'filipe@email.com',	'FILIPE ANDRADE');
 
-DROP TABLE IF EXISTS "itens";
 CREATE TABLE "public"."itens" (
     "categoria" smallint,
     "preco" integer NOT NULL,
@@ -26,7 +26,6 @@ INSERT INTO "itens" ("categoria", "preco", "id", "nome") VALUES
 (1,	675,	'f66d8bf8-f350-46ba-8893-902bfd3e556e',	'BATATA FRITA'),
 (3,	460,	'9b5b286e-e617-4f20-80ad-1824c97ec71b',	'SORVETE');
 
-DROP TABLE IF EXISTS "itens_pedidos";
 CREATE TABLE "public"."itens_pedidos" (
     "quantidade" integer NOT NULL,
     "item_id" uuid NOT NULL,
@@ -39,7 +38,6 @@ INSERT INTO "itens_pedidos" ("quantidade", "item_id", "pedido_id") VALUES
 (2,	'23e52205-4d9d-41e6-a7f3-271af4f5316b',	'c215b5a1-9421-4cfd-982a-00f64f470252'),
 (3,	'9b5b286e-e617-4f20-80ad-1824c97ec71b',	'c215b5a1-9421-4cfd-982a-00f64f470252');
 
-DROP TABLE IF EXISTS "pedidos";
 CREATE TABLE "public"."pedidos" (
     "status" smallint,
     "data_criacao" timestamptz(6),
@@ -49,22 +47,9 @@ CREATE TABLE "public"."pedidos" (
 ) WITH (oids = false);
 
 INSERT INTO "pedidos" ("status", "data_criacao", "cliente_id", "id") VALUES
-(1,	'2024-05-25 22:09:29.193878+00',	'63a59178-39f8-4a28-a2c7-989a57ca7b54',	'c215b5a1-9421-4cfd-982a-00f64f470252');
+(1,	'2024-05-26 13:34:10.17325+00',	'63a59178-39f8-4a28-a2c7-989a57ca7b54',	'c215b5a1-9421-4cfd-982a-00f64f470252');
 
 ALTER TABLE ONLY "public"."itens_pedidos" ADD CONSTRAINT "fkd2vejrqnlcjm5qys9nw3g3ol" FOREIGN KEY (item_id) REFERENCES itens(id) NOT DEFERRABLE;
 ALTER TABLE ONLY "public"."itens_pedidos" ADD CONSTRAINT "fkjg75o3y4r665tq9f72gyk64ut" FOREIGN KEY (pedido_id) REFERENCES pedidos(id) NOT DEFERRABLE;
 
 ALTER TABLE ONLY "public"."pedidos" ADD CONSTRAINT "fkg7202lk0hwxn04bmdl2thth5b" FOREIGN KEY (cliente_id) REFERENCES clientes(id) NOT DEFERRABLE;
-
-
--- TODO: incluir o dump aqui e remover o dro-create no application.properties
-
--- INSERT INTO clientes (id, nome, cpf, email, ativo) VALUES ('63a59178-39f8-4a28-a2c7-989a57ca7b54', 'FILIPE ANDRADE', '123.123.123-12', 'filipe@email.com', TRUE);
--- INSERT INTO itens (id, nome, preco, categoria) VALUES ('257ae14b-8bb7-4a80-9a68-22197f72ff47', 'SANDUICHE', 550, 0);
--- INSERT INTO itens (id, nome, preco, categoria) VALUES ('23e52205-4d9d-41e6-a7f3-271af4f5316b', 'REFRIGERANTE', 350, 2);
--- INSERT INTO itens (id, nome, preco, categoria) VALUES ('f66d8bf8-f350-46ba-8893-902bfd3e556e', 'BATATA FRITA', 675, 1);
--- INSERT INTO itens (id, nome, preco, categoria) VALUES ('9b5b286e-e617-4f20-80ad-1824c97ec71b', 'SORVETE', 460, 3);
--- INSERT INTO pedidos (id, cliente_id, status, data_criacao) VALUES ('c215b5a1-9421-4cfd-982a-00f64f470252', '63a59178-39f8-4a28-a2c7-989a57ca7b54', 1, NOW());
--- INSERT INTO itens_pedidos (item_id, pedido_id, quantidade) VALUES ('257ae14b-8bb7-4a80-9a68-22197f72ff47', 'c215b5a1-9421-4cfd-982a-00f64f470252', 1);
--- INSERT INTO itens_pedidos (item_id, pedido_id, quantidade) VALUES ('23e52205-4d9d-41e6-a7f3-271af4f5316b', 'c215b5a1-9421-4cfd-982a-00f64f470252', 2);
--- INSERT INTO itens_pedidos (item_id, pedido_id, quantidade) VALUES ('9b5b286e-e617-4f20-80ad-1824c97ec71b', 'c215b5a1-9421-4cfd-982a-00f64f470252', 3);

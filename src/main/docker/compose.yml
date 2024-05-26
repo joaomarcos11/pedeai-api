@@ -23,15 +23,17 @@ services:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASS}
     volumes:
-      - ./dump.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - pedeai
+      - pedeai  
 
   adminer:
     image: adminer
     restart: always
     ports:
       - 8083:8080
+    networks:
+      - pedeai
 
 networks:
   pedeai:

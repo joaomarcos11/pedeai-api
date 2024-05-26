@@ -1,6 +1,6 @@
 # Rascunho Filipe
 
-`docker run --name pedeai-postgres -p 5432:5432 -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=pedeai -d postgres`
+`docker run --name pedeai-postgres -p 5432:5432 -e POSTGRES_USER=pedeai -e POSTGRES_PASSWORD=senha1 -e POSTGRES_DB=pedeai -d postgres:16.3-alpine3.20`
 
 `docker run -p 8023:80 -e 'PGADMIN_DEFAULT_EMAIL=admin@admin.com' -e 'PGADMIN_DEFAULT_PASSWORD=password' -d dpage/pgadmin4`
 
