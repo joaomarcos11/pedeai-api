@@ -1,4 +1,4 @@
-\CONNECT "pedeai";
+\connect "pedeai"
 
 CREATE TABLE "public"."clientes" (
     "ativo" boolean NOT NULL,
