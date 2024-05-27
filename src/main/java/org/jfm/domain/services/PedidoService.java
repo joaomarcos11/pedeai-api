@@ -83,7 +83,9 @@ public class PedidoService implements PedidoUseCase {
 
     @Override
     public void editar(Pedido pedido) {
-        pedidoRepository.editar(pedido);
+        Pedido pedidoEditar = pedidoRepository.buscarPorId(pedido.getId());
+        pedidoEditar.setStatus(pedido.getStatus());
+        pedidoRepository.editar(pedidoEditar);
     };
 
     private void pagar(UUID idPedido, int valor) {
