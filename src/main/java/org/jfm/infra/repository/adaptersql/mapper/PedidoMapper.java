@@ -39,6 +39,10 @@ public interface PedidoMapper {
 
     @Named("clienteUuidToEntity")
     public static ClienteEntity clienteUuidToEntity(UUID idCliente) {
+        if (idCliente == null) {
+            return null;
+        }
+
         ClienteEntity clienteEntity = new ClienteEntity();
         clienteEntity.setId(idCliente);
         return clienteEntity;
