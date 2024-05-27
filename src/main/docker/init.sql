@@ -10,7 +10,7 @@ CREATE TABLE "public"."clientes" (
 ) WITH (oids = false);
 
 INSERT INTO "clientes" ("ativo", "id", "cpf", "email", "nome") VALUES
-('t',	'63a59178-39f8-4a28-a2c7-989a57ca7b54',	'123.123.123-12',	'filipe@email.com',	'FILIPE ANDRADE'),
+('t',	'63a59178-39f8-4a28-a2c7-989a57ca7b54',	'12312312312',	'filipe@email.com',	'FILIPE ANDRADE'),
 ('f',	'5793fc61-8d22-4183-9b20-079e624074a3',	'78978978978',	'murilo@email.com',	'MURILO MARTINS'),
 ('t',	'b57b4dcc-c47f-40f0-8331-6185bb9b3568',	'45645645645',	'joao@email.com',	'JOAO MARCOS');
 
