@@ -10,7 +10,7 @@ Banco de dados: PostgreSQL
 
 # Endpoints / Fluxo
 
-Aplicação: localhost:8080/
+Aplicação: http://localhost:8080/
 Swagger-UI: http://localhost:8080/swagger-ui
 Adminer: http://localhost:8083
 
