@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jfm.controller.rest.dto.PedidoCreateDto;
 import org.jfm.controller.rest.dto.PedidoDto;
 import org.jfm.controller.rest.dto.PedidoUpdateDto;
@@ -30,6 +31,7 @@ import jakarta.ws.rs.core.Response;
 @Path("/pedidos")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Tag(name = "Pedido", description = "Operações relacionadas ao pedido")
 public class PedidoResource {
 
     @Inject
