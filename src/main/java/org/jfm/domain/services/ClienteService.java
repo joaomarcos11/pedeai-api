@@ -22,9 +22,6 @@ public class ClienteService implements ClienteUseCase {
     public UUID criar(Cliente cliente) {
         cliente.validar();
         
-        // ToDo - melhorar, usar ctor?
-        cliente.setCpf(cliente.handleCpf(cliente.getCpf()));
-
         Cliente clienteBuscadoPorCpf = this.clienteRepository.buscarPorCpf(cliente.getCpf());
         if (clienteBuscadoPorCpf != null) {
             throw new EntityConflictException(ErrosSistemaEnum.CLIENTE_CPF_EMAIL_CONFLICT.getMessage());
