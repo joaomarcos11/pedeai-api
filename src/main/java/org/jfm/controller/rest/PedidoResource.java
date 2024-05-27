@@ -14,7 +14,6 @@ import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.exceptions.ErrosSistemaEnum;
 import org.jfm.domain.exceptions.ParamException;
-import org.jfm.domain.usecases.ItemPedidoUseCase;
 import org.jfm.domain.usecases.PedidoUseCase;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -36,9 +35,6 @@ public class PedidoResource {
 
     @Inject
     PedidoUseCase pedidoUseCase;
-
-    @Inject
-    ItemPedidoUseCase itemPedidoUseCase;
 
     @Inject
     PedidoMapper pedidoMapper;
@@ -74,7 +70,6 @@ public class PedidoResource {
 
         Pedido pedido = pedidoUseCase.buscarPorId(id);
         PedidoDto pedidoDto = pedidoMapper.toDto(pedido);
-        // pedidoDto.setItens(itemPedidoUseCase.listarItensDoPedidoPeloId(id));
         return Response.status(Response.Status.OK).entity(pedidoDto).build();
     }
 

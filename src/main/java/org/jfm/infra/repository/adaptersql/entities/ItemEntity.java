@@ -34,6 +34,6 @@ public class ItemEntity {
     private Categoria categoria;
 
     @OneToMany(mappedBy = "item")
-    Set<ItemPedidoEntity> itemPedidos;
+    Set<ItemPedidoEntity> itensPedidos;
 
 }
