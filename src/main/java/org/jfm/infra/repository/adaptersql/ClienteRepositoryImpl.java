@@ -60,7 +60,7 @@ public class ClienteRepositoryImpl implements ClienteRepository {
             
             return clienteMapper.toDomain(query.getSingleResult());
         } catch (NoResultException e) {
-            throw new EntityNotFoundException("cliente não encontrado");
+            throw new EntityNotFoundException(ErrosSistemaEnum.CLIENTE_NOT_FOUND.getMessage());
         } catch (PersistenceException e) {
             throw new ErrorSqlException(ErrosSistemaEnum.DATABASE_ERROR.getMessage());
         }

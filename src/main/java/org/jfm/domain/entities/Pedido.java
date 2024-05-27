@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.jfm.domain.entities.enums.Status;
-import org.jfm.domain.exceptions.EntityInvalidException;
+import org.jfm.domain.exceptions.Exceptions.InvalidEntityException;
 
 public class Pedido {
     private UUID id;
@@ -61,8 +61,8 @@ public class Pedido {
     }
 
     public void validar() {
-        if (this.itens == null) {
-            throw new EntityInvalidException("pedido deve conter itens"); // TODO: talvez trocar essa exception
+        if (this.itens == null || this.itens.size() == 0) {
+            throw new InvalidEntityException("Pedido deve conter itens"); // TODO: talvez trocar essa exception
         }
     }
 

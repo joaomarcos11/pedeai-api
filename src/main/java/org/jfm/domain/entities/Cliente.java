@@ -70,11 +70,11 @@ public class Cliente {
 
   public void validar() {
     if (this.nome == null || this.nome.isBlank()) {
-      throw new InvalidEntityException("nome deve conter mais de 3 caracteres");
+      throw new InvalidEntityException("Nome deve conter mais de 3 caracteres");
     }
 
     if (this.nome.length() <= 3) {
-      throw new InvalidEntityException("nome deve conter mais de 3 caracteres");
+      throw new InvalidEntityException("Nome deve conter mais de 3 caracteres");
     }
 
     this.nome = this.nome.toUpperCase();
@@ -86,7 +86,7 @@ public class Cliente {
 
     matcher = EMAIL_VALIDATION.matcher(this.email);
     if (this.email == null || this.email.isBlank() || !matcher.matches()) {
-      throw new InvalidEntityException("email inválido");
+      throw new InvalidEntityException("Email inválido");
     }
   }
 

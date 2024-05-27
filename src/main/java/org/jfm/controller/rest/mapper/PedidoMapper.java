@@ -28,6 +28,10 @@ public interface PedidoMapper {
 
     @Named("itensPedidosListToMap")
     public static Map<Item, Integer> itensPedidosListToMap(List<ItemPedidoCreateDto> itensPedidosDto) {
+        if (itensPedidosDto == null) {
+            return null;
+        }
+
         Map<Item, Integer> itensPedidos = new HashMap<>();
         
         for (ItemPedidoCreateDto itemPedidoCreateDto : itensPedidosDto) {
