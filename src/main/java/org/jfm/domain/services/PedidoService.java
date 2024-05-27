@@ -1,6 +1,8 @@
 package org.jfm.domain.services;
 
 import java.time.Instant;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import org.jfm.domain.entities.Item;
@@ -68,7 +70,15 @@ public class PedidoService implements PedidoUseCase {
 
     @Override
     public List<Pedido> listar() {
-        return pedidoRepository.listar();
+        List<Pedido> pedidos = pedidoRepository.listar();
+
+        Collections.sort(pedidos, new Comparator<Pedido>() {
+            public int compare(Pedido ped1, Pedido ped2) {
+                return ped1.getDataCriacao().compareTo(ped2.getDataCriacao());
+            }
+        });
+
+        return pedidos;
     };
 
     @Override
@@ -78,7 +88,15 @@ public class PedidoService implements PedidoUseCase {
 
     @Override
     public List<Pedido> listarPorStatus(Status status) {
-        return pedidoRepository.listarPorStatus(status);
+        List<Pedido> pedidos = pedidoRepository.listarPorStatus(status);
+
+        Collections.sort(pedidos, new Comparator<Pedido>() {
+            public int compare(Pedido ped1, Pedido ped2) {
+                return ped1.getDataCriacao().compareTo(ped2.getDataCriacao());
+            }
+        });
+
+        return pedidos;
     }
 
     @Override
