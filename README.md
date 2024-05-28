@@ -1,21 +1,248 @@
-# Descriçao da solução
 
-Linguagem: Java
-Framework: Quarkus
-Banco de dados: PostgreSQL
+# Projeto "pede-ai"
 
-# Executando a aplicação
+O projeto “pede-ai” foi desenvolvido como parte da Fase 1 do Tech Challenge da Pós-graduação em Software Architecture da FIAP
 
-`docker-compose -f ./src/main/docker/compose.yml up`
+O objetivo da demanda era o de criar um sistema de pedidos para uma lanchonete, otimizando o atendimento e a gestão interna. 
 
-# Endpoints / Fluxo
+A ideia é oferecer uma solução eficiente para que os clientes possam fazer pedidos personalizados e acompanhar o processo de preparação e entrega.
 
-Aplicação: http://localhost:8080/
-Swagger-UI: http://localhost:8080/swagger-ui
-Adminer: http://localhost:8083
+## Deploy
 
-Fluxo Cliente:
+Para fazer o deploy desse projeto rode:
 
-Adminstração:
+```bash
 
-# Desafio
+docker-compose -f ./src/main/docker/compose.yml up
+
+```
+
+## Desafio
+
+O projeto visa atender a necessdiade de uma lanchonete que está expandindo, mas enfrenta dificuldades devido à falta de um sistema de controle de pedidos. 
+
+Sem uma estrutura adequada, os atendentes podem cometer erros, os pedidos podem ser perdidos e a satisfação dos clientes fica comprometida. 
+
+Além disso, a ausência de um sistema de rastreamento dificulta a gestão interna.
+
+## Entregáveis
+
+1. **Documentação do Sistema (DDD) com Event Storming**:
+   - Utilização da linguagem ubíqua (termos comuns a todos os envolvidos) para representar os fluxos de pedido e pagamento, preparação e entrega.
+   - Diagramas UML seguindo os padrões apresentados nas aulas.
+   - Desenhos que sigam as explicações e padrões adequados.
+
+2. **Aplicação Backend (Monolito)**:
+   - Desenvolvimento de uma aplicação backend completa.
+   - APIs para:
+     - Cadastro do cliente.
+     - Identificação do cliente via CPF.
+     - Gerenciamento de produtos (criação, edição e remoção).
+     - Busca de produtos por categoria.
+     - "Fake checkout" - criação de pedidos (sem finalização de checkout, apenas para fila).
+     - Listagem de pedidos.
+   - Utilização do Swagger para documentar as APIs.
+   - Trabalho inicial com um único banco de dados.
+
+3. **Dockerfile para subir o ambiente**:
+   - 1 instância para banco de dados.
+   - 1 instância para executar a aplicação.
+
+
+## Estutura do projeto
+
+Esta aplicação foi desenvolvida utilizando a linguagem Java com o framework Quarkus e o banco de dados PostgreSQL.
+
+A estrutura da nossa aplicação segue a arquitetura hexagonal, na qual as preocupações do sistema são divididas em três camadas distintas: a camada de aplicação, a camada de domínio e a camada de infraestrutura. 
+
+Cada uma dessas camadas possui responsabilidades específicas e se comunica com as outras camadas de forma bem definida.
+
+**Camada de Aplicação:** Esta é a camada externa do sistema, responsável por receber as entradas do usuário, interpretá-las e acionar as operações adequadas na camada de domínio por meio dos Controladores REST.
+
+**Camada de Domínio:** Esta camada contém as regras de negócio e os objetos de domínio do sistema. É aqui que as entidades e os serviços são definidos. Os serviços representam a lógica de negócio da aplicação, implementando as operações definidas nos casos de uso. As entidades representam os objetos principais do domínio.
+
+**Camada de Infraestrutura:** Esta camada é responsável por fornecer implementações concretas para os detalhes técnicos, como o acesso ao banco de dados, chamadas externas de API, envio de e-mails, etc. Elas implementam as interfaces definidas na camada de domínio, fornecendo a lógica necessária para interagir com os recursos externos.
+
+**Portas e Adaptadores:** Na arquitetura hexagonal, é comum usar interfaces para definir os pontos de interação entre as camadas, permitindo a substituição de implementações sem afetar o restante do sistema. Isso promove a modularidade e a testabilidade do código. No projeto, as portas (interfaces) da camada de domínio estão definidas em `src/main/java/org/jfm/domain/ports`, enquanto os Adaptadores (implementações) estão localizados em `src/main/java/org/jfm/infra/repository/adaptersql`.
+
+Cada camada se comunica com as camadas adjacentes por meio de interfaces definidas, permitindo uma arquitetura flexível e desacoplada.
+
+```plaintext
+           +----------------------------------------+
+           |             Controladores REST         |
+           |                                        |
+           |      ClienteResource                   |
+           |      ItemResource                      |
+           |      PedidoResource                    |
+           +----------------------+-----------------+
+                                  |
+                                  |
+                        +---------+----------+
+                        |    Casos de Uso    |
+                        |                    |
+                        |    ClienteUseCase  |
+                        |    ItemUseCase     |
+                        |    PedidoUseCase   |
+                        +---------+----------+
+                                  |
+                                  |
+                        +---------+----------+
+                        |   Serviços         |
+                        |                    |
+                        |   ClienteService   |
+                        |   ItemService      |
+                        |   PedidoService    |
+                        +---------+----------+
+                                  |
+                                  |
+                        +---------+----------+
+                        |   Domínio          |
+                        |                    |
+                        |   Entidades        |
+                        |   Repositórios     |
+                        |   Exceções         |
+                        |   Casos de Uso     |
+                        +---------+----------+
+                                  |
+                                  |
+                        +---------+----------+
+                        |   Infraestrutura   |
+                        |                    |
+                        |   Implementações   |
+                        |   Conexão com BD   |
+                        |   Adaptadores      |
+                        +---------+----------+
+```
+
+## Documentação da API
+
+A documentação da API pode ser encontrada em: 
+http://localhost:8080/openapi
+
+Para ver o Swagger da aplicação, acesse: http://localhost:8080/swagger-ui
+
+Para acessar o banco de dados: http://localhost:8083
+
+## Endpoints
+
+#### Retorna um cliente específico
+```http
+  GET /clientes/${id}
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. O ID do cliente que você quer |
+
+#### Retorna todos os clientes
+```http
+  GET /clientes
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `cpf`      | `string` | O CPF do cliente que você quer filtrar (opcional) |
+
+#### Cria um novo cliente
+```http
+  POST /clientes
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `body`      | `ClienteDto` | **Obrigatório**. Os detalhes do cliente que você quer criar |
+
+#### Atualiza um cliente existente
+```http
+  PUT /clientes/${id}
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. O ID do cliente que você quer atualizar |
+| `body`      | `ClienteDto` | **Obrigatório**. Os detalhes atualizados do cliente que você quer atualizar |
+
+#### Remove um cliente específico
+```http
+  DELETE /clientes/${id}
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. O ID do cliente que você quer remover |
+
+#### Retorna um item específico
+```http
+  GET /itens/${id}
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. O ID do item que você quer |
+
+#### Retorna todos os itens
+```http
+  GET /itens
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `categoria`      | `string` | A categoria do item que você quer filtrar (opcional) |
+
+#### Cria um novo item
+```http
+  POST /itens
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `body`      | `ItemCreateUpdateDto` | **Obrigatório**. Os detalhes do item que você quer criar |
+
+#### Atualiza um item existente
+```http
+  PUT /itens/${id}
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. O ID do item que você quer atualizar |
+| `body`      | `ItemCreateUpdateDto` | **Obrigatório**. Os detalhes atualizados do item que você quer atualizar |
+
+#### Remove um item específico
+```http
+  DELETE /itens/${id}
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. O ID do item que você quer remover |
+
+#### Retorna um pedido específico
+```http
+  GET /pedidos/${id}
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. O ID do pedido que você quer |
+
+#### Retorna todos os pedidos
+```http
+  GET /pedidos
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `status`      | `string` | O status do pedido que você quer filtrar (opcional) |
+
+#### Cria um novo pedido
+```http
+  POST /pedidos
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `body`      | `PedidoCreateDto` | **Obrigatório**. Os detalhes do pedido que você quer criar |
+
+#### Atualiza/Editar um pedido existente
+```http
+  PUT /pedidos/${id}
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. O ID do pedido que você quer atualizar |
+| `body`      | `PedidoUpdateDto` | **Obrigatório**. Os detalhes atualizados do pedido que você quer atualizar |
+
+
+## Autores
+
+- [@filipeandrade6](https://github.com/filipeandrade6)
+- [@joaomarcos11](https://github.com/joaomarcos11)
+- [@murilomartins93](https://github.com/murilomartins93)
