@@ -1,5 +1,5 @@
 
-# Projeto "pede-ai"
+# Projeto "pedeai-api"
 
 O projeto “pede-ai” foi desenvolvido como parte da Fase 1 do Tech Challenge da Pós-graduação em Software Architecture da FIAP
 
@@ -126,7 +126,7 @@ Para acessar o banco de dados: http://localhost:8083
 ## Endpoints
 
 #### Retorna um cliente específico
-```http
+```
   GET /clientes/${id}
 ```
 | Parâmetro   | Tipo       | Descrição                                   |
@@ -134,7 +134,7 @@ Para acessar o banco de dados: http://localhost:8083
 | `id`      | `string` | **Obrigatório**. O ID do cliente que você quer |
 
 #### Retorna todos os clientes
-```http
+```
   GET /clientes
 ```
 | Parâmetro   | Tipo       | Descrição                                   |
@@ -142,7 +142,7 @@ Para acessar o banco de dados: http://localhost:8083
 | `cpf`      | `string` | O CPF do cliente que você quer filtrar (opcional) |
 
 #### Cria um novo cliente
-```http
+```
   POST /clientes
 ```
 | Parâmetro   | Tipo       | Descrição                                   |
@@ -150,7 +150,7 @@ Para acessar o banco de dados: http://localhost:8083
 | `body`      | `ClienteDto` | **Obrigatório**. Os detalhes do cliente que você quer criar |
 
 #### Atualiza um cliente existente
-```http
+```
   PUT /clientes/${id}
 ```
 | Parâmetro   | Tipo       | Descrição                                   |
@@ -159,7 +159,7 @@ Para acessar o banco de dados: http://localhost:8083
 | `body`      | `ClienteDto` | **Obrigatório**. Os detalhes atualizados do cliente que você quer atualizar |
 
 #### Remove um cliente específico
-```http
+```
   DELETE /clientes/${id}
 ```
 | Parâmetro   | Tipo       | Descrição                                   |
@@ -167,7 +167,7 @@ Para acessar o banco de dados: http://localhost:8083
 | `id`      | `string` | **Obrigatório**. O ID do cliente que você quer remover |
 
 #### Retorna um item específico
-```http
+```
   GET /itens/${id}
 ```
 | Parâmetro   | Tipo       | Descrição                                   |
@@ -175,7 +175,7 @@ Para acessar o banco de dados: http://localhost:8083
 | `id`      | `string` | **Obrigatório**. O ID do item que você quer |
 
 #### Retorna todos os itens
-```http
+```
   GET /itens
 ```
 | Parâmetro   | Tipo       | Descrição                                   |
@@ -183,7 +183,7 @@ Para acessar o banco de dados: http://localhost:8083
 | `categoria`      | `string` | A categoria do item que você quer filtrar (opcional) |
 
 #### Cria um novo item
-```http
+```
   POST /itens
 ```
 | Parâmetro   | Tipo       | Descrição                                   |
@@ -191,7 +191,7 @@ Para acessar o banco de dados: http://localhost:8083
 | `body`      | `ItemCreateUpdateDto` | **Obrigatório**. Os detalhes do item que você quer criar |
 
 #### Atualiza um item existente
-```http
+```
   PUT /itens/${id}
 ```
 | Parâmetro   | Tipo       | Descrição                                   |
@@ -200,7 +200,7 @@ Para acessar o banco de dados: http://localhost:8083
 | `body`      | `ItemCreateUpdateDto` | **Obrigatório**. Os detalhes atualizados do item que você quer atualizar |
 
 #### Remove um item específico
-```http
+```
   DELETE /itens/${id}
 ```
 | Parâmetro   | Tipo       | Descrição                                   |
@@ -208,7 +208,7 @@ Para acessar o banco de dados: http://localhost:8083
 | `id`      | `string` | **Obrigatório**. O ID do item que você quer remover |
 
 #### Retorna um pedido específico
-```http
+```
   GET /pedidos/${id}
 ```
 | Parâmetro   | Tipo       | Descrição                                   |
@@ -216,7 +216,7 @@ Para acessar o banco de dados: http://localhost:8083
 | `id`      | `string` | **Obrigatório**. O ID do pedido que você quer |
 
 #### Retorna todos os pedidos
-```http
+```
   GET /pedidos
 ```
 | Parâmetro   | Tipo       | Descrição                                   |
@@ -224,7 +224,7 @@ Para acessar o banco de dados: http://localhost:8083
 | `status`      | `string` | O status do pedido que você quer filtrar (opcional) |
 
 #### Cria um novo pedido
-```http
+```
   POST /pedidos
 ```
 | Parâmetro   | Tipo       | Descrição                                   |
@@ -232,7 +232,7 @@ Para acessar o banco de dados: http://localhost:8083
 | `body`      | `PedidoCreateDto` | **Obrigatório**. Os detalhes do pedido que você quer criar |
 
 #### Atualiza/Editar um pedido existente
-```http
+```
   PUT /pedidos/${id}
 ```
 | Parâmetro   | Tipo       | Descrição                                   |
