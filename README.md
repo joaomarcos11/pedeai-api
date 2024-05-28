@@ -6,16 +6,22 @@ O projeto “pedeai-api” foi desenvolvido como parte da Fase 1 do Tech Challen
 O objetivo da demanda era o de criar um sistema de pedidos para uma lanchonete, otimizando o atendimento e a gestão interna. 
 
 A ideia é oferecer uma solução eficiente para que os clientes possam fazer pedidos personalizados e acompanhar o processo de preparação e entrega.
+## Documentação do Sistema (DDD) com Event Storming
 
+A documentação do sistema no padrão Domain-Driven Design (DDD) pode ser encontrada em: 
+
+https://miro.com/app/board/uXjVKStgq5k=/?share_link_id=621691325318
 ## Deploy
 
 Para fazer o deploy desse projeto rode:
 
 ```bash
 
-docker-compose -f ./src/main/docker/compose.yml up
+docker-compose up
 
 ```
+
+Para acessar o banco de dados: http://localhost:8083
 
 ## Desafio
 
@@ -120,8 +126,6 @@ A documentação da API pode ser encontrada em:
 http://localhost:8080/openapi
 
 Para ver o Swagger da aplicação, acesse: http://localhost:8080/swagger-ui
-
-Para acessar o banco de dados: http://localhost:8083
 
 ## Endpoints
 
@@ -240,9 +244,8 @@ Para acessar o banco de dados: http://localhost:8083
 | `id`      | `string` | **Obrigatório**. O ID do pedido que você quer atualizar |
 | `body`      | `PedidoUpdateDto` | **Obrigatório**. Os detalhes atualizados do pedido que você quer atualizar |
 
-
 ## Autores
 
-- [@filipeandrade6](https://github.com/filipeandrade6)
-- [@joaomarcos11](https://github.com/joaomarcos11)
-- [@murilomartins93](https://github.com/murilomartins93)
+- Filipe Andrade - RM356270 | Github: [@filipeandrade6](https://github.com/filipeandrade6) | Discord: @filipeandrade6
+- João Marcos - RM356227 | Github: [@joaomarcos11](https://github.com/joaomarcos11) | Discord: @joaomarcos113473
+- Murilo Martins - RM356159 | Github: [@murilomartins93](https://github.com/murilomartins93) | Discord: @giarenzzo
