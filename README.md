@@ -109,9 +109,7 @@ Cada camada se comunica com as camadas adjacentes por meio de interfaces definid
                         |   Domínio          |
                         |                    |
                         |   Entidades        |
-                        |   Repositórios     |
                         |   Exceções         |
-                        |   Casos de Uso     |
                         +---------+----------+
                                   |
                                   |
