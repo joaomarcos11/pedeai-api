@@ -6,11 +6,13 @@ O projeto “pedeai-api” foi desenvolvido como parte da Fase 1 do Tech Challen
 O objetivo da demanda era o de criar um sistema de pedidos para uma lanchonete, otimizando o atendimento e a gestão interna. 
 
 A ideia é oferecer uma solução eficiente para que os clientes possam fazer pedidos personalizados e acompanhar o processo de preparação e entrega.
+
 ## Documentação do Sistema (DDD) com Event Storming
 
 A documentação do sistema no padrão Domain-Driven Design (DDD) pode ser encontrada em: 
 
 https://miro.com/app/board/uXjVKStgq5k=/?share_link_id=621691325318
+
 ## Deploy
 
 Para fazer o deploy desse projeto rode:
@@ -21,7 +23,9 @@ docker-compose up
 
 ```
 
-Para acessar o banco de dados: http://localhost:8083
+Para acessar o banco de dados: http://localhost:8083/?pgsql=db&username=pedeai&db=pedeai
+
+Senha: senha1
 
 ## Desafio
 
