@@ -5,13 +5,13 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.jfm.domain.entities.enums.Status;
-import org.jfm.domain.exceptions.EntityInvalidException;
+import org.jfm.domain.exceptions.Exceptions.InvalidEntityException;
 
 public class Pedido {
     private UUID id;
     private UUID idCliente;
     private Status status;
-    private Map<UUID, Integer> itens;
+    private Map<Item, Integer> itens;
     private Instant dataCriacao;
     
     public Pedido(UUID id, UUID idCliente, Status status) {
@@ -44,11 +44,11 @@ public class Pedido {
         this.status = status;
     }
 
-    public Map<UUID, Integer> getItens() {
+    public Map<Item, Integer> getItens() {
         return this.itens;
     }
 
-    public void setItens(Map<UUID, Integer> itens) {
+    public void setItens(Map<Item, Integer> itens) {
         this.itens = itens;
     }
 
@@ -61,8 +61,8 @@ public class Pedido {
     }
 
     public void validar() {
-        if (this.itens == null) {
-            throw new EntityInvalidException("pedido deve conter itens"); // TODO: talvez trocar essa exception
+        if (this.itens == null || this.itens.size() == 0) {
+            throw new InvalidEntityException("Pedido deve conter itens"); // TODO: talvez trocar essa exception
         }
     }
 

@@ -3,6 +3,7 @@ package org.jfm.controller.rest;
 import java.util.List;
 import java.util.UUID;
 
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jfm.controller.rest.dto.ClienteDto;
 import org.jfm.controller.rest.mapper.ClienteMapper;
 import org.jfm.domain.entities.Cliente;
@@ -26,6 +27,7 @@ import jakarta.ws.rs.core.Response;
 @Path("/clientes")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Tag(name = "Cliente", description = "Operações relacionadas ao cliente")
 public class ClienteResource {
 
     @Inject

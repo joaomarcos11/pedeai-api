@@ -13,7 +13,7 @@ public class Cliente {
   private String email;
   private boolean ativo;
 
-  private static final Pattern CPF_VALIDATION = Pattern.compile("(^\\d{3}\\x2E\\d{3}\\x2E\\d{3}\\x2D\\d{2}$)");
+  private static final Pattern CPF_VALIDATION = Pattern.compile("^\\d{11}$");
   public static final Pattern EMAIL_VALIDATION = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
       Pattern.CASE_INSENSITIVE);
 
@@ -70,11 +70,11 @@ public class Cliente {
 
   public void validar() {
     if (this.nome == null || this.nome.isBlank()) {
-      throw new InvalidEntityException("nome deve conter mais de 3 caracteres");
+      throw new InvalidEntityException("Nome deve conter mais de 3 caracteres");
     }
 
     if (this.nome.length() <= 3) {
-      throw new InvalidEntityException("nome deve conter mais de 3 caracteres");
+      throw new InvalidEntityException("Nome deve conter mais de 3 caracteres");
     }
 
     this.nome = this.nome.toUpperCase();
@@ -86,12 +86,8 @@ public class Cliente {
 
     matcher = EMAIL_VALIDATION.matcher(this.email);
     if (this.email == null || this.email.isBlank() || !matcher.matches()) {
-      throw new InvalidEntityException("email inválido");
+      throw new InvalidEntityException("Email inválido");
     }
-  }
-
-  public String handleCpf(String cpf) {
-    return cpf.trim().replaceAll("[^\\w\\s]","");
   }
 
   @Override

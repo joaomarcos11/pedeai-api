@@ -3,6 +3,7 @@ package org.jfm.controller.rest;
 import java.util.List;
 import java.util.UUID;
 
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jfm.controller.rest.dto.ItemCreateUpdateDto;
 import org.jfm.controller.rest.mapper.ItemMapper;
 import org.jfm.domain.entities.Item;
@@ -27,6 +28,7 @@ import jakarta.ws.rs.core.Response;
 @Path("/itens")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Tag(name = "Item", description = "Operações relacionadas ao item")
 public class ItemResource {
 
     @Inject

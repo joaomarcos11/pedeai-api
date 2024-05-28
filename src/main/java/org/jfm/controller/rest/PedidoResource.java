@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jfm.controller.rest.dto.PedidoCreateDto;
 import org.jfm.controller.rest.dto.PedidoDto;
 import org.jfm.controller.rest.dto.PedidoUpdateDto;
@@ -13,7 +14,6 @@ import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.exceptions.ErrosSistemaEnum;
 import org.jfm.domain.exceptions.ParamException;
-import org.jfm.domain.usecases.ItemPedidoUseCase;
 import org.jfm.domain.usecases.PedidoUseCase;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -30,13 +30,11 @@ import jakarta.ws.rs.core.Response;
 @Path("/pedidos")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Tag(name = "Pedido", description = "Operações relacionadas ao pedido")
 public class PedidoResource {
 
     @Inject
     PedidoUseCase pedidoUseCase;
-
-    @Inject
-    ItemPedidoUseCase itemPedidoUseCase;
 
     @Inject
     PedidoMapper pedidoMapper;
@@ -59,9 +57,6 @@ public class PedidoResource {
         }
 
         List<PedidoDto> pedidosDto = pedidos.stream().map(p -> pedidoMapper.toDto(p)).collect(Collectors.toList());
-        for (PedidoDto pedido : pedidosDto) {
-            pedido.setItens(itemPedidoUseCase.listarItensDoPedidoPeloId(pedido.getId()));
-        }
 
         return Response.status(Response.Status.OK).entity(pedidosDto).build();
     }
@@ -75,8 +70,7 @@ public class PedidoResource {
 
         Pedido pedido = pedidoUseCase.buscarPorId(id);
         PedidoDto pedidoDto = pedidoMapper.toDto(pedido);
-        pedidoDto.setItens(itemPedidoUseCase.listarItensDoPedidoPeloId(id));
-        return Response.status(Response.Status.OK).entity(pedido).build();
+        return Response.status(Response.Status.OK).entity(pedidoDto).build();
     }
 
     @PUT
@@ -88,6 +82,7 @@ public class PedidoResource {
 
         Pedido pedidoEntity = pedidoMapper.toDomain(pedido);
         pedidoEntity.setId(id);
+        pedidoEntity.setStatus(pedido.status());
         pedidoUseCase.editar(pedidoEntity);
 
         return Response.status(Response.Status.OK).build();

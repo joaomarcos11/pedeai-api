@@ -1,0 +1,40 @@
+services:
+  app:
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - pedeai
+
+  db:
+    image: postgres:16.3-alpine3.20
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - pedeai  
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8083:8080
+    networks:
+      - pedeai
+
+networks:
+  pedeai:
+    driver: bridge

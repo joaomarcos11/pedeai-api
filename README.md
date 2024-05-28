@@ -1,113 +1,253 @@
-# Rascunho Filipe
 
-`docker run --name pedeai-postgres -p 5432:5432 -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=pedeai -d postgres`
+# Projeto "pedeai-api"
 
-`docker run -p 8023:80 -e 'PGADMIN_DEFAULT_EMAIL=admin@admin.com' -e 'PGADMIN_DEFAULT_PASSWORD=password' -d dpage/pgadmin4`
+O projeto “pedeai-api” foi desenvolvido como parte da Fase 1 do Tech Challenge da Pós-graduação em Software Architecture da FIAP.
 
-para buildar a aplicação containerizada
-`docker build -f src/main/docker/Dockerfile.multistage -t pedeai-api .`
+O objetivo da demanda era o de criar um sistema de pedidos para uma lanchonete, otimizando o atendimento e a gestão interna. 
 
-para rodar a aplicação containerizada
-`docker run -i --rm -p 8080:8080 pedeai-ai`
+A ideia é oferecer uma solução eficiente para que os clientes possam fazer pedidos personalizados e acompanhar o processo de preparação e entrega.
 
+## Documentação do Sistema (DDD) com Event Storming
 
-# pedeai-api
+A documentação do sistema no padrão Domain-Driven Design (DDD) pode ser encontrada em: 
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+https://miro.com/app/board/uXjVKStgq5k=/?share_link_id=621691325318
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+## Deploy
 
-## Running the application in dev mode
+Para fazer o deploy desse projeto rode:
 
-You can run your application in dev mode that enables live coding using:
-```shell script
-./mvnw compile quarkus:dev
+```bash
+
+docker-compose up
+
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
+Para acessar o banco de dados: http://localhost:8083/?pgsql=db&username=pedeai&db=pedeai
 
-## Packaging and running the application
+Senha: senha1
 
-The application can be packaged using:
-```shell script
-./mvnw package
+## Desafio
+
+O projeto visa atender a necessdiade de uma lanchonete que está expandindo, mas enfrenta dificuldades devido à falta de um sistema de controle de pedidos. 
+
+Sem uma estrutura adequada, os atendentes podem cometer erros, os pedidos podem ser perdidos e a satisfação dos clientes fica comprometida. 
+
+Além disso, a ausência de um sistema de rastreamento dificulta a gestão interna.
+
+## Entregáveis
+
+1. **Documentação do Sistema (DDD) com Event Storming**:
+   - Utilização da linguagem ubíqua (termos comuns a todos os envolvidos) para representar os fluxos de pedido e pagamento, preparação e entrega.
+   - Diagramas UML seguindo os padrões apresentados nas aulas.
+   - Desenhos que sigam as explicações e padrões adequados.
+
+2. **Aplicação Backend (Monolito)**:
+   - Desenvolvimento de uma aplicação backend completa.
+   - APIs para:
+     - Cadastro do cliente.
+     - Identificação do cliente via CPF.
+     - Gerenciamento de produtos (criação, edição e remoção).
+     - Busca de produtos por categoria.
+     - "Fake checkout" - criação de pedidos (sem finalização de checkout, apenas para fila).
+     - Listagem de pedidos.
+   - Utilização do Swagger para documentar as APIs.
+   - Trabalho inicial com um único banco de dados.
+
+3. **Dockerfile para subir o ambiente**:
+   - 1 instância para banco de dados.
+   - 1 instância para executar a aplicação.
+
+
+## Estutura do projeto
+
+Esta aplicação foi desenvolvida utilizando a linguagem Java com o framework Quarkus e o banco de dados PostgreSQL.
+
+A estrutura da nossa aplicação segue a arquitetura hexagonal, na qual as preocupações do sistema são divididas em três camadas distintas: a camada de aplicação, a camada de domínio e a camada de infraestrutura. 
+
+Cada uma dessas camadas possui responsabilidades específicas e se comunica com as outras camadas de forma bem definida.
+
+**Camada de Aplicação:** Esta é a camada externa do sistema, responsável por receber as entradas do usuário, interpretá-las e acionar as operações adequadas na camada de domínio por meio dos Controladores REST.
+
+**Camada de Domínio:** Esta camada contém as regras de negócio e os objetos de domínio do sistema. É aqui que as entidades e os serviços são definidos. Os serviços representam a lógica de negócio da aplicação, implementando as operações definidas nos casos de uso. As entidades representam os objetos principais do domínio.
+
+**Camada de Infraestrutura:** Esta camada é responsável por fornecer implementações concretas para os detalhes técnicos, como o acesso ao banco de dados, chamadas externas de API, envio de e-mails, etc. Elas implementam as interfaces definidas na camada de domínio, fornecendo a lógica necessária para interagir com os recursos externos.
+
+**Portas e Adaptadores:** Na arquitetura hexagonal, é comum usar interfaces para definir os pontos de interação entre as camadas, permitindo a substituição de implementações sem afetar o restante do sistema. Isso promove a modularidade e a testabilidade do código. No projeto, as portas (interfaces) da camada de domínio estão definidas em `src/main/java/org/jfm/domain/ports`, enquanto os Adaptadores (implementações) estão localizados em `src/main/java/org/jfm/infra/repository/adaptersql`.
+
+Cada camada se comunica com as camadas adjacentes por meio de interfaces definidas, permitindo uma arquitetura flexível e desacoplada.
+
+```plaintext
+           +----------------------------------------+
+           |             Controladores REST         |
+           |                                        |
+           |      ClienteResource                   |
+           |      ItemResource                      |
+           |      PedidoResource                    |
+           +----------------------+-----------------+
+                                  |
+                                  |
+                        +---------+----------+
+                        |    Casos de Uso    |
+                        |                    |
+                        |    ClienteUseCase  |
+                        |    ItemUseCase     |
+                        |    PedidoUseCase   |
+                        +---------+----------+
+                                  |
+                                  |
+                        +---------+----------+
+                        |   Serviços         |
+                        |                    |
+                        |   ClienteService   |
+                        |   ItemService      |
+                        |   PedidoService    |
+                        +---------+----------+
+                                  |
+                                  |
+                        +---------+----------+
+                        |   Domínio          |
+                        |                    |
+                        |   Entidades        |
+                        |   Exceções         |
+                        +---------+----------+
+                                  |
+                                  |
+                        +---------+----------+
+                        |   Infraestrutura   |
+                        |                    |
+                        |   Implementações   |
+                        |   Conexão com BD   |
+                        |   Adaptadores      |
+                        +---------+----------+
 ```
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+## Documentação da API
 
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
+A documentação da API pode ser encontrada em: 
+http://localhost:8080/openapi
+
+Para ver o Swagger da aplicação, acesse: http://localhost:8080/swagger-ui
+
+## Endpoints
+
+#### Retorna um cliente específico
 ```
-
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
-
-## Creating a native executable
-
-You can create a native executable using: 
-```shell script
-./mvnw package -Dnative
+  GET /clientes/${id}
 ```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. O ID do cliente que você quer |
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
+#### Retorna todos os clientes
 ```
-
-You can then execute your native executable with: `./target/pedeai-api-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
-
-## Related Guides
-
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-- Hibernate ORM ([guide](https://quarkus.io/guides/hibernate-orm)): Define your persistent model with Hibernate ORM and Jakarta Persistence
-- REST Client ([guide](https://quarkus.io/guides/rest-client)): Call REST services
-- Picocli ([guide](https://quarkus.io/guides/picocli)): Develop command line applications with Picocli
-- Hibernate ORM with Panache ([guide](https://quarkus.io/guides/hibernate-orm-panache)): Simplify your persistence code for Hibernate ORM via the active record or the repository pattern
-- SmallRye Health ([guide](https://quarkus.io/guides/smallrye-health)): Monitor service health
-- JDBC Driver - PostgreSQL ([guide](https://quarkus.io/guides/datasource)): Connect to the PostgreSQL database via JDBC
-
-## Provided Code
-
-### Hibernate ORM
-
-Create your first JPA entity
-
-[Related guide section...](https://quarkus.io/guides/hibernate-orm)
-
-[Related Hibernate with Panache section...](https://quarkus.io/guides/hibernate-orm-panache)
-
-
-### Picocli Example
-
-Hello and goodbye are civilization fundamentals. Let's not forget it with this example picocli application by changing the <code>command</code> and <code>parameters</code>.
-
-[Related guide section...](https://quarkus.io/guides/picocli#command-line-application-with-multiple-commands)
-
-Also for picocli applications the dev mode is supported. When running dev mode, the picocli application is executed and on press of the Enter key, is restarted.
-
-As picocli applications will often require arguments to be passed on the commandline, this is also possible in dev mode via:
-```shell script
-./mvnw compile quarkus:dev -Dquarkus.args='Quarky'
+  GET /clientes
 ```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `cpf`      | `string` | O CPF do cliente que você quer filtrar (opcional) |
 
-### REST Client
+#### Cria um novo cliente
+```
+  POST /clientes
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `body`      | `ClienteDto` | **Obrigatório**. Os detalhes do cliente que você quer criar |
 
-Invoke different services through REST with JSON
+#### Atualiza um cliente existente
+```
+  PUT /clientes/${id}
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. O ID do cliente que você quer atualizar |
+| `body`      | `ClienteDto` | **Obrigatório**. Os detalhes atualizados do cliente que você quer atualizar |
 
-[Related guide section...](https://quarkus.io/guides/rest-client)
+#### Remove um cliente específico
+```
+  DELETE /clientes/${id}
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. O ID do cliente que você quer remover |
 
-### REST
+#### Retorna um item específico
+```
+  GET /itens/${id}
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. O ID do item que você quer |
 
-Easily start your REST Web Services
+#### Retorna todos os itens
+```
+  GET /itens
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `categoria`      | `string` | A categoria do item que você quer filtrar (opcional) |
 
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+#### Cria um novo item
+```
+  POST /itens
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `body`      | `ItemCreateUpdateDto` | **Obrigatório**. Os detalhes do item que você quer criar |
 
-### SmallRye Health
+#### Atualiza um item existente
+```
+  PUT /itens/${id}
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. O ID do item que você quer atualizar |
+| `body`      | `ItemCreateUpdateDto` | **Obrigatório**. Os detalhes atualizados do item que você quer atualizar |
 
-Monitor your application's health using SmallRye Health
+#### Remove um item específico
+```
+  DELETE /itens/${id}
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. O ID do item que você quer remover |
 
-[Related guide section...](https://quarkus.io/guides/smallrye-health)
+#### Retorna um pedido específico
+```
+  GET /pedidos/${id}
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. O ID do pedido que você quer |
+
+#### Retorna todos os pedidos
+```
+  GET /pedidos
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `status`      | `string` | O status do pedido que você quer filtrar (opcional) |
+
+#### Cria um novo pedido
+```
+  POST /pedidos
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `body`      | `PedidoCreateDto` | **Obrigatório**. Os detalhes do pedido que você quer criar |
+
+#### Atualiza/Editar um pedido existente
+```
+  PUT /pedidos/${id}
+```
+| Parâmetro   | Tipo       | Descrição                                   |
+| :---------- | :--------- | :------------------------------------------ |
+| `id`      | `string` | **Obrigatório**. O ID do pedido que você quer atualizar |
+| `body`      | `PedidoUpdateDto` | **Obrigatório**. Os detalhes atualizados do pedido que você quer atualizar |
+
+## Autores
+
+- Filipe Andrade - RM356270 | Github: [@filipeandrade6](https://github.com/filipeandrade6) | Discord: @filipeandrade6
+- João Marcos - RM356227 | Github: [@joaomarcos11](https://github.com/joaomarcos11) | Discord: @joaomarcos113473
+- Murilo Martins - RM356159 | Github: [@murilomartins93](https://github.com/murilomartins93) | Discord: @giarenzzo
