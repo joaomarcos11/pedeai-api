@@ -1,7 +1,7 @@
 
 # Projeto "pedeai-api"
 
-O projeto “pede-ai” foi desenvolvido como parte da Fase 1 do Tech Challenge da Pós-graduação em Software Architecture da FIAP
+O projeto “pedeai-api” foi desenvolvido como parte da Fase 1 do Tech Challenge da Pós-graduação em Software Architecture da FIAP
 
 O objetivo da demanda era o de criar um sistema de pedidos para uma lanchonete, otimizando o atendimento e a gestão interna. 
 
