@@ -11,6 +11,8 @@ public interface PedidoUseCase {
 
     public List<Pedido> listar();
 
+    public List<Pedido> listarEmAndamento();
+
     public Pedido buscarPorId(UUID id);
 
     public List<Pedido> listarPorStatus(Status status);

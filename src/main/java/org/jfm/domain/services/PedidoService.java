@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 import org.jfm.domain.entities.Item;
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;
@@ -82,6 +84,19 @@ public class PedidoService implements PedidoUseCase {
     };
 
     @Override
+    public List<Pedido> listarEmAndamento() {
+        List<Pedido> pedidos = pedidoRepository.listar();
+
+        pedidos = pedidos.stream()
+            .filter(pedido -> pedido.getStatus() != Status.CONCLUIDO && pedido.getStatus() != Status.CANCELADO)
+            .sorted(Comparator.comparing(Pedido::getStatus, Comparator.comparingInt(this::getStatusPrioridade))
+                        .thenComparing(Pedido::getDataCriacao))
+            .collect(Collectors.toList());
+        
+        return pedidos;
+    }
+
+    @Override
     public Pedido buscarPorId(UUID id) {
         return pedidoRepository.buscarPorId(id);
     };
@@ -111,4 +126,16 @@ public class PedidoService implements PedidoUseCase {
         pedidoPayment.pagar(info);
     }
 
+    private int getStatusPrioridade(Status status) {
+        switch (status) {
+            case DISPONIVEL:
+                return 1;
+            case PREPARANDO:
+                return 2;
+            case PAGO:
+                return 3;
+            default:
+                return 4;
+        }
+    }
 }
