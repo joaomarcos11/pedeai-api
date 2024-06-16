@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: pedeai-app
+  name: app-cm
 data:
-  DB_HOST: "pedeai-db"
+  DB_HOST: "db-svc"
   DB_PORT: "5432"
   DB_USER: "pedeai"
   DB_NAME: "pedeai"

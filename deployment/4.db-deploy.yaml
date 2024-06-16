@@ -1,38 +1,38 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pedeai-db-deployment
+  name: db-deploy
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pedeai-db
+      app: db
   template:
     metadata:
       labels:
-        app: pedeai-db
+        app: db
     spec:
       containers:
-        - name: pedeai-db
+        - name: db
           image: postgres:16.3-alpine3.20
           ports:
             - containerPort: 5432
           envFrom:
             - configMapRef:
-                name: pedeai-db
+                name: db-cm
           volumeMounts:
-            #            - name: pedeai-db-volume
-            #              mountPath: /var/lib/postgresql/data
-            - name: pedeai-db-init
+            - name: db-pv
+              mountPath: /var/lib/postgresql/data
+            - name: db-init
               mountPath: /docker-entrypoint-initdb.d
               readOnly: true
       volumes:
-        #        - name: pedeai-db-volume
-          #          persistentVolumeClaim:
-            #            claimName: pedeai-db-pvc
-        - name: pedeai-db-init
+        - name: db-pv
+          persistentVolumeClaim:
+            claimName: db-pvc
+        - name: db-init
           configMap:
-            name: pedeai-db
+            name: db-cm
             items:
             - key: db.init
               path: init.sql

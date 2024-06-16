@@ -1,12 +1,12 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: pedeai-hpa
+  name: app-hpa
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: pedeai-app-deployment
+    name: app-deploy
   minReplicas: 1
   maxReplicas: 3
   metrics:
