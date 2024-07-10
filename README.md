@@ -1,3 +1,31 @@
+# Kubernetes Autoscale
+
+guia de como instalar minikube, [clique aqui](https://gist.github.com/wholroyd/748e09ca0b78897750791172b2abb051)!
+
+habilitar metrics-server para utilizar hpa (demora alguns minutos até iniciar o monitoramento):
+
+`minikube addons enable metrics-server`
+
+carregar imagens do ambiente docker local:
+
+`minikube image load pedeai-api-app:latest`
+`minikube image load postgres:16.3-alpine3.20`
+
+criar infra:
+
+`kubectl apply -f ./deployment` 
+
+habilitar túnel para acessar aplicações expostas dentro do cluster:
+
+`minikube service app-svc --url`
+
+testar hpa com carga:
+
+`kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://app-svc:8080/clientes; done"`
+
+visualizar dashboard minikube:
+
+`minikube dashboard`
 
 # Projeto "pedeai-api"
 

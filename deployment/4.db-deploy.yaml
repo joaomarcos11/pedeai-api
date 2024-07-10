@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+        - name: db
+          image: postgres:16.3-alpine3.20
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: db-cm
+          volumeMounts:
+            - name: db-pv
+              mountPath: /var/lib/postgresql/data
+            - name: db-init
+              mountPath: /docker-entrypoint-initdb.d
+              readOnly: true
+      volumes:
+        - name: db-pv
+          persistentVolumeClaim:
+            claimName: db-pvc
+        - name: db-init
+          configMap:
+            name: db-cm
+            items:
+            - key: db.init
+              path: init.sql

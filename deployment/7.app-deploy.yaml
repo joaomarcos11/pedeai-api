@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deploy
+spec:
+  selector:
+    matchLabels:
+      app: pedeai
+  template:
+    metadata:
+      labels:
+        app: pedeai
+    spec:
+      containers:
+        - name: pedeai
+          image: pedeai-api-app:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: app-cm
+          resources:
+            requests:
+              cpu: 200m
+   
