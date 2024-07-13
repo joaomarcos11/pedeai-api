@@ -6,7 +6,8 @@ public enum ErrosSistemaEnum {
     CLIENTE_CPF_EMAIL_CONFLICT("CPF/Email já cadastrados"),
     PARAM_INVALID("Parâmetro(s) invalido(s)"),
     ITEM_NOT_FOUND("Item não encontrado"),
-    PEDIDO_NOT_FOUND("Pedido não encontrado");
+    PEDIDO_NOT_FOUND("Pedido não encontrado"),
+    PAYMENT_ERROR("Erro de pagamento");
 
 
     private final String message;

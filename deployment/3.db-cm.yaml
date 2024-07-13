@@ -74,6 +74,16 @@ data:
     (2,	'2024-05-27 21:25:31.589084+00',	'b57b4dcc-c47f-40f0-8331-6185bb9b3568',	'5035ea42-8ec0-4d65-8887-4e8eab5b9391'),
     (3,	'2024-05-27 21:26:24.211358+00',	NULL,	'ed20791f-416d-4037-a300-6130a9abfbbc');
 
+    CREATE TABLE "public"."pedidos_pagamentos" (
+        "data_criacao" timestamptz(6),
+        "pagamento_id" uuid NOT NULL,
+        "pedido_id" uuid NOT NULL,
+        CONSTRAINT "pedidos_pagamentos_pkey" PRIMARY KEY ("pagamento_id", "pedido_id")
+    ) WITH (oids = false);
+
+    INSERT INTO "pedidos_pagamentos" ("pedido_id", "pagamento_id", "data_criacao") VALUES
+    ('5035ea42-8ec0-4d65-8887-4e8eab5b9391', '5035ea42-8ec0-4d65-8887-4e8eab5b9392', '2024-05-27 21:25:31.589084+00');
+
     ALTER TABLE ONLY "public"."itens_pedidos" ADD CONSTRAINT "fkd2vejrqnlcjm5qys9nw3g3ol" FOREIGN KEY (item_id) REFERENCES itens(id) NOT DEFERRABLE;
     ALTER TABLE ONLY "public"."itens_pedidos" ADD CONSTRAINT "fkjg75o3y4r665tq9f72gyk64ut" FOREIGN KEY (pedido_id) REFERENCES pedidos(id) NOT DEFERRABLE;
 

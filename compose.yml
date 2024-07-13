@@ -10,7 +10,8 @@ services:
       context: .
       dockerfile: ./Dockerfile
     ports:
-      - "8080:8080"
+      - "32323:8080"
+      #- "8080:8080" TROCAR ISSO AQUI
     depends_on:
       - db
     networks:

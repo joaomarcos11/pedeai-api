@@ -1,102 +1,94 @@
 package org.jfm.infra.payment.adaptermercadopago;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.OffsetDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 // SDK de Mercado Pago
 import com.mercadopago.MercadoPagoConfig;
-import com.mercadopago.client.common.AddressRequest;
 import com.mercadopago.client.common.IdentificationRequest;
-import com.mercadopago.client.common.PhoneRequest;
-import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
-import com.mercadopago.client.preference.PreferenceItemRequest;
-import com.mercadopago.client.preference.PreferencePayerRequest;
-import com.mercadopago.client.preference.PreferencePaymentMethodRequest;
-import com.mercadopago.client.preference.PreferencePaymentMethodsRequest;
-import com.mercadopago.client.preference.PreferencePaymentTypeRequest;
-import com.mercadopago.client.preference.PreferenceRequest;
-import com.mercadopago.resources.common.Address;
-import com.mercadopago.resources.common.Phone;
-import com.mercadopago.resources.preference.PreferenceBackUrls;
+import com.mercadopago.client.payment.PaymentClient;
+import com.mercadopago.client.payment.PaymentCreateRequest;
+import com.mercadopago.client.payment.PaymentPayerRequest;
+import com.mercadopago.core.MPRequestOptions;
+import com.mercadopago.resources.payment.Payment;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.jfm.domain.entities.enums.IdentificacaoPagamento;
+import org.jfm.domain.exceptions.ErrosSistemaEnum;
+import org.jfm.domain.exceptions.PaymentException;
 import org.jfm.domain.ports.PedidoPayment;
+import org.jfm.domain.valueobjects.PagamentoPix;
 
+@ApplicationScoped
 public class PedidoPaymentImpl implements PedidoPayment {
 
-    public static void pagar() {
-        MercadoPagoConfig.setAccessToken("PROD_ACCESS_TOKEN");
+    @ConfigProperty(name = "mercadopago.access.token") 
+    String ACCESS_TOKEN;
+
+    @Override
+    public PagamentoPix criarPagamento2(
+        int valor,
+        String descricao,
+        IdentificacaoPagamento tipoIdentificacao,
+        String identificacao
+    ) {
+        try {
+
+            // TODO: https://www.mercadopago.com.br/developers/pt/docs/checkout-api/integration-configuration/integrate-with-pix#editor_9
+
+            UUID uuid = UUID.randomUUID();
     
-        PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
-                .id("item-ID-1234")
-                .title("Meu produto")
-                .currencyId("BRL")
-                .pictureUrl("https://www.mercadopago.com/org-img/MP3/home/logomp3.gif")
-                .description("Descrição do Item")
-                .categoryId("art")
-                .quantity(1)
-                .unitPrice(new BigDecimal("75.76"))
+            // TODO: melhorar abaixo
+            String valorString = Integer.toString(valor);
+            String valorConvertido = valorString.substring(0, valorString.length()-2) + "."+ valorString.substring(valorString.length()-2, valorString.length());
+    
+            // 31 minutos para pagamento
+            OffsetDateTime dataExpiracaoPagamento = OffsetDateTime.now().plusMinutes(31);
+    
+            // TODO: configurar env var
+            MercadoPagoConfig.setAccessToken(ACCESS_TOKEN);
+    
+            Map<String, String> customHeaders = new HashMap<>();
+                customHeaders.put("x-idempotency-key", uuid.toString());
+            
+            MPRequestOptions requestOptions = MPRequestOptions.builder()
+                .customHeaders(customHeaders)
                 .build();
     
-        List<PreferenceItemRequest> items = new ArrayList<>();
-        items.add(itemRequest);
+            PaymentClient client = new PaymentClient();
     
-        PreferencePayerRequest payer = PreferencePayerRequest.builder()
-            .name("NOME DO CARA")
-            .surname("SOBRENOME DO CARA")
-            .email("EMAIL DO CARA")
-            .phone(
-                PhoneRequest.builder()
-                    .areaCode("61")
-                    .number("55555-4444")
-                    .build()
-                )
-            .identification(
-                IdentificationRequest.builder()
-                    .type("CPF")
-                    .number("CPF DO CARA")
-                    .build()
-                )
-            .address(AddressRequest.builder()
-                    .streetName("RUA DO CARA")
-                    .streetNumber("666")
-                    .zipCode("666666333")
-                    .build()
-                )
-            .build(); 
-
-    
-        PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-            .success("http://localhost:3030/v1/api/pagamentos/sucesso")
-            .failure("http://localhost:3030/v1/api/pagamentos/falha")
-            .pending("http://localhost:3030/v1/api/pagamentos/pendente")
-            .build();
-
-        List<PreferencePaymentMethodRequest> excludedPaymentMethods = new ArrayList<>();
-        excludedPaymentMethods.add(PreferencePaymentMethodRequest.builder().id("bolbradesco").build());
-        excludedPaymentMethods.add(PreferencePaymentMethodRequest.builder().id("pec").build());
-    
-        List<PreferencePaymentTypeRequest> excludedPaymentTypes = new ArrayList<>();
-        excludedPaymentTypes.add(PreferencePaymentTypeRequest.builder().id("debit_card").build());
-
-        PreferencePaymentMethodsRequest paymentMethods = PreferencePaymentMethodsRequest.builder()
-            .excludedPaymentMethods(excludedPaymentMethods)
-            .excludedPaymentTypes(excludedPaymentTypes)
-            .build();
-    
-        PreferenceRequest preferenceRequest = PreferenceRequest.builder()
-                .items(items)
-                .payer(payer)
-                .backUrls(backUrls)
-                .autoReturn("approved")
-                .paymentMethods(paymentMethods)
-                .notificationUrl("https://www.your-site.com/ipn")
-                .statementDescriptor("MEUNEGOCIO")
-                .externalReference("Reference_1234")
-                .expires(true)
-                .expirationDateFrom("2016-02-01T12:00:00.000-04:00")
-                .expirationDateTo("2016-02-28T12:00:00.000-04:00")
+            PaymentCreateRequest paymentCreateRequest =
+            PaymentCreateRequest.builder()
+                .transactionAmount(new BigDecimal(valorConvertido))
+                .description(descricao)
+                .paymentMethodId("pix")
+                .dateOfExpiration(dataExpiracaoPagamento)
+                .notificationUrl("http://138.36.249.54:32323/pagamento") // TODO: verificar se é isso mesmo
+                .payer(
+                    PaymentPayerRequest.builder()
+                        .email("PAYER_EMAIL")
+                        .firstName("Test")
+                        .identification(
+                            IdentificationRequest.builder().type("CPF").number("19119119100").build())
+                        .build())
                 .build();
+    
+            Payment payment = client.create(paymentCreateRequest, requestOptions);
+    
+            Long paymentId = payment.getId();
+            String qrCode = payment.getPointOfInteraction().getTransactionData().getQrCodeBase64();
+    
+            return new PagamentoPix(uuid, paymentId, qrCode);
+            
+        } catch (Exception e) {
+            // TODO: ver toda a questão de tratamento de erros (incluir mensagem original)
+            throw new PaymentException(ErrosSistemaEnum.PAYMENT_ERROR.getMessage());
+        }
     }
 
     @Override
@@ -110,5 +102,5 @@ public class PedidoPaymentImpl implements PedidoPayment {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'pagar'");
     }
-    
+
 }

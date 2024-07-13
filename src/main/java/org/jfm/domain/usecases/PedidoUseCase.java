@@ -5,9 +5,10 @@ import java.util.UUID;
 
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.enums.Status;
+import org.jfm.domain.valueobjects.PagamentoPix;
 
 public interface PedidoUseCase {
-    public UUID criar(Pedido pedido);
+    public PagamentoPix criar(Pedido pedido);
 
     public List<Pedido> listar();
 
@@ -16,4 +17,6 @@ public interface PedidoUseCase {
     public List<Pedido> listarPorStatus(Status status);
 
     public void editar(Pedido pedido);
+
+    public void pagamentoPedido(String id, String status);
 }

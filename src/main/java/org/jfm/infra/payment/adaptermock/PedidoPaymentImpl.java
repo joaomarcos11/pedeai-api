@@ -2,7 +2,9 @@ package org.jfm.infra.payment.adaptermock;
 
 import java.util.UUID;
 
+import org.jfm.domain.entities.enums.IdentificacaoPagamento;
 import org.jfm.domain.ports.PedidoPayment;
+import org.jfm.domain.valueobjects.PagamentoPix;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -18,6 +20,13 @@ public class PedidoPaymentImpl implements PedidoPayment {
     @Override
     public boolean pagar(byte[] informacao) {
         return true;
+    }
+
+    @Override
+    public PagamentoPix criarPagamento2(int valor, String descricao, IdentificacaoPagamento tipoIdentificacao,
+            String identificacao) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'criarPagamento2'");
     }
     
 }

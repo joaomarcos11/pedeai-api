@@ -5,19 +5,26 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+
+import org.jfm.domain.entities.Cliente;
 import org.jfm.domain.entities.Item;
 import org.jfm.domain.entities.Pedido;
+import org.jfm.domain.entities.enums.IdentificacaoPagamento;
 import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.exceptions.EntityNotFoundException;
 import org.jfm.domain.ports.PedidoRepository;
 import org.jfm.domain.usecases.ClienteUseCase;
 import org.jfm.domain.usecases.ItemUseCase;
+import org.jfm.domain.ports.PedidoPagamentoRepository;
 import org.jfm.domain.ports.PedidoPayment;
 import org.jfm.domain.usecases.PedidoUseCase;
+import org.jfm.domain.valueobjects.PagamentoPix;
 
 public class PedidoService implements PedidoUseCase {
 
     PedidoRepository pedidoRepository;
+    
+    PedidoPagamentoRepository pedidoPagamentoRepository;
 
     ItemUseCase itemUseCase;
 
@@ -25,15 +32,17 @@ public class PedidoService implements PedidoUseCase {
 
     PedidoPayment pedidoPayment;
 
-    public PedidoService(PedidoRepository pedidoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase, PedidoPayment pedidoPayment) {
+
+    public PedidoService(PedidoRepository pedidoRepository, PedidoPagamentoRepository pedidoPagamentoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase, PedidoPayment pedidoPayment) {
         this.pedidoRepository = pedidoRepository;
+        this.pedidoPagamentoRepository = pedidoPagamentoRepository;
         this.clienteUseCase = clienteUseCase;
         this.itemUseCase = itemUseCase;
         this.pedidoPayment = pedidoPayment;
     }
 
     @Override
-    public UUID criar(Pedido pedido) {
+    public PagamentoPix criar(Pedido pedido) {
         pedido.validar();
 
         if (pedido.getIdCliente() != null) {
@@ -41,8 +50,6 @@ public class PedidoService implements PedidoUseCase {
         }
 
         List<Item> itens = itemUseCase.listar();
-
-        int precoFinal = 0;
 
         for (Item item : pedido.getItens().keySet()) {
             if (!itens.contains(item)) {
@@ -53,20 +60,33 @@ public class PedidoService implements PedidoUseCase {
             item.setNome(itens.get(itens.indexOf(item)).getNome());
             item.setCategoria(itens.get(itens.indexOf(item)).getCategoria());
             item.setPreco(itens.get(itens.indexOf(item)).getPreco());
-
-            precoFinal = precoFinal + item.getPreco();
         }
 
         pedido.setId(UUID.randomUUID());
         pedido.setDataCriacao(Instant.now());
-        
-        pagar(pedido.getId(), precoFinal);
-        pedido.setStatus(Status.PAGO);
+
+        PagamentoPix pagamento = criarPagamento(pedido);
+        pedido.setStatus(Status.AGUARDANDO_PAGAMENTO);
+
+        // TODO: ver se pega a data de criação do pedido ou gera aqui agora (metodo para tentar pagar pedido já feito?)
+        pedidoPagamentoRepository.criar(pedido, pagamento.id(), Instant.now());
 
         pedidoRepository.criar(pedido);
 
-        return pedido.getId();
+        return pagamento;
     };
+
+    @Override
+    public void pagamentoPedido(String id, String status) {
+        if (status == "PAGO") {
+            Pedido pedido = this.pedidoRepository.buscarPorId(UUID.fromString(id));
+            pedido.setStatus(Status.PAGO);
+            this.pedidoRepository.editar(pedido);
+            // TODO: atualiza a tabela de associação pedido pagamento id
+            // TODO: sistema de notificação?
+        }
+        // TODO: outro tipo de tratamento
+    }
 
     @Override
     public List<Pedido> listar() {
@@ -106,9 +126,19 @@ public class PedidoService implements PedidoUseCase {
         pedidoRepository.editar(pedidoEditar);
     };
 
-    private void pagar(UUID idPedido, int valor) {
-        byte[] info = pedidoPayment.criarPagamento(valor);
-        pedidoPayment.pagar(info);
+    private PagamentoPix criarPagamento(Pedido pedido) {
+        Cliente cliente = this.clienteUseCase.buscarPorId(pedido.getIdCliente());
+        
+        int valorFinal = 0;
+        StringBuilder descricao = new StringBuilder();
+        
+        for (Item item : pedido.getItens().keySet()) {
+            descricao.append(item.getId() + " // " + item.getNome() + " // " + item.getPreco());
+            valorFinal += pedido.getItens().get(item);
+        }
+
+        // TODO: utilizar forma dinamica abaixo de configurar a identificacao de pagamento
+        return pedidoPayment.criarPagamento2(valorFinal, descricao.toString(), IdentificacaoPagamento.EMAIL, cliente.getEmail());
     }
 
 }
