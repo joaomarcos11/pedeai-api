@@ -78,6 +78,8 @@ public class ItemRepositoryImpl implements ItemRepository {
             query.setParameter("nome", item.getNome());
             query.setParameter("preco", item.getPreco());
             query.setParameter("categoria", item.getCategoria());
+            query.setParameter("descricao", item.getDescricao());
+            query.setParameter("imagem", item.getImagem());
             
             query.executeUpdate(); // TODO: utilizar o return para verificar alguma coisa?
         } catch (PersistenceException e) {

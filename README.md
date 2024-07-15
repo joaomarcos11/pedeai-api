@@ -8,12 +8,18 @@ habilitar metrics-server para utilizar hpa (demora alguns minutos até iniciar o
 
 carregar imagens do ambiente docker local:
 
-`minikube image load pedeai-api-app:latest`
-`minikube image load postgres:16.3-alpine3.20`
+`minikube image rm pedeai-api-app:latest; minikube image load pedeai-api-app:latest`
+
+`minikube image load postgres:16.3-alpine3.20; minikube image load postgres:16.3-alpine3.20`
+
 
 criar infra:
 
-`kubectl apply -f ./deployment` 
+`kubectl apply -f ./deployment`
+
+copiar imagens para acesso da aplicação:
+
+`kubectl cp ./deployment/imagens $(kubectl get pods | awk 'FNR == 2 {print $1}'):/var/app`
 
 habilitar túnel para acessar aplicações expostas dentro do cluster:
 

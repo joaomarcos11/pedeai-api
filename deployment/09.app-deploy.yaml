@@ -23,4 +23,10 @@ spec:
           resources:
             requests:
               cpu: 200m
-   
+          volumeMounts:
+            - name: app-pv
+              mountPath: /var/app/imagens
+      volumes:
+        - name: app-pv
+          persistentVolumeClaim:
+            claimName: app-pvc

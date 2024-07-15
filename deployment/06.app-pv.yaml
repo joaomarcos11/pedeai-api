@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: db-pv
+  name: app-pv
 spec:
   capacity:
-    storage: 5Gi
+    storage: 100Mi
   accessModes: 
-    - ReadWriteOnce
+    - ReadWriteMany
   hostPath:
-    path: /data/db-pv
+    path: /data/app-pv
