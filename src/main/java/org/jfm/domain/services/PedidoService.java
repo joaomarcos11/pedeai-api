@@ -12,6 +12,7 @@ import org.jfm.domain.exceptions.EntityNotFoundException;
 import org.jfm.domain.ports.PedidoRepository;
 import org.jfm.domain.usecases.ClienteUseCase;
 import org.jfm.domain.usecases.ItemUseCase;
+import org.jfm.domain.ports.Notificacao;
 import org.jfm.domain.ports.PedidoPayment;
 import org.jfm.domain.usecases.PedidoUseCase;
 
@@ -25,11 +26,14 @@ public class PedidoService implements PedidoUseCase {
 
     PedidoPayment pedidoPayment;
 
-    public PedidoService(PedidoRepository pedidoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase, PedidoPayment pedidoPayment) {
+    Notificacao notificacao;
+
+    public PedidoService(PedidoRepository pedidoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase, PedidoPayment pedidoPayment, Notificacao notificacao) {
         this.pedidoRepository = pedidoRepository;
         this.clienteUseCase = clienteUseCase;
         this.itemUseCase = itemUseCase;
         this.pedidoPayment = pedidoPayment;
+        this.notificacao = notificacao;
     }
 
     @Override
@@ -60,8 +64,12 @@ public class PedidoService implements PedidoUseCase {
         pedido.setId(UUID.randomUUID());
         pedido.setDataCriacao(Instant.now());
         
-        pagar(pedido.getId(), precoFinal);
+        UUID pedidoId = pedido.getId();
+
+        pagar(pedidoId, precoFinal);
         pedido.setStatus(Status.PAGO);
+        this.notificacao.notificacaoPagamento(pedidoId.toString(), "pago");
+        this.notificacao.notificarCozinha(pedidoId.toString());
 
         pedidoRepository.criar(pedido);
 
