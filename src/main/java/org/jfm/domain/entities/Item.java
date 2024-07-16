@@ -10,16 +10,20 @@ public class Item {
     private String nome;
     private int preco;
     private Categoria categoria;
+    private String descricao;
+    private String imagem;
 
     public Item() {
         super();
     }
 
-    public Item(UUID id, String nome, int preco, Categoria categoria) {
+    public Item(UUID id, String nome, int preco, Categoria categoria, String descricao, String imagem) {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
         this.categoria = categoria;
+        this.descricao = descricao;
+        this.imagem = imagem;
     }
 
     public UUID getId() {
@@ -52,6 +56,22 @@ public class Item {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public String getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(String imagem) {
+        this.imagem = imagem;
     }
 
     public void validar() {

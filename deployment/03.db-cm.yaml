@@ -28,18 +28,20 @@ data:
         "preco" integer NOT NULL,
         "id" uuid NOT NULL,
         "nome" character varying(255),
+        "descricao" character varying(255),
+        "imagem" character varying(255),
         CONSTRAINT "itens_pkey" PRIMARY KEY ("id")
     ) WITH (oids = false);
 
-    INSERT INTO "itens" ("categoria", "preco", "id", "nome") VALUES
-    (0,	550,	'257ae14b-8bb7-4a80-9a68-22197f72ff47',	'SANDUICHE'),
-    (2,	350,	'23e52205-4d9d-41e6-a7f3-271af4f5316b',	'REFRIGERANTE'),
-    (1,	675,	'f66d8bf8-f350-46ba-8893-902bfd3e556e',	'BATATA FRITA'),
-    (3,	460,	'9b5b286e-e617-4f20-80ad-1824c97ec71b',	'SORVETE'),
-    (0,	450,	'6907dc62-e579-4178-ba30-3d7e4cea021d',	'X-VEGETARIANO'),
-    (2,	350,	'dd494312-7c6c-40c0-8449-0574c715325d',	'SUCO DE LARANJA'),
-    (1,	650,	'4e1bb65c-b3c0-4229-964b-c10241b7aca4',	'DADINHO DE TAPIOCA'),
-    (3,	710,	'082db643-11a4-4bf8-8115-72148e24261d',	'PUDIM');
+    INSERT INTO "itens" ("categoria", "preco", "id", "nome", "descricao", "imagem") VALUES
+    (0,	550,	'257ae14b-8bb7-4a80-9a68-22197f72ff47',	'SANDUICHE', 'um delicioso sanduiche', '/var/app/imagens/sanduiche.jpg'),
+    (2,	350,	'23e52205-4d9d-41e6-a7f3-271af4f5316b',	'REFRIGERANTE', 'um delicioso refrigerante', '/var/app/imagens/refrigerante.jpg'),
+    (1,	675,	'f66d8bf8-f350-46ba-8893-902bfd3e556e',	'BATATA FRITA', 'batata-frita salgada', '/var/app/imagens/batata-frita.jpg'),
+    (3,	460,	'9b5b286e-e617-4f20-80ad-1824c97ec71b',	'SORVETE', 'uma deliciosa sobremesa', '/var/app/imagens/sorvete.jpg'),
+    (0,	450,	'6907dc62-e579-4178-ba30-3d7e4cea021d',	'X-VEGETARIANO', 'um delicioso lanche vegetariano', '/var/app/imagens/x-vegetariano.jpg'),
+    (2,	350,	'dd494312-7c6c-40c0-8449-0574c715325d',	'SUCO DE LARANJA', 'um suco feito da fruta fresca', '/var/app/imagens/suco-de-laranja.jpg'),
+    (1,	650,	'4e1bb65c-b3c0-4229-964b-c10241b7aca4',	'DADINHO DE TAPIOCA', 'um lanche saboroso', '/var/app/imagens/dadinho-de-tapioca.jpg'),
+    (3,	710,	'082db643-11a4-4bf8-8115-72148e24261d',	'PUDIM', 'uma sobremesa deliciosa', '/var/app/imagens/pudim.jpg');
 
     CREATE TABLE "public"."itens_pedidos" (
         "quantidade" integer NOT NULL,

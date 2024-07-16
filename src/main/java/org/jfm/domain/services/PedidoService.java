@@ -16,6 +16,7 @@ import org.jfm.domain.ports.PedidoRepository;
 import org.jfm.domain.usecases.ClienteUseCase;
 import org.jfm.domain.usecases.ItemUseCase;
 import org.jfm.domain.ports.PedidoPagamentoRepository;
+import org.jfm.domain.ports.Notificacao;
 import org.jfm.domain.ports.PedidoPayment;
 import org.jfm.domain.usecases.PedidoUseCase;
 import org.jfm.domain.valueobjects.PagamentoPix;
@@ -32,13 +33,15 @@ public class PedidoService implements PedidoUseCase {
 
     PedidoPayment pedidoPayment;
 
+    Notificacao notificacao;
 
-    public PedidoService(PedidoRepository pedidoRepository, PedidoPagamentoRepository pedidoPagamentoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase, PedidoPayment pedidoPayment) {
+    public PedidoService(PedidoRepository pedidoRepository, PedidoPagamentoRepository pedidoPagamentoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase, PedidoPayment pedidoPayment, Notificacao notificacao) {
         this.pedidoRepository = pedidoRepository;
         this.pedidoPagamentoRepository = pedidoPagamentoRepository;
         this.clienteUseCase = clienteUseCase;
         this.itemUseCase = itemUseCase;
         this.pedidoPayment = pedidoPayment;
+        this.notificacao = notificacao;
     }
 
     @Override
@@ -64,14 +67,12 @@ public class PedidoService implements PedidoUseCase {
 
         pedido.setId(UUID.randomUUID());
         pedido.setDataCriacao(Instant.now());
+        pedido.setStatus(Status.AGUARDANDO_PAGAMENTO);
+        pedidoRepository.criar(pedido);
 
         PagamentoPix pagamento = criarPagamento(pedido);
-        pedido.setStatus(Status.AGUARDANDO_PAGAMENTO);
-
         // TODO: ver se pega a data de criação do pedido ou gera aqui agora (metodo para tentar pagar pedido já feito?)
-        pedidoPagamentoRepository.criar(pedido, pagamento.id(), Instant.now());
-
-        pedidoRepository.criar(pedido);
+        pedidoPagamentoRepository.criar(pedido, pagamento.id(), Instant.now());      
 
         return pagamento;
     };
@@ -82,8 +83,9 @@ public class PedidoService implements PedidoUseCase {
             Pedido pedido = this.pedidoRepository.buscarPorId(UUID.fromString(id));
             pedido.setStatus(Status.PAGO);
             this.pedidoRepository.editar(pedido);
-            // TODO: atualiza a tabela de associação pedido pagamento id
-            // TODO: sistema de notificação?
+            String pedidoIdString = pedido.getId().toString();
+            this.notificacao.notificacaoPagamento(pedidoIdString, "pago");
+            this.notificacao.notificarCozinha(pedidoIdString);
         }
         // TODO: outro tipo de tratamento
     }

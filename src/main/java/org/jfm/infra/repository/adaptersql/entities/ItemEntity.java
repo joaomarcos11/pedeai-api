@@ -19,7 +19,7 @@ import lombok.Setter;
 @NamedQueries({
         @NamedQuery(name = "Item.findAll", query = "SELECT i FROM ItemEntity i"),
         @NamedQuery(name = "Item.findById", query = "SELECT i FROM ItemEntity i WHERE i.id = :id"),
-        @NamedQuery(name = "Item.update", query = "UPDATE ItemEntity i SET i.nome = :nome, i.preco = :preco, i.categoria = :categoria WHERE i.id = :id"),
+        @NamedQuery(name = "Item.update", query = "UPDATE ItemEntity i SET i.nome = :nome, i.preco = :preco, i.categoria = :categoria, i.descricao = :descricao, i.imagem = :imagem WHERE i.id = :id"),
         @NamedQuery(name = "Item.delete", query = "DELETE FROM ItemEntity i WHERE i.id = :id"),
         @NamedQuery(name = "Item.findByCategoria", query = "SELECT i FROM ItemEntity i WHERE i.categoria = :categoria"),
 })
@@ -32,6 +32,8 @@ public class ItemEntity {
     private String nome;
     private int preco;
     private Categoria categoria;
+    private String descricao;
+    private String imagem;
 
     @OneToMany(mappedBy = "item")
     Set<ItemPedidoEntity> itensPedidos;
