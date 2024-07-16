@@ -6,12 +6,13 @@ services:
       - DB_PASS=${DB_PASS}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
+      - WEBHOOK_URL=${WEBHOOK_URL}
+      - MERCADOPAGO_ACCESS_TOKEN=${MERCADOPAGO_ACCESS_TOKEN}
     build:
       context: .
       dockerfile: ./Dockerfile
     ports:
-      - "32323:8080"
-      #- "8080:8080" TROCAR ISSO AQUI
+      - "8080:8080"
     depends_on:
       - db
     networks:

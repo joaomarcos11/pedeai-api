@@ -21,14 +21,17 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jfm.domain.entities.enums.IdentificacaoPagamento;
 import org.jfm.domain.exceptions.ErrosSistemaEnum;
 import org.jfm.domain.exceptions.PaymentException;
-import org.jfm.domain.ports.PedidoPayment;
+import org.jfm.domain.ports.PagamentoGateway;
 import org.jfm.domain.valueobjects.PagamentoPix;
 
 @ApplicationScoped
-public class PedidoPaymentImpl implements PedidoPayment {
+public class PagamentoGatewayImpl implements PagamentoGateway {
 
     @ConfigProperty(name = "mercadopago.access.token") 
     String ACCESS_TOKEN;
+
+    @ConfigProperty(name = "webhook.url")
+    String WEBHOOK_URL;
 
     @Override
     public PagamentoPix criarPagamento2(
@@ -38,7 +41,6 @@ public class PedidoPaymentImpl implements PedidoPayment {
         String identificacao
     ) {
         try {
-
             // TODO: https://www.mercadopago.com.br/developers/pt/docs/checkout-api/integration-configuration/integrate-with-pix#editor_9
 
             UUID uuid = UUID.randomUUID();
@@ -68,11 +70,11 @@ public class PedidoPaymentImpl implements PedidoPayment {
                 .description(descricao)
                 .paymentMethodId("pix")
                 .dateOfExpiration(dataExpiracaoPagamento)
-                .notificationUrl("http://138.36.249.54:32323/pagamento") // TODO: verificar se é isso mesmo
+                .notificationUrl(WEBHOOK_URL)
                 .payer(
                     PaymentPayerRequest.builder()
-                        .email("PAYER_EMAIL")
-                        .firstName("Test")
+                        .email("d234a622-7cb6-4583-b2fe-c0213b0988e2@emailhook.site")
+                        .firstName("Teste")
                         .identification(
                             IdentificationRequest.builder().type("CPF").number("19119119100").build())
                         .build())

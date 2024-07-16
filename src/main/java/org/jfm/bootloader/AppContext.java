@@ -4,11 +4,12 @@ import org.jfm.domain.ports.ClienteRepository;
 import org.jfm.domain.ports.ItemRepository;
 import org.jfm.domain.ports.PedidoPagamentoRepository;
 import org.jfm.domain.ports.Notificacao;
-import org.jfm.domain.ports.PedidoPayment;
+import org.jfm.domain.ports.PagamentoGateway;
 import org.jfm.domain.ports.PedidoRepository;
 import org.jfm.domain.services.ClienteService;
 import org.jfm.domain.services.ItemService;
 import org.jfm.domain.services.PedidoService;
+import org.jfm.domain.usecases.ItemUseCase;
 import org.jfm.domain.usecases.ClienteUseCase;
 
 import jakarta.enterprise.inject.Produces;
@@ -26,8 +27,8 @@ public class AppContext {
     };
 
     @Produces
-    public PedidoService pedidoService(PedidoRepository pedidoRepository, PedidoPagamentoRepository pedidoPagamentoRepository, ClienteUseCase clienteUseCase, ItemService itemService, PedidoPayment pedidoPayment, Notificacao notificacao) {
-        return new PedidoService(pedidoRepository, pedidoPagamentoRepository, clienteUseCase, itemService, pedidoPayment, notificacao);
+    public PedidoService pedidoService(PedidoRepository pedidoRepository, PedidoPagamentoRepository pedidoPagamentoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase, PagamentoGateway pagamentoGateway, Notificacao notificacao) {
+        return new PedidoService(pedidoRepository, pedidoPagamentoRepository, clienteUseCase, itemUseCase, pagamentoGateway, notificacao);
     };
 
 }

@@ -1,6 +1,7 @@
 package org.jfm.controller.rest;
 
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -85,16 +86,18 @@ public class NotificacaoResource {
         }
     }
 
-    public void notificarPagamento(String pedidoId, String mensagem) {
-        this.notificar(pagamentoSessions.get(pedidoId), mensagem);
+    // TODO: verificar se recebe o UUID ou converte para String e o serviço que chama faz a conversão
+
+    public void notificarPagamento(UUID pedidoId, String mensagem) {
+        this.notificar(pagamentoSessions.get(pedidoId.toString()), mensagem);
     }
     
-    public void notificarClientes(String mensagem) {
-        clienteSessions.values().forEach(s -> this.notificar(s, mensagem));
+    public void notificarClientes(UUID mensagem) {
+        clienteSessions.values().forEach(s -> this.notificar(s, mensagem.toString()));
     }
 
-    public void notificarCozinha(String mensagem) {
-        cozinhaSessions.values().forEach(s -> this.notificar(s, mensagem));
+    public void notificarCozinha(UUID mensagem) {
+        cozinhaSessions.values().forEach(s -> this.notificar(s, mensagem.toString()));
     }
 
     private void notificar(Session session, String mensagem) {

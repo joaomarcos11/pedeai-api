@@ -17,7 +17,7 @@ import org.jfm.domain.usecases.ClienteUseCase;
 import org.jfm.domain.usecases.ItemUseCase;
 import org.jfm.domain.ports.PedidoPagamentoRepository;
 import org.jfm.domain.ports.Notificacao;
-import org.jfm.domain.ports.PedidoPayment;
+import org.jfm.domain.ports.PagamentoGateway;
 import org.jfm.domain.usecases.PedidoUseCase;
 import org.jfm.domain.valueobjects.PagamentoPix;
 
@@ -31,16 +31,16 @@ public class PedidoService implements PedidoUseCase {
 
     ClienteUseCase clienteUseCase;
 
-    PedidoPayment pedidoPayment;
+    PagamentoGateway pagamentoGateway;
 
     Notificacao notificacao;
 
-    public PedidoService(PedidoRepository pedidoRepository, PedidoPagamentoRepository pedidoPagamentoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase, PedidoPayment pedidoPayment, Notificacao notificacao) {
+    public PedidoService(PedidoRepository pedidoRepository, PedidoPagamentoRepository pedidoPagamentoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase, PagamentoGateway pagamentoGateway, Notificacao notificacao) {
         this.pedidoRepository = pedidoRepository;
         this.pedidoPagamentoRepository = pedidoPagamentoRepository;
         this.clienteUseCase = clienteUseCase;
         this.itemUseCase = itemUseCase;
-        this.pedidoPayment = pedidoPayment;
+        this.pagamentoGateway = pagamentoGateway;
         this.notificacao = notificacao;
     }
 
@@ -79,13 +79,14 @@ public class PedidoService implements PedidoUseCase {
 
     @Override
     public void pagamentoPedido(String id, String status) {
+        // TODO: trocar abaixo
         if (status == "PAGO") {
-            Pedido pedido = this.pedidoRepository.buscarPorId(UUID.fromString(id));
+            UUID pedidoId = UUID.fromString(id);
+            Pedido pedido = this.pedidoRepository.buscarPorId(pedidoId);
             pedido.setStatus(Status.PAGO);
             this.pedidoRepository.editar(pedido);
-            String pedidoIdString = pedido.getId().toString();
-            this.notificacao.notificacaoPagamento(pedidoIdString, "pago");
-            this.notificacao.notificarCozinha(pedidoIdString);
+            this.notificacao.notificacaoPagamento(pedidoId, "pago");
+            this.notificacao.notificarCozinha(pedidoId);
         }
         // TODO: outro tipo de tratamento
     }
@@ -140,7 +141,7 @@ public class PedidoService implements PedidoUseCase {
         }
 
         // TODO: utilizar forma dinamica abaixo de configurar a identificacao de pagamento
-        return pedidoPayment.criarPagamento2(valorFinal, descricao.toString(), IdentificacaoPagamento.EMAIL, cliente.getEmail());
+        return pagamentoGateway.criarPagamento2(valorFinal, descricao.toString(), IdentificacaoPagamento.EMAIL, cliente.getEmail());
     }
 
 }
