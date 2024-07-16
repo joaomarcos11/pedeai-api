@@ -22,16 +22,12 @@ public class PagamentoResource {
     @Inject
     PedidoUseCase pedidoService;
 
-    @Inject
-    PagamentoWebsocket pagamentoWebsocket;
+    // TODO: ver qual verbo http é utilizado para notificar o pagamento e remover abaixo.
     
     @GET
     public Response get(Request request) {
         System.out.println("GET: " + request.toString());
         this.pedidoService.pagamentoPedido(request.toString(), request.toString());
-        // TODO: jogar essa logica para o service
-        // TODO: validar se o pedido existe e tal e é valido
-        this.pagamentoWebsocket.sendMessage(request.toString());
         return Response.status(Response.Status.OK).build();
     }
     
@@ -39,9 +35,6 @@ public class PagamentoResource {
     public Response post(Request request) {
         System.out.println("POST: " + request.toString());
         this.pedidoService.pagamentoPedido(request.toString(), request.toString());
-        // TODO: jogar essa logica para o service
-        // TODO: validar se o pedido existe e tal e é valido
-        this.pagamentoWebsocket.sendMessage(request.toString());
         return Response.status(Response.Status.OK).build();
     }
 
