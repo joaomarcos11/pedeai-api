@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.jfm.domain.entities.Pedido;
+import org.jfm.domain.entities.PedidoStatus;
 import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.valueobjects.PagamentoPix;
 
@@ -19,4 +20,6 @@ public interface PedidoUseCase {
     public void editar(Pedido pedido);
 
     public void pagamentoPedido(String id, String status);
+
+    public List<PedidoStatus> buscarHistoricoStatus(UUID id);
 }

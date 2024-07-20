@@ -11,6 +11,7 @@ import org.jfm.controller.rest.dto.PedidoDto;
 import org.jfm.controller.rest.dto.PedidoUpdateDto;
 import org.jfm.controller.rest.mapper.PedidoMapper;
 import org.jfm.domain.entities.Pedido;
+import org.jfm.domain.entities.PedidoStatus;
 import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.exceptions.ErrosSistemaEnum;
 import org.jfm.domain.exceptions.ParamException;
@@ -88,6 +89,18 @@ public class PedidoResource {
         pedidoUseCase.editar(pedidoEntity);
 
         return Response.status(Response.Status.OK).build();
+    }
+
+    @GET
+    @Path("/{id}/status")
+    public Response buscarHistoricoStatusPorId(@PathParam("id") UUID id) {
+        if (id == null) {
+            throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+        }
+
+        List<PedidoStatus> pedidosStatus = pedidoUseCase.buscarHistoricoStatus(id);
+
+        return Response.status(Response.Status.OK).entity(pedidosStatus).build();
     }
 
 }
