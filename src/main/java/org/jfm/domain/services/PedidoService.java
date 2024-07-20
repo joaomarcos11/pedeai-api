@@ -39,8 +39,9 @@ public class PedidoService implements PedidoUseCase {
 
     Notificacao notificacao;
 
-    public PedidoService(PedidoRepository pedidoRepository, PedidoPagamentoRepository pedidoPagamentoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase, PagamentoGateway pagamentoGateway, Notificacao notificacao) {
+    public PedidoService(PedidoRepository pedidoRepository, PedidoStatusRepository pedidoStatusRepository, PedidoPagamentoRepository pedidoPagamentoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase, PagamentoGateway pagamentoGateway, Notificacao notificacao) {
         this.pedidoRepository = pedidoRepository;
+        this.pedidoStatusRepository = pedidoStatusRepository;
         this.pedidoPagamentoRepository = pedidoPagamentoRepository;
         this.clienteUseCase = clienteUseCase;
         this.itemUseCase = itemUseCase;

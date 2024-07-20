@@ -16,6 +16,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceException;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 
 @ApplicationScoped
@@ -46,10 +47,14 @@ public class PedidoStatusRepositoryImpl implements PedidoStatusRepository {
 
     @Override
     @Transactional
-    public List<PedidoStatus> listarPorPedidoId(UUID id) {
+    public List<PedidoStatus> listarPorPedidoId(UUID pedidoId) {
         try {
-            return entityManager.createNamedQuery("PedidoStatus.findAllByPedidoId", PedidoStatusEntity.class).getResultStream().map(p -> pedidoStatusMapper.toDomain(p)).collect(Collectors.toList());
+            TypedQuery<PedidoStatusEntity> query = entityManager.createNamedQuery("PedidoStatus.findAllByPedidoId", PedidoStatusEntity.class);
+            query.setParameter("pedido_id", pedidoId);
 
+            return query.getResultList().stream()
+                .map(pedidoStatusMapper::toDomain)
+                .collect(Collectors.toList());
         } catch (PersistenceException e) {
             throw new ErrorSqlException(ErrosSistemaEnum.DATABASE_ERROR.getMessage());
         }

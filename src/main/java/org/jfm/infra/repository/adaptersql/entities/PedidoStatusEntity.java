@@ -17,9 +17,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table (name = "pedidos_status_historico")
+@Table (name = "pedidos_status")
 @NamedQueries({
-    @NamedQuery(name = "PedidoStatus.findAllByPedidoId", query = "SELECT ps FROM PedidoStatusEntity ps WHERE ps.pedido_id = :pedido_id")
+    @NamedQuery(name = "PedidoStatus.findAllByPedidoId", query = "SELECT ps FROM PedidoStatusEntity ps WHERE ps.pedido.id = :pedido_id")
 })
 @Getter
 @Setter
