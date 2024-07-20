@@ -65,6 +65,16 @@ public class PedidoResource {
     }
 
     @GET
+    @Path("/em-andamento")
+    public Response buscarEmAndamento() {
+        List<Pedido> pedidos = pedidoUseCase.listarEmAndamento();
+
+        List<PedidoDto> pedidosDto = pedidos.stream().map(p -> pedidoMapper.toDto(p)).collect(Collectors.toList());
+
+        return Response.status(Response.Status.OK).entity(pedidosDto).build();
+    }
+
+    @GET
     @Path("/{id}")
     public Response buscarPorId(@PathParam("id") UUID id) {
         if (id == null) {
