@@ -24,4 +24,6 @@ public interface PedidoUseCase {
     public void pagamentoPedido(String id, String status);
 
     public List<PedidoStatus> buscarHistoricoStatus(UUID id);
+
+    public boolean estaPago(UUID id);
 }

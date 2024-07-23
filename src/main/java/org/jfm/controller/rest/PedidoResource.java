@@ -113,4 +113,16 @@ public class PedidoResource {
         return Response.status(Response.Status.OK).entity(pedidosStatus).build();
     }
 
+    @GET
+    @Path("/{id}/esta-pago")
+    public Response buscarEstaPago(@PathParam("id") UUID id) {
+        if (id == null) {
+            throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+        }
+
+        boolean pedidoEstaPago = pedidoUseCase.estaPago(id);
+        
+        return Response.status(Response.Status.OK).entity(pedidoEstaPago).build();
+    }
+
 }

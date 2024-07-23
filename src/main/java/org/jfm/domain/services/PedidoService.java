@@ -187,6 +187,13 @@ public class PedidoService implements PedidoUseCase {
         return pedidosStatus;
     }
 
+    @Override
+    public boolean estaPago(UUID id) {
+        Pedido pedido = pedidoRepository.buscarPorId(id);
+
+        return pedido.getStatus() == Status.PAGO;
+    }
+
     private int getStatusPrioridade(Status status) {
         switch (status) {
             case DISPONIVEL:
