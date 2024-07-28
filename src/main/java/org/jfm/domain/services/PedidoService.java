@@ -3,7 +3,9 @@ package org.jfm.domain.services;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.jfm.domain.entities.Cliente;
@@ -40,6 +42,8 @@ public class PedidoService implements PedidoUseCase {
     PagamentoGateway pagamentoGateway;
 
     Notificacao notificacao;
+
+    private static final Set<Status> STATUS_EM_ANDAMENTO = EnumSet.of(Status.PAGO, Status.PREPARANDO, Status.DISPONIVEL);
 
     public PedidoService(PedidoRepository pedidoRepository, PedidoStatusRepository pedidoStatusRepository, PedidoPagamentoRepository pedidoPagamentoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase, PagamentoGateway pagamentoGateway, Notificacao notificacao) {
         this.pedidoRepository = pedidoRepository;
@@ -123,7 +127,7 @@ public class PedidoService implements PedidoUseCase {
         List<Pedido> pedidos = pedidoRepository.listar();
 
         pedidos = pedidos.stream()
-            .filter(pedido -> pedido.getStatus() != Status.CONCLUIDO && pedido.getStatus() != Status.CANCELADO)
+            .filter(pedido -> STATUS_EM_ANDAMENTO.contains(pedido.getStatus()))
             .sorted(Comparator.comparing(Pedido::getStatus, Comparator.comparingInt(this::getStatusPrioridade))
                         .thenComparing(Pedido::getDataCriacao))
             .collect(Collectors.toList());
