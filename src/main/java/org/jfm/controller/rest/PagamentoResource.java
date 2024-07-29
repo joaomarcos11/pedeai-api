@@ -1,7 +1,10 @@
 package org.jfm.controller.rest;
 
+import java.util.UUID;
+
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jfm.controller.rest.dto.PagamentoGatewayWebhookDto;
+import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.usecases.PedidoUseCase;
 
 import jakarta.inject.Inject;
@@ -23,9 +26,11 @@ public class PagamentoResource {
     PedidoUseCase pedidoUseCase;
 
     @POST
-    public Response get(@QueryParam("data_id") String  dataId, @QueryParam("type") String type, PagamentoGatewayWebhookDto pagamentoData) {
-        System.out.println(pagamentoData);
-        this.pedidoUseCase.pagamentoPedido(pagamentoData.data().id(), type);
+    public Response pagamentoWebhook(@QueryParam("data_id") String  dataId, @QueryParam("type") String type, PagamentoGatewayWebhookDto pagamentoData) {
+        // TODO: trocar isso aqui
+
+        UUID uuid = UUID.fromString(pagamentoData.data().id());
+        this.pedidoUseCase.pagamentoPedido(uuid, Status.PAGO);
         return Response.status(Response.Status.OK).build();
     }
 

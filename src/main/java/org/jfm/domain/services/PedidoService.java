@@ -19,7 +19,7 @@ import org.jfm.domain.ports.PedidoPagamentoRepository;
 import org.jfm.domain.ports.Notificacao;
 import org.jfm.domain.ports.PagamentoGateway;
 import org.jfm.domain.usecases.PedidoUseCase;
-import org.jfm.domain.valueobjects.PagamentoPix;
+import org.jfm.domain.valueobjects.Pagamento;
 
 public class PedidoService implements PedidoUseCase {
 
@@ -45,7 +45,7 @@ public class PedidoService implements PedidoUseCase {
     }
 
     @Override
-    public PagamentoPix criar(Pedido pedido) {
+    public Pagamento criar(Pedido pedido) {
         pedido.validar();
 
         if (pedido.getIdCliente() != null) {
@@ -58,8 +58,7 @@ public class PedidoService implements PedidoUseCase {
             if (!itens.contains(item)) {
                 throw new EntityNotFoundException("item " + item + " não existe");
             }
-
-            // gambiarra // TODO: remover isso aqui?
+            
             item.setNome(itens.get(itens.indexOf(item)).getNome());
             item.setCategoria(itens.get(itens.indexOf(item)).getCategoria());
             item.setPreco(itens.get(itens.indexOf(item)).getPreco());
@@ -70,25 +69,27 @@ public class PedidoService implements PedidoUseCase {
         pedido.setStatus(Status.AGUARDANDO_PAGAMENTO);
         pedidoRepository.criar(pedido);
 
-        PagamentoPix pagamento = criarPagamento(pedido);
-        // TODO: ver se pega a data de criação do pedido ou gera aqui agora (metodo para tentar pagar pedido já feito?)
-        pedidoPagamentoRepository.criar(pedido, pagamento.id(), Instant.now());      
+        Pagamento pagamento = criarPagamento(pedido);
+        pedidoPagamentoRepository.criar(pedido, pagamento.id(), Instant.now());    
 
         return pagamento;
     };
 
     @Override
-    public void pagamentoPedido(String id, String status) {
-        // TODO: trocar abaixo
-        if (status == "PAGO") {
-            UUID pedidoId = UUID.fromString(id);
-            Pedido pedido = this.pedidoRepository.buscarPorId(pedidoId);
-            pedido.setStatus(Status.PAGO);
-            this.pedidoRepository.editar(pedido);
-            this.notificacao.notificacaoPagamento(pedidoId, "pago");
-            this.notificacao.notificarCozinha(pedidoId);
+    public void pagamentoPedido(UUID id, Status status) {
+        if (status != Status.PAGO) {
+            this.notificacao.notificacaoPagamento(id, status);
+            
+            // TODO: throw exception?
+
+            return;
         }
-        // TODO: outro tipo de tratamento
+        
+        Pedido pedido = this.pedidoRepository.buscarPorId(id);
+        pedido.setStatus(Status.PAGO);
+        this.pedidoRepository.editar(pedido);
+        this.notificacao.notificacaoPagamento(id, status);
+        this.notificacao.notificarCozinha(id);
     }
 
     @Override
@@ -126,10 +127,13 @@ public class PedidoService implements PedidoUseCase {
     public void editar(Pedido pedido) {
         Pedido pedidoEditar = pedidoRepository.buscarPorId(pedido.getId());
         pedidoEditar.setStatus(pedido.getStatus());
+
+        // TODO: colocar logica aqui notificacao
+
         pedidoRepository.editar(pedidoEditar);
     };
 
-    private PagamentoPix criarPagamento(Pedido pedido) {
+    private Pagamento criarPagamento(Pedido pedido) {
         Cliente cliente = this.clienteUseCase.buscarPorId(pedido.getIdCliente());
         
         int valorFinal = 0;
@@ -141,7 +145,7 @@ public class PedidoService implements PedidoUseCase {
         }
 
         // TODO: utilizar forma dinamica abaixo de configurar a identificacao de pagamento
-        return pagamentoGateway.criarPagamento2(valorFinal, descricao.toString(), IdentificacaoPagamento.EMAIL, cliente.getEmail());
+        return pagamentoGateway.criarPagamento(valorFinal, descricao.toString(), IdentificacaoPagamento.EMAIL, cliente.getEmail());
     }
 
 }

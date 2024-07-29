@@ -1,5 +1,6 @@
 package org.jfm.bootloader;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jfm.domain.ports.ClienteRepository;
 import org.jfm.domain.ports.ItemRepository;
 import org.jfm.domain.ports.PedidoPagamentoRepository;
@@ -16,6 +17,9 @@ import jakarta.enterprise.inject.Produces;
 
 public class AppContext {
 
+    @ConfigProperty(name = "gateway.pagamento.mock") 
+    String GATEWAY_PAGAMENTO_MOCK;
+
     @Produces
     public ClienteService clienteService(ClienteRepository clienteRepository) {
         return new ClienteService(clienteRepository);
@@ -27,8 +31,16 @@ public class AppContext {
     };
 
     @Produces
-    public PedidoService pedidoService(PedidoRepository pedidoRepository, PedidoPagamentoRepository pedidoPagamentoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase, PagamentoGateway pagamentoGateway, Notificacao notificacao) {
-        return new PedidoService(pedidoRepository, pedidoPagamentoRepository, clienteUseCase, itemUseCase, pagamentoGateway, notificacao);
+    public PedidoService pedidoService(PedidoRepository pedidoRepository, PedidoPagamentoRepository pedidoPagamentoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase, Notificacao notificacao) {
+        PagamentoGateway gatewayPagamento;
+        
+        if (!GATEWAY_PAGAMENTO_MOCK.equals("true")) {
+            gatewayPagamento = new org.jfm.infra.payment.adaptermercadopago.PagamentoGatewayImpl();
+        } else {
+            gatewayPagamento = new org.jfm.infra.payment.adaptermock.PagamentoGatewayImpl();
+        }
+
+        return new PedidoService(pedidoRepository, pedidoPagamentoRepository, clienteUseCase, itemUseCase, gatewayPagamento, notificacao);
     };
 
 }

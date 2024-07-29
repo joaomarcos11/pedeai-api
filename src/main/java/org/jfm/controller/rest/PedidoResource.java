@@ -15,7 +15,7 @@ import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.exceptions.ErrosSistemaEnum;
 import org.jfm.domain.exceptions.ParamException;
 import org.jfm.domain.usecases.PedidoUseCase;
-import org.jfm.domain.valueobjects.PagamentoPix;
+import org.jfm.domain.valueobjects.Pagamento;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -44,7 +44,7 @@ public class PedidoResource {
     @POST
     public Response criar(PedidoCreateDto pedido) {
         Pedido pedidoEntity = pedidoMapper.toDomain(pedido);
-        PagamentoPix pedidoPagamento = pedidoUseCase.criar(pedidoEntity);
+        Pagamento pedidoPagamento = pedidoUseCase.criar(pedidoEntity);
         return Response.status(Response.Status.CREATED).entity(pedidoPagamento).build();
     }
 
