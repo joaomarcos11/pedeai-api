@@ -7,6 +7,7 @@ import org.jfm.domain.ports.PedidoPagamentoRepository;
 import org.jfm.domain.ports.Notificacao;
 import org.jfm.domain.ports.PagamentoGateway;
 import org.jfm.domain.ports.PedidoRepository;
+import org.jfm.domain.ports.PedidoStatusRepository;
 import org.jfm.domain.services.ClienteService;
 import org.jfm.domain.services.ItemService;
 import org.jfm.domain.services.PedidoService;
@@ -31,7 +32,7 @@ public class AppContext {
     };
 
     @Produces
-    public PedidoService pedidoService(PedidoRepository pedidoRepository, PedidoPagamentoRepository pedidoPagamentoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase, Notificacao notificacao) {
+    public PedidoService pedidoService(PedidoRepository pedidoRepository, PedidoStatusRepository pedidoStatusRepository, PedidoPagamentoRepository pedidoPagamentoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase, Notificacao notificacao) {
         PagamentoGateway gatewayPagamento;
         
         if (!GATEWAY_PAGAMENTO_MOCK.equals("true")) {
@@ -40,7 +41,7 @@ public class AppContext {
             gatewayPagamento = new org.jfm.infra.payment.adaptermock.PagamentoGatewayImpl();
         }
 
-        return new PedidoService(pedidoRepository, pedidoPagamentoRepository, clienteUseCase, itemUseCase, gatewayPagamento, notificacao);
+        return new PedidoService(pedidoRepository, pedidoStatusRepository, pedidoPagamentoRepository, clienteUseCase, itemUseCase, gatewayPagamento, notificacao);
     };
 
 }

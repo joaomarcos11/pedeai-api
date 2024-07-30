@@ -90,3 +90,13 @@ data:
     ALTER TABLE ONLY "public"."itens_pedidos" ADD CONSTRAINT "fkjg75o3y4r665tq9f72gyk64ut" FOREIGN KEY (pedido_id) REFERENCES pedidos(id) NOT DEFERRABLE;
 
     ALTER TABLE ONLY "public"."pedidos" ADD CONSTRAINT "fkg7202lk0hwxn04bmdl2thth5b" FOREIGN KEY (cliente_id) REFERENCES clientes(id) NOT DEFERRABLE;
+
+    CREATE TABLE "public"."pedidos_status" (
+        "id" uuid NOT NULL,
+        "anterior" smallint,
+        "atual" smallint NOT NULL,
+        "data" timestamptz(6) NOT NULL,
+        "pedido_id" uuid NOT NULL,
+        CONSTRAINT "pedidos_status_pkey" PRIMARY KEY  ("id"),
+        CONSTRAINT "pedidos_status_pedido_id_fkey" FOREIGN KEY ("pedido_id") REFERENCES "public"."pedidos" ("id")
+    ) WITH (oids = false);

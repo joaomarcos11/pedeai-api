@@ -11,6 +11,7 @@ import org.jfm.controller.rest.dto.PedidoDto;
 import org.jfm.controller.rest.dto.PedidoUpdateDto;
 import org.jfm.controller.rest.mapper.PedidoMapper;
 import org.jfm.domain.entities.Pedido;
+import org.jfm.domain.entities.PedidoStatus;
 import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.exceptions.ErrosSistemaEnum;
 import org.jfm.domain.exceptions.ParamException;
@@ -64,6 +65,16 @@ public class PedidoResource {
     }
 
     @GET
+    @Path("/em-andamento")
+    public Response buscarEmAndamento() {
+        List<Pedido> pedidos = pedidoUseCase.listarEmAndamento();
+
+        List<PedidoDto> pedidosDto = pedidos.stream().map(p -> pedidoMapper.toDto(p)).collect(Collectors.toList());
+
+        return Response.status(Response.Status.OK).entity(pedidosDto).build();
+    }
+
+    @GET
     @Path("/{id}")
     public Response buscarPorId(@PathParam("id") UUID id) {
         if (id == null) {
@@ -88,6 +99,30 @@ public class PedidoResource {
         pedidoUseCase.editar(pedidoEntity);
 
         return Response.status(Response.Status.OK).build();
+    }
+
+    @GET
+    @Path("/{id}/status")
+    public Response buscarHistoricoStatusPorId(@PathParam("id") UUID id) {
+        if (id == null) {
+            throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+        }
+
+        List<PedidoStatus> pedidosStatus = pedidoUseCase.buscarHistoricoStatus(id);
+
+        return Response.status(Response.Status.OK).entity(pedidosStatus).build();
+    }
+
+    @GET
+    @Path("/{id}/esta-pago")
+    public Response buscarEstaPago(@PathParam("id") UUID id) {
+        if (id == null) {
+            throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+        }
+
+        boolean pedidoEstaPago = pedidoUseCase.estaPago(id);
+        
+        return Response.status(Response.Status.OK).entity(pedidoEstaPago).build();
     }
 
 }
