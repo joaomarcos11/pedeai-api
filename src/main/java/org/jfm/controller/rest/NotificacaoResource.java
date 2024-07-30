@@ -14,92 +14,29 @@ import jakarta.websocket.Session;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 
-@ServerEndpoint("/notificacao/{tipo}/{id}")
+@ServerEndpoint("/notificacao/{id}")
 @ApplicationScoped
 public class NotificacaoResource {
     
     Map<String, Session> pagamentoSessions = new ConcurrentHashMap<>();
-    Map<String, Session> clienteSessions = new ConcurrentHashMap<>(); 
-    Map<String, Session> cozinhaSessions = new ConcurrentHashMap<>(); 
 
     @OnOpen
-    public void onOpen(Session session, @PathParam("tipo") String tipo, @PathParam("id") String id) {
-        // TODO: logar conexão?
-        switch (tipo) {
-            case "pagamento":
-            pagamentoSessions.put(id, session);
-            break;
-            
-            case "cliente":
-            clienteSessions.put(id, session);
-            break;
-            
-            case "cozinha":
-            cozinhaSessions.put(id, session);
-            break;
-            
-            default:
-                // TODO: logar erro?
-                break;
-        }
+    public void onOpen(Session session, @PathParam("id") String id) {
+        pagamentoSessions.put(id, session);
     }
 
     @OnClose
-    public void onClose(Session session, @PathParam("tipo") String tipo, @PathParam("id") String id) {
-        // TODO: logar disconexão?
-        switch (tipo) {
-            case "pagamento":
-            pagamentoSessions.put(id, session);
-            break;
-
-            case "cliente":
-            clienteSessions.remove(id, session);
-            break;
-            
-            case "cozinha":
-            cozinhaSessions.remove(id, session);
-            break;
-            
-            default:
-                // TODO: logar erro?
-                break;
-        }
+    public void onClose(Session session, @PathParam("id") String id) {
+        pagamentoSessions.put(id, session);
     }
 
     @OnError
-    public void onError(Session session, @PathParam("tipo") String tipo, @PathParam("id") String id, Throwable throwable) {
-        // TODO: logar erro?
-        switch (tipo) {
-            case "pagamento":
-            pagamentoSessions.put(id, session);
-            break;
-
-            case "cliente":
-            clienteSessions.remove(id, session);
-            break;
-            
-            case "cozinha":
-            cozinhaSessions.remove(id, session);
-            break;
-
-            default:
-                // TODO: logar erro?
-                break;
-        }
+    public void onError(Session session, @PathParam("id") String id, Throwable throwable) {
+        pagamentoSessions.put(id, session);
     }
-
-    // TODO: verificar se recebe o UUID ou converte para String e o serviço que chama faz a conversão
 
     public void notificarPagamento(UUID pedidoId, Status status) {
         this.notificar(pagamentoSessions.get(pedidoId.toString()), status.toString());
-    }
-    
-    public void notificarClientes(UUID mensagem) {
-        clienteSessions.values().forEach(s -> this.notificar(s, mensagem.toString()));
-    }
-
-    public void notificarCozinha(UUID mensagem) {
-        cozinhaSessions.values().forEach(s -> this.notificar(s, mensagem.toString()));
     }
 
     private void notificar(Session session, String mensagem) {

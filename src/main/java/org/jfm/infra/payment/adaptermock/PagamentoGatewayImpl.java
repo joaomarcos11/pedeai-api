@@ -31,7 +31,8 @@ public class PagamentoGatewayImpl implements PagamentoGateway {
             return new Pagamento(uuid, response.id(), response.qrCodeBase64());
 
         } catch (Exception e) {
-           throw new PagamentoException(ErrosSistemaEnum.PAYMENT_ERROR.getMessage());
+            System.out.println(e.getMessage());
+            throw new PagamentoException(ErrosSistemaEnum.PAYMENT_ERROR.getMessage());
         }
     }
 

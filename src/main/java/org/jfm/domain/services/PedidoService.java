@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 import org.jfm.domain.entities.Item;
 import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.entities.PedidoStatus;
-import org.jfm.domain.entities.enums.IdentificacaoPagamento;
 import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.exceptions.EntityNotFoundException;
 import org.jfm.domain.ports.PedidoRepository;
@@ -105,7 +104,6 @@ public class PedidoService implements PedidoUseCase {
         this.pedidoRepository.editar(pedido);
         this.pedidoStatusRepository.criar(pedidoStatus);
         this.notificacao.notificacaoPagamento(id, status);
-        this.notificacao.notificarCozinha(id);
     }
 
     @Override
@@ -158,8 +156,6 @@ public class PedidoService implements PedidoUseCase {
         PedidoStatus pedidoStatus = new PedidoStatus(UUID.randomUUID(), pedidoEditar.getId(), pedidoEditar.getStatus(), pedido.getStatus());
 
         pedidoEditar.setStatus(pedido.getStatus());
-
-        // TODO: colocar logica aqui notificacao
 
         pedidoRepository.editar(pedidoEditar);
         pedidoStatusRepository.criar(pedidoStatus);
