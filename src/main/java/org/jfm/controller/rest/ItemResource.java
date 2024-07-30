@@ -98,7 +98,7 @@ public class ItemResource {
     @GET
     @Path("/{id}")
     public Response buscarPorId(
-            @PathParam("id") @Parameter(description = "ID do item", example = "63a59178-39f8-4a28-a2c7-989a57ca7b54") UUID id) {
+            @PathParam("id") @Parameter(description = "ID do item", example = "257ae14b-8bb7-4a80-9a68-22197f72ff47") UUID id) {
         if (id == null) {
             throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
         }
@@ -141,7 +141,7 @@ public class ItemResource {
     @DELETE
     @Path("/{id}")
     public Response remover(
-            @PathParam("id") @Parameter(description = "ID do item", example = "63a59178-39f8-4a28-a2c7-989a57ca7b54") UUID id) {
+            @PathParam("id") @Parameter(description = "ID do item", example = "082db643-11a4-4bf8-8115-72148e24262d") UUID id) {
         if (id == null || id.toString().isEmpty()) {
             throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
         }

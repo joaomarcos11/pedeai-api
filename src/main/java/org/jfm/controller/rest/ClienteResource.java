@@ -155,7 +155,7 @@ public class ClienteResource {
         @DELETE
         @Path("/{id}")
         public Response remover(
-                        @PathParam("id") @Parameter(description = "Id do cliente", example = "63a59178-39f8-4a28-a2c7-989a57ca7b54") UUID id) {
+                        @PathParam("id") @Parameter(description = "Id do cliente", example = "b57b4dcc-c47f-40f0-8331-6185bb343443") UUID id) {
                 if (id == null) {
                         throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
                 }

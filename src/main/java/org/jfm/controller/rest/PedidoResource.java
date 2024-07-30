@@ -125,7 +125,7 @@ public class PedidoResource {
     @GET
     @Path("/{id}")
     public Response buscarPorId(
-            @PathParam("id") @Parameter(description = "ID do pedido", example = "63a59178-39f8-4a28-a2c7-989a57ca7b54") UUID id) {
+            @PathParam("id") @Parameter(description = "ID do pedido", example = "c215b5a1-9421-4cfd-982a-00f64f470252") UUID id) {
         if (id == null) {
             throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
         }
@@ -146,7 +146,7 @@ public class PedidoResource {
     @PUT
     @Path("/{id}")
     public Response editar(
-            @PathParam("id") @Parameter(description = "ID do pedido", example = "63a59178-39f8-4a28-a2c7-989a57ca7b54") UUID id,
+            @PathParam("id") @Parameter(description = "ID do pedido", example = "c215b5a1-9421-4cfd-982a-00f64f470252") UUID id,
             @RequestBody(description = "Dados do pedido para atualização", required = true, content = @Content(mediaType = "application/json", schema = @Schema(implementation = PedidoUpdateDto.class))) PedidoUpdateDto pedido) {
         if (id == null) {
             throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
@@ -171,7 +171,7 @@ public class PedidoResource {
     @GET
     @Path("/{id}/status")
     public Response buscarHistoricoStatusPorId(
-            @PathParam("id") @Parameter(description = "ID do pedido", example = "63a59178-39f8-4a28-a2c7-989a57ca7b54") UUID id) {
+            @PathParam("id") @Parameter(description = "ID do pedido", example = "c215b5a1-9421-4cfd-982a-00f64f470252") UUID id) {
         if (id == null) {
             throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
         }
@@ -192,7 +192,7 @@ public class PedidoResource {
     @GET
     @Path("/{id}/esta-pago")
     public Response buscarEstaPago(
-            @PathParam("id") @Parameter(description = "ID do pedido", example = "63a59178-39f8-4a28-a2c7-989a57ca7b54") UUID id) {
+            @PathParam("id") @Parameter(description = "ID do pedido", example = "c215b5a1-9421-4cfd-982a-00f64f470252") UUID id) {
         if (id == null) {
             throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
         }
