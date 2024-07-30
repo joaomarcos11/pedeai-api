@@ -27,8 +27,6 @@ public class PagamentoResource {
 
     @POST
     public Response pagamentoWebhook(@QueryParam("data_id") String  dataId, @QueryParam("type") String type, PagamentoGatewayWebhookDto pagamentoData) {
-        // TODO: trocar isso aqui
-
         UUID uuid = UUID.fromString(pagamentoData.data().id());
         this.pedidoUseCase.pagamentoPedido(uuid, Status.PAGO);
         return Response.status(Response.Status.OK).build();

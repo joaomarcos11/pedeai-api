@@ -9,7 +9,6 @@ import java.util.UUID;
 import org.jfm.domain.entities.Cliente;
 import org.jfm.domain.entities.Item;
 import org.jfm.domain.entities.Pedido;
-import org.jfm.domain.entities.enums.IdentificacaoPagamento;
 import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.exceptions.EntityNotFoundException;
 import org.jfm.domain.ports.PedidoRepository;
@@ -144,8 +143,7 @@ public class PedidoService implements PedidoUseCase {
             valorFinal += pedido.getItens().get(item);
         }
 
-        // TODO: utilizar forma dinamica abaixo de configurar a identificacao de pagamento
-        return pagamentoGateway.criarPagamento(valorFinal, descricao.toString(), IdentificacaoPagamento.EMAIL, cliente.getEmail());
+        return pagamentoGateway.criarPagamento(cliente, pedido, valorFinal);
     }
 
 }

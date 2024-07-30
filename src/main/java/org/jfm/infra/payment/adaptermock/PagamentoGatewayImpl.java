@@ -4,10 +4,10 @@ import java.util.UUID;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-
-import org.jfm.domain.entities.enums.IdentificacaoPagamento;
+import org.jfm.domain.entities.Cliente;
+import org.jfm.domain.entities.Pedido;
 import org.jfm.domain.exceptions.ErrosSistemaEnum;
-import org.jfm.domain.exceptions.PaymentException;
+import org.jfm.domain.exceptions.Exceptions.PagamentoException;
 import org.jfm.domain.ports.PagamentoGateway;
 import org.jfm.domain.valueobjects.Pagamento;
 import org.jfm.infra.payment.adaptermock.restclient.PaymentAdapterMock;
@@ -21,23 +21,17 @@ public class PagamentoGatewayImpl implements PagamentoGateway {
     PaymentAdapterMock restClient;
 
     @Override
-    public Pagamento criarPagamento (
-        int valor,
-        String descricao,
-        IdentificacaoPagamento tipoIdentificacao,
-        String identificacao
-    ) {
-
+    public Pagamento criarPagamento(Cliente cliente, Pedido pedido, int valor) {
         try {
             UUID uuid = UUID.randomUUID();
     
-            RequestDto request = new RequestDto(uuid, valor, descricao, identificacao);
+            RequestDto request = new RequestDto(uuid, valor, pedido.toString(), cliente.getCpf());
             ResponseDto response = restClient.criarPagamento(request);
     
             return new Pagamento(uuid, response.id(), response.qrCodeBase64());
 
         } catch (Exception e) {
-            throw new PaymentException(ErrosSistemaEnum.PAYMENT_ERROR.getMessage());
+           throw new PagamentoException(ErrosSistemaEnum.PAYMENT_ERROR.getMessage());
         }
     }
 
