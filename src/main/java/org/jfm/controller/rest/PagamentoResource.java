@@ -2,6 +2,14 @@ package org.jfm.controller.rest;
 
 import java.util.UUID;
 
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jfm.controller.rest.dto.PagamentoGatewayWebhookDto;
 import org.jfm.domain.entities.enums.Status;
@@ -25,8 +33,19 @@ public class PagamentoResource {
     @Inject
     PedidoUseCase pedidoUseCase;
 
+    @Operation(summary = "Pagamento Webhook", description = "Webhook para os serviços de pagamento")
+    @APIResponses(value = {
+            @APIResponse(responseCode = "200", description = "Sucesso", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = UUID.class)) }),
+            @APIResponse(responseCode = "404", description = "Bad Request", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.STRING, example = "Bad Request"))
+            })
+    })
     @POST
-    public Response pagamentoWebhook(@QueryParam("data_id") String  dataId, @QueryParam("type") String type, PagamentoGatewayWebhookDto pagamentoData) {
+    public Response pagamentoWebhook(
+            @QueryParam("data_id") @Parameter(description = "Id", example = "1") String dataId,
+            @QueryParam("type") @Parameter(description = "Tipo", example = "1") String type,
+            @RequestBody(description = "Dados do pagamento", required = true, content = @Content(mediaType = "application/json", schema = @Schema(implementation = PagamentoGatewayWebhookDto.class))) PagamentoGatewayWebhookDto pagamentoData) {
         // TODO: trocar isso aqui
 
         UUID uuid = UUID.fromString(pagamentoData.data().id());
