@@ -6,6 +6,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 import org.jfm.domain.entities.enums.IdentificacaoPagamento;
+import org.jfm.domain.exceptions.ErrosSistemaEnum;
+import org.jfm.domain.exceptions.PaymentException;
 import org.jfm.domain.ports.PagamentoGateway;
 import org.jfm.domain.valueobjects.Pagamento;
 import org.jfm.infra.payment.adaptermock.restclient.PaymentAdapterMock;
@@ -31,16 +33,11 @@ public class PagamentoGatewayImpl implements PagamentoGateway {
     
             RequestDto request = new RequestDto(uuid, valor, descricao, identificacao);
             ResponseDto response = restClient.criarPagamento(request);
-
-            System.out.println("chegou aqui!");
     
             return new Pagamento(uuid, response.id(), response.qrCodeBase64());
-        } catch (Exception e) {
-            System.out.println("entrou na exception aqui!");
 
-            System.out.println(e.getMessage());
-            System.out.println(e);
-            return null;
+        } catch (Exception e) {
+            throw new PaymentException(ErrosSistemaEnum.PAYMENT_ERROR.getMessage());
         }
     }
 
