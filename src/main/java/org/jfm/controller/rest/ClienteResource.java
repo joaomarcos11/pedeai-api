@@ -3,6 +3,15 @@ package org.jfm.controller.rest;
 import java.util.List;
 import java.util.UUID;
 
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.ExampleObject;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jfm.controller.rest.dto.ClienteDto;
 import org.jfm.controller.rest.mapper.ClienteMapper;
@@ -30,63 +39,125 @@ import jakarta.ws.rs.core.Response;
 @Tag(name = "Cliente", description = "Operações relacionadas ao cliente")
 public class ClienteResource {
 
-    @Inject
-    ClienteUseCase clienteUseCase;
+        @Inject
+        ClienteUseCase clienteUseCase;
 
-    @Inject
-    ClienteMapper clienteMapper;
+        @Inject
+        ClienteMapper clienteMapper;
 
-    @POST
-    public Response criar(ClienteDto cliente) {
-        Cliente clienteEntity = clienteMapper.toDomain(cliente);
-        UUID idCliente = clienteUseCase.criar(clienteEntity);
-        return Response.status(Response.Status.CREATED).entity(idCliente).build();
-    };
-
-    @GET
-    public Response buscar(@QueryParam("cpf") String cpf) {
-        if (cpf == null) {
-            List<Cliente> clientes = clienteUseCase.listar();
-            return Response.status(Response.Status.OK).entity(clientes).build();
+        @Operation(summary = "Criar cliente", description = "Cria um novo cliente")
+        @APIResponses(value = {
+                        @APIResponse(responseCode = "201", description = "Sucesso", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = UUID.class)) }),
+                        @APIResponse(responseCode = "404", description = "Bad Request", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.STRING, example = "Bad Request"))
+                        }),
+                        @APIResponse(responseCode = "404", description = "Cliente não encontrado", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.STRING, example = "Cliente não encontrado"))
+                        }),
+                        @APIResponse(responseCode = "409", description = "Conflito", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.STRING, example = "Conflito"))
+                        })
+        })
+        @POST
+        public Response criar(ClienteDto cliente) {
+                Cliente clienteEntity = clienteMapper.toDomain(cliente);
+                UUID idCliente = clienteUseCase.criar(clienteEntity);
+                return Response.status(Response.Status.CREATED).entity(idCliente).build();
         }
 
-        Cliente cliente = clienteUseCase.buscarPorCpf(cpf);
-        return Response.status(Response.Status.OK).entity(cliente).build();
-    };
+        @Operation(summary = "Buscar cliente por CPF", description = "Busca um cliente por CPF")
+        @APIResponses(value = {
+                        @APIResponse(responseCode = "200", description = "Sucesso", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = ClienteDto.class)) }),
+                        @APIResponse(responseCode = "404", description = "Cliente não encontrado", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.STRING, example = "Cliente não encontrado"))
+                        })
+        })
+        @GET
+        public Response buscar(
+                        @QueryParam("cpf") @Parameter(description = "CPF do cliente", example = "78978978978") String cpf) {
+                if (cpf == null) {
+                        List<Cliente> clientes = clienteUseCase.listar();
+                        return Response.status(Response.Status.OK).entity(clientes).build();
+                }
 
-    @GET
-    @Path("/{id}")
-    public Response buscarPorId(@PathParam("id") UUID id) {
-        if (id == null) {
-            throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+                Cliente cliente = clienteUseCase.buscarPorCpf(cpf);
+                if (cliente == null) {
+                        return Response.status(Response.Status.NOT_FOUND).entity("Cliente não encontrado").build();
+                }
+                return Response.status(Response.Status.OK).entity(cliente).build();
         }
 
-        Cliente cliente = clienteUseCase.buscarPorId(id);
-        return Response.status(Response.Status.OK).entity(cliente).build();
-    };
+        @Operation(summary = "Buscar cliente por Id", description = "Busca um cliente por Id")
+        @APIResponses(value = {
+                        @APIResponse(responseCode = "200", description = "Sucesso", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = ClienteDto.class)) }),
+                        @APIResponse(responseCode = "404", description = "Cliente não encontrado", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.STRING, example = "Cliente não encontrado"))
+                        })
+        })
+        @GET
+        @Path("/{id}")
+        public Response buscarPorId(
+                        @PathParam("id") @Parameter(description = "Id do cliente", example = "63a59178-39f8-4a28-a2c7-989a57ca7b54") UUID id) {
+                if (id == null) {
+                        throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+                }
 
-    @PUT
-    @Path("/{id}")
-    public Response editar(@PathParam("id") UUID id, ClienteDto clienteDto) {
-        if (id == null || id.toString().isEmpty()) {
-            throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+                Cliente cliente = clienteUseCase.buscarPorId(id);
+                if (cliente == null) {
+                        return Response.status(Response.Status.NOT_FOUND).entity("Cliente não encontrado").build();
+                }
+                return Response.status(Response.Status.OK).entity(cliente).build();
         }
 
-        Cliente clienteEntity = clienteMapper.toDomain(clienteDto);
-        clienteEntity.setId(id);
-        clienteUseCase.editar(clienteEntity);
-        return Response.status(Response.Status.OK).build();
-    };
+        @Operation(summary = "Atualizar cliente", description = "Atualiza um cliente")
+        @APIResponses(value = {
+                        @APIResponse(responseCode = "200", description = "Sucesso", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = ClienteDto.class)) }),
+                        @APIResponse(responseCode = "404", description = "Cliente não encontrado", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.STRING, example = "Cliente não encontrado"))
+                        })
+        })
+        @PUT
+        @Path("/{id}")
+        public Response editar(
+                        @PathParam("id") @Parameter(description = "Id do cliente", example = "63a59178-39f8-4a28-a2c7-989a57ca7b54") UUID id,
+                        @RequestBody(description = "Dados do cliente para atualização", required = true, content = @Content(mediaType = "application/json", schema = @Schema(implementation = ClienteDto.class), examples = {
+                                        @ExampleObject(name = "clienteAtualizacao", summary = "Exemplo de dados de atualização do cliente", value = "{\"nome\": \"Jorge\", \"cpf\": \"12345678900\", \"email\": \"jorge@example.com\", \"ativo\": true}")
+                        })) ClienteDto clienteDto) {
+                if (id == null || id.toString().isEmpty()) {
+                        throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+                }
 
-    @DELETE
-    @Path("/{id}")
-    public Response remover(@PathParam("id") UUID id) {
-        if (id == null) {
-            throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
-        }
+                Cliente clienteEntity = clienteMapper.toDomain(clienteDto);
+                clienteEntity.setId(id);
+                clienteUseCase.editar(clienteEntity);
+                return Response.status(Response.Status.OK).build();
+        };
 
-        clienteUseCase.remover(id);
-        return Response.status(Response.Status.OK).build();
-    };
+        @Operation(summary = "Deletar cliente", description = "Remove um cliente")
+        @APIResponses(value = {
+                        @APIResponse(responseCode = "200", description = "Sucesso", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(implementation = ClienteDto.class)) }),
+                        @APIResponse(responseCode = "404", description = "Cliente não encontrado", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.STRING, example = "Cliente não encontrado"))
+                        }),
+                        @APIResponse(responseCode = "502", description = "Usuário com pedidos", content = {
+                                        @Content(mediaType = "application/json", schema = @Schema(type = SchemaType.STRING, example = "Não é possível remover um cliente que tenha pedidos registrados"))
+                        })
+        })
+        @DELETE
+        @Path("/{id}")
+        public Response remover(
+                        @PathParam("id") @Parameter(description = "Id do cliente", example = "63a59178-39f8-4a28-a2c7-989a57ca7b54") UUID id) {
+                if (id == null) {
+                        throw new ParamException(ErrosSistemaEnum.PARAM_INVALID.getMessage());
+                }
+
+                clienteUseCase.remover(id);
+                return Response.status(Response.Status.OK).build();
+        };
 
 }
