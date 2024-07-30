@@ -25,7 +25,7 @@ import org.jfm.domain.ports.PedidoPagamentoRepository;
 import org.jfm.domain.ports.Notificacao;
 import org.jfm.domain.ports.PagamentoGateway;
 import org.jfm.domain.usecases.PedidoUseCase;
-import org.jfm.domain.valueobjects.PagamentoPix;
+import org.jfm.domain.valueobjects.Pagamento;
 
 public class PedidoService implements PedidoUseCase {
 
@@ -56,7 +56,7 @@ public class PedidoService implements PedidoUseCase {
     }
 
     @Override
-    public PagamentoPix criar(Pedido pedido) {
+    public Pagamento criar(Pedido pedido) {
         pedido.validar();
 
         if (pedido.getIdCliente() != null) {
@@ -69,8 +69,7 @@ public class PedidoService implements PedidoUseCase {
             if (!itens.contains(item)) {
                 throw new EntityNotFoundException("item " + item + " não existe");
             }
-
-            // gambiarra // TODO: remover isso aqui?
+            
             item.setNome(itens.get(itens.indexOf(item)).getNome());
             item.setCategoria(itens.get(itens.indexOf(item)).getCategoria());
             item.setPreco(itens.get(itens.indexOf(item)).getPreco());
@@ -84,29 +83,29 @@ public class PedidoService implements PedidoUseCase {
 
         pedidoStatusRepository.criar(new PedidoStatus(UUID.randomUUID(), id, null, pedido.getStatus()));
 
-        PagamentoPix pagamento = criarPagamento(pedido);
-        // TODO: ver se pega a data de criação do pedido ou gera aqui agora (metodo para tentar pagar pedido já feito?)
-        pedidoPagamentoRepository.criar(pedido, pagamento.id(), Instant.now());      
+        Pagamento pagamento = criarPagamento(pedido);
+        pedidoPagamentoRepository.criar(pedido, pagamento.id(), Instant.now());    
 
         return pagamento;
     };
 
     @Override
-    public void pagamentoPedido(String id, String status) {
-        // TODO: trocar abaixo
-        if (status == "PAGO") {
-            UUID pedidoId = UUID.fromString(id);
-            Pedido pedido = this.pedidoRepository.buscarPorId(pedidoId);
-            PedidoStatus pedidoStatus = new PedidoStatus(UUID.randomUUID(), pedido.getId(), pedido.getStatus(), Status.PAGO);
+    public void pagamentoPedido(UUID id, Status status) {
+        if (status != Status.PAGO) {
+            this.notificacao.notificacaoPagamento(id, status);
             
-            pedido.setStatus(Status.PAGO);
-            this.pedidoRepository.editar(pedido);
-            this.pedidoStatusRepository.criar(pedidoStatus);
+            // TODO: throw exception?
 
-            this.notificacao.notificacaoPagamento(pedidoId, "pago");
-            this.notificacao.notificarCozinha(pedidoId);
+            return;
         }
-        // TODO: outro tipo de tratamento
+        
+        Pedido pedido = this.pedidoRepository.buscarPorId(id);
+        PedidoStatus pedidoStatus = new PedidoStatus(UUID.randomUUID(), pedido.getId(), pedido.getStatus(), Status.PAGO);
+        pedido.setStatus(Status.PAGO);
+        this.pedidoRepository.editar(pedido);
+        this.pedidoStatusRepository.criar(pedidoStatus);
+        this.notificacao.notificacaoPagamento(id, status);
+        this.notificacao.notificarCozinha(id);
     }
 
     @Override
@@ -159,11 +158,14 @@ public class PedidoService implements PedidoUseCase {
         PedidoStatus pedidoStatus = new PedidoStatus(UUID.randomUUID(), pedidoEditar.getId(), pedidoEditar.getStatus(), pedido.getStatus());
 
         pedidoEditar.setStatus(pedido.getStatus());
+
+        // TODO: colocar logica aqui notificacao
+
         pedidoRepository.editar(pedidoEditar);
         pedidoStatusRepository.criar(pedidoStatus);
     };
 
-    private PagamentoPix criarPagamento(Pedido pedido) {
+    private Pagamento criarPagamento(Pedido pedido) {
         Cliente cliente = this.clienteUseCase.buscarPorId(pedido.getIdCliente());
         
         int valorFinal = 0;
@@ -174,8 +176,7 @@ public class PedidoService implements PedidoUseCase {
             valorFinal += pedido.getItens().get(item);
         }
 
-        // TODO: utilizar forma dinamica abaixo de configurar a identificacao de pagamento
-        return pagamentoGateway.criarPagamento2(valorFinal, descricao.toString(), IdentificacaoPagamento.EMAIL, cliente.getEmail());
+        return pagamentoGateway.criarPagamento(cliente, pedido, valorFinal);
     }
 
     @Override

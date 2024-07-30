@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.jfm.domain.entities.enums.Status;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;
@@ -88,8 +90,8 @@ public class NotificacaoResource {
 
     // TODO: verificar se recebe o UUID ou converte para String e o serviço que chama faz a conversão
 
-    public void notificarPagamento(UUID pedidoId, String mensagem) {
-        this.notificar(pagamentoSessions.get(pedidoId.toString()), mensagem);
+    public void notificarPagamento(UUID pedidoId, Status status) {
+        this.notificar(pagamentoSessions.get(pedidoId.toString()), status.toString());
     }
     
     public void notificarClientes(UUID mensagem) {

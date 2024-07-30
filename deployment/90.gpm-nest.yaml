@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gpm-deploy
+spec:
+  selector:
+    matchLabels:
+      app: gpm
+  template:
+    metadata:
+      labels:
+        app: gpm
+    spec:
+      containers:
+        - name: gpm
+          image: gw-mock-nest:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              cpu: 200m

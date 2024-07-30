@@ -10,8 +10,7 @@ carregar imagens do ambiente docker local:
 
 `minikube image rm pedeai-api-app:latest; minikube image load pedeai-api-app:latest`
 
-`minikube image load postgres:16.3-alpine3.20; minikube image load postgres:16.3-alpine3.20`
-
+`minikube image rm postgres:16.3-alpine3.20; minikube image load postgres:16.3-alpine3.20`
 
 criar infra:
 

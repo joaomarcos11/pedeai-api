@@ -3,6 +3,7 @@ package org.jfm.infra.notificacao.adaptermock;
 import java.util.UUID;
 
 import org.jfm.controller.rest.NotificacaoResource;
+import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.ports.Notificacao;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -15,8 +16,8 @@ public class NotificacaoImpl implements Notificacao {
     NotificacaoResource resource;
 
     @Override
-    public void notificacaoPagamento(UUID pedidoId, String mensagem) {
-        this.resource.notificarPagamento(pedidoId, mensagem);
+    public void notificacaoPagamento(UUID pedidoId, Status status) {
+        this.resource.notificarPagamento(pedidoId, status);
     }
 
     @Override

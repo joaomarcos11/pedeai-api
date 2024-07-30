@@ -1,12 +1,9 @@
 package org.jfm.domain.ports;
 
-import org.jfm.domain.entities.enums.IdentificacaoPagamento;
-import org.jfm.domain.valueobjects.PagamentoPix;
+import org.jfm.domain.entities.Cliente;
+import org.jfm.domain.entities.Pedido;
+import org.jfm.domain.valueobjects.Pagamento;
 
 public interface PagamentoGateway {
-    public PagamentoPix criarPagamento2(int valor, String descricao, IdentificacaoPagamento tipoIdentificacao, String identificacao);
-    
-    public byte[] criarPagamento(int valor);
-
-    public boolean pagar(byte[] informacao);
+    public Pagamento criarPagamento(Cliente cliente, Pedido pedido, int valor);
 }
