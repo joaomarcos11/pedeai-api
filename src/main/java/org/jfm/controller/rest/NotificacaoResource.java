@@ -1,7 +1,10 @@
 package org.jfm.controller.rest;
 
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.jfm.domain.entities.enums.Status;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.websocket.OnClose;
@@ -11,90 +14,29 @@ import jakarta.websocket.Session;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 
-@ServerEndpoint("/notificacao/{tipo}/{id}")
+@ServerEndpoint("/notificacao/{id}")
 @ApplicationScoped
 public class NotificacaoResource {
     
     Map<String, Session> pagamentoSessions = new ConcurrentHashMap<>();
-    Map<String, Session> clienteSessions = new ConcurrentHashMap<>(); 
-    Map<String, Session> cozinhaSessions = new ConcurrentHashMap<>(); 
 
     @OnOpen
-    public void onOpen(Session session, @PathParam("tipo") String tipo, @PathParam("id") String id) {
-        // TODO: logar conexão?
-        switch (tipo) {
-            case "pagamento":
-            pagamentoSessions.put(id, session);
-            break;
-            
-            case "cliente":
-            clienteSessions.put(id, session);
-            break;
-            
-            case "cozinha":
-            cozinhaSessions.put(id, session);
-            break;
-            
-            default:
-                // TODO: logar erro?
-                break;
-        }
+    public void onOpen(Session session, @PathParam("id") String id) {
+        pagamentoSessions.put(id, session);
     }
 
     @OnClose
-    public void onClose(Session session, @PathParam("tipo") String tipo, @PathParam("id") String id) {
-        // TODO: logar disconexão?
-        switch (tipo) {
-            case "pagamento":
-            pagamentoSessions.put(id, session);
-            break;
-
-            case "cliente":
-            clienteSessions.remove(id, session);
-            break;
-            
-            case "cozinha":
-            cozinhaSessions.remove(id, session);
-            break;
-            
-            default:
-                // TODO: logar erro?
-                break;
-        }
+    public void onClose(Session session, @PathParam("id") String id) {
+        pagamentoSessions.put(id, session);
     }
 
     @OnError
-    public void onError(Session session, @PathParam("tipo") String tipo, @PathParam("id") String id, Throwable throwable) {
-        // TODO: logar erro?
-        switch (tipo) {
-            case "pagamento":
-            pagamentoSessions.put(id, session);
-            break;
-
-            case "cliente":
-            clienteSessions.remove(id, session);
-            break;
-            
-            case "cozinha":
-            cozinhaSessions.remove(id, session);
-            break;
-
-            default:
-                // TODO: logar erro?
-                break;
-        }
+    public void onError(Session session, @PathParam("id") String id, Throwable throwable) {
+        pagamentoSessions.put(id, session);
     }
 
-    public void notificarPagamento(String pedidoId, String mensagem) {
-        this.notificar(pagamentoSessions.get(pedidoId), mensagem);
-    }
-    
-    public void notificarClientes(String mensagem) {
-        clienteSessions.values().forEach(s -> this.notificar(s, mensagem));
-    }
-
-    public void notificarCozinha(String mensagem) {
-        cozinhaSessions.values().forEach(s -> this.notificar(s, mensagem));
+    public void notificarPagamento(UUID pedidoId, Status status) {
+        this.notificar(pagamentoSessions.get(pedidoId.toString()), status.toString());
     }
 
     private void notificar(Session session, String mensagem) {

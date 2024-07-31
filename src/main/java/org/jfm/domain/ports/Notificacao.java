@@ -1,7 +1,9 @@
 package org.jfm.domain.ports;
 
+import java.util.UUID;
+
+import org.jfm.domain.entities.enums.Status;
+
 public interface Notificacao {
-    public void notificacaoPagamento(String pedidoId, String mensagem);
-    public void notificarClientes(String data);
-    public void notificarCozinha(String data);
+    public void notificacaoPagamento(UUID pedidoId, Status status);
 }

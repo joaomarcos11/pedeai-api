@@ -6,6 +6,9 @@ services:
       - DB_PASS=${DB_PASS}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
+      - WEBHOOK_URL=${WEBHOOK_URL}
+      - MERCADOPAGO_ACCESS_TOKEN=${MERCADOPAGO_ACCESS_TOKEN}
+      - GATEWAY_PAGAMENTO_MOCK=${GATEWAY_PAGAMENTO_MOCK}
     build:
       context: .
       dockerfile: ./Dockerfile

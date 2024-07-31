@@ -12,7 +12,8 @@ CREATE TABLE "public"."clientes" (
 INSERT INTO "clientes" ("ativo", "id", "cpf", "email", "nome") VALUES
 ('t',	'63a59178-39f8-4a28-a2c7-989a57ca7b54',	'12312312312',	'filipe@email.com',	'FILIPE ANDRADE'),
 ('f',	'5793fc61-8d22-4183-9b20-079e624074a3',	'78978978978',	'murilo@email.com',	'MURILO MARTINS'),
-('t',	'b57b4dcc-c47f-40f0-8331-6185bb9b3568',	'45645645645',	'joao@email.com',	'JOAO MARCOS');
+('t',	'b57b4dcc-c47f-40f0-8331-6185bb9b3568',	'45645645645',	'joao@email.com',	'JOAO MARCOS'),
+('t',	'b57b4dcc-c47f-40f0-8331-6185bb343443',	'35645645644',	'caio@email.com',	'CAIO MATOS');
 
 CREATE TABLE "public"."itens" (
     "categoria" smallint,
@@ -32,7 +33,8 @@ INSERT INTO "itens" ("categoria", "preco", "id", "nome", "descricao", "imagem") 
 (0,	450,	'6907dc62-e579-4178-ba30-3d7e4cea021d',	'X-VEGETARIANO', 'um delicioso lanche vegetariano', '/var/app/imagens/x-vegetariano.jpg'),
 (2,	350,	'dd494312-7c6c-40c0-8449-0574c715325d',	'SUCO DE LARANJA', 'um suco feito da fruta fresca', '/var/app/imagens/suco-de-laranja.jpg'),
 (1,	650,	'4e1bb65c-b3c0-4229-964b-c10241b7aca4',	'DADINHO DE TAPIOCA', 'um lanche saboroso', '/var/app/imagens/dadinho-de-tapioca.jpg'),
-(3,	710,	'082db643-11a4-4bf8-8115-72148e24261d',	'PUDIM', 'uma sobremesa deliciosa', '/var/app/imagens/pudim.jpg');
+(3,	710,	'082db643-11a4-4bf8-8115-72148e24261d',	'PUDIM', 'uma sobremesa deliciosa', '/var/app/imagens/pudim.jpg'),
+(3,	210,	'082db643-11a4-4bf8-8115-72148e24262d',	'PASTEL DE BELEM', 'uma sobremesa deliciosa', '/var/app/imagens/belem.jpg');
 
 CREATE TABLE "public"."itens_pedidos" (
     "quantidade" integer NOT NULL,
@@ -71,3 +73,13 @@ ALTER TABLE ONLY "public"."itens_pedidos" ADD CONSTRAINT "fkd2vejrqnlcjm5qys9nw3
 ALTER TABLE ONLY "public"."itens_pedidos" ADD CONSTRAINT "fkjg75o3y4r665tq9f72gyk64ut" FOREIGN KEY (pedido_id) REFERENCES pedidos(id) NOT DEFERRABLE;
 
 ALTER TABLE ONLY "public"."pedidos" ADD CONSTRAINT "fkg7202lk0hwxn04bmdl2thth5b" FOREIGN KEY (cliente_id) REFERENCES clientes(id) NOT DEFERRABLE;
+
+CREATE TABLE "public"."pedidos_status" (
+    "id" uuid NOT NULL,
+    "anterior" smallint,
+    "atual" smallint NOT NULL,
+    "data" timestamptz(6) NOT NULL,
+    "pedido_id" uuid NOT NULL,
+    CONSTRAINT "pedidos_status_pkey" PRIMARY KEY  ("id"),
+    CONSTRAINT "pedidos_status_pedido_id_fkey" FOREIGN KEY ("pedido_id") REFERENCES "public"."pedidos" ("id")
+) WITH (oids = false);

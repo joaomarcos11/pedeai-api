@@ -12,3 +12,4 @@ INSERT INTO pedidos (id, cliente_id, status, data_criacao) VALUES ('c215b5a1-942
 INSERT INTO itens_pedidos (item_id, pedido_id, quantidade) VALUES ('257ae14b-8bb7-4a80-9a68-22197f72ff47', 'c215b5a1-9421-4cfd-982a-00f64f470252', 1);
 INSERT INTO itens_pedidos (item_id, pedido_id, quantidade) VALUES ('23e52205-4d9d-41e6-a7f3-271af4f5316b', 'c215b5a1-9421-4cfd-982a-00f64f470252', 2);
 INSERT INTO itens_pedidos (item_id, pedido_id, quantidade) VALUES ('9b5b286e-e617-4f20-80ad-1824c97ec71b', 'c215b5a1-9421-4cfd-982a-00f64f470252', 3);
+INSERT INTO pedidos_pagamentos (pedido_id, pagamento_id, data_criacao) VALUES ('c215b5a1-9421-4cfd-982a-00f64f470252', 'c215b5a1-9421-4cfd-982a-00f64f470253', NOW());
