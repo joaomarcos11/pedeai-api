@@ -15,6 +15,7 @@ import org.jfm.controller.rest.dto.PagamentoGatewayWebhookDto;
 import org.jfm.domain.entities.enums.Status;
 import org.jfm.domain.usecases.PedidoUseCase;
 
+import io.vertx.core.cli.annotations.Hidden;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
@@ -24,6 +25,7 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+@Hidden
 @Path("/pagamento")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)

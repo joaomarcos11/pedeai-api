@@ -30,7 +30,7 @@ import org.jfm.domain.valueobjects.Pagamento;
 public class PedidoService implements PedidoUseCase {
 
     PedidoRepository pedidoRepository;
-    
+
     PedidoPagamentoRepository pedidoPagamentoRepository;
 
     PedidoStatusRepository pedidoStatusRepository;
@@ -43,9 +43,12 @@ public class PedidoService implements PedidoUseCase {
 
     Notificacao notificacao;
 
-    private static final Set<Status> STATUS_EM_ANDAMENTO = EnumSet.of(Status.PAGO, Status.PREPARANDO, Status.DISPONIVEL);
+    private static final Set<Status> STATUS_EM_ANDAMENTO = EnumSet.of(Status.PAGO, Status.PREPARANDO,
+            Status.DISPONIVEL);
 
-    public PedidoService(PedidoRepository pedidoRepository, PedidoStatusRepository pedidoStatusRepository, PedidoPagamentoRepository pedidoPagamentoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase, PagamentoGateway pagamentoGateway, Notificacao notificacao) {
+    public PedidoService(PedidoRepository pedidoRepository, PedidoStatusRepository pedidoStatusRepository,
+            PedidoPagamentoRepository pedidoPagamentoRepository, ClienteUseCase clienteUseCase, ItemUseCase itemUseCase,
+            PagamentoGateway pagamentoGateway, Notificacao notificacao) {
         this.pedidoRepository = pedidoRepository;
         this.pedidoStatusRepository = pedidoStatusRepository;
         this.pedidoPagamentoRepository = pedidoPagamentoRepository;
@@ -69,7 +72,7 @@ public class PedidoService implements PedidoUseCase {
             if (!itens.contains(item)) {
                 throw new EntityNotFoundException("item " + item + " não existe");
             }
-            
+
             item.setNome(itens.get(itens.indexOf(item)).getNome());
             item.setCategoria(itens.get(itens.indexOf(item)).getCategoria());
             item.setPreco(itens.get(itens.indexOf(item)).getPreco());
@@ -83,24 +86,26 @@ public class PedidoService implements PedidoUseCase {
 
         pedidoStatusRepository.criar(new PedidoStatus(UUID.randomUUID(), id, null, pedido.getStatus()));
 
-        Pagamento pagamento = criarPagamento(pedido);
-        pedidoPagamentoRepository.criar(pedido, pagamento.id(), Instant.now());    
+        // Pagamento pagamento = criarPagamento(pedido);
+        // pedidoPagamentoRepository.criar(pedido, pagamento.id(), Instant.now());
 
-        return pagamento;
+        // return pagamento;
+        return new Pagamento(UUID.randomUUID(), 124L, "x");
     };
 
     @Override
     public void pagamentoPedido(UUID id, Status status) {
         if (status != Status.PAGO) {
             this.notificacao.notificacaoPagamento(id, status);
-            
+
             // TODO: throw exception?
 
             return;
         }
-        
+
         Pedido pedido = this.pedidoRepository.buscarPorId(id);
-        PedidoStatus pedidoStatus = new PedidoStatus(UUID.randomUUID(), pedido.getId(), pedido.getStatus(), Status.PAGO);
+        PedidoStatus pedidoStatus = new PedidoStatus(UUID.randomUUID(), pedido.getId(), pedido.getStatus(),
+                Status.PAGO);
         pedido.setStatus(Status.PAGO);
         this.pedidoRepository.editar(pedido);
         this.pedidoStatusRepository.criar(pedidoStatus);
@@ -126,11 +131,11 @@ public class PedidoService implements PedidoUseCase {
         List<Pedido> pedidos = pedidoRepository.listar();
 
         pedidos = pedidos.stream()
-            .filter(pedido -> STATUS_EM_ANDAMENTO.contains(pedido.getStatus()))
-            .sorted(Comparator.comparing(Pedido::getStatus, Comparator.comparingInt(this::getStatusPrioridade))
+                .filter(pedido -> STATUS_EM_ANDAMENTO.contains(pedido.getStatus()))
+                .sorted(Comparator.comparing(Pedido::getStatus, Comparator.comparingInt(this::getStatusPrioridade))
                         .thenComparing(Pedido::getDataCriacao))
-            .collect(Collectors.toList());
-        
+                .collect(Collectors.toList());
+
         return pedidos;
     }
 
@@ -155,7 +160,8 @@ public class PedidoService implements PedidoUseCase {
     @Override
     public void editar(Pedido pedido) {
         Pedido pedidoEditar = pedidoRepository.buscarPorId(pedido.getId());
-        PedidoStatus pedidoStatus = new PedidoStatus(UUID.randomUUID(), pedidoEditar.getId(), pedidoEditar.getStatus(), pedido.getStatus());
+        PedidoStatus pedidoStatus = new PedidoStatus(UUID.randomUUID(), pedidoEditar.getId(), pedidoEditar.getStatus(),
+                pedido.getStatus());
 
         pedidoEditar.setStatus(pedido.getStatus());
 
@@ -167,10 +173,10 @@ public class PedidoService implements PedidoUseCase {
 
     private Pagamento criarPagamento(Pedido pedido) {
         Cliente cliente = this.clienteUseCase.buscarPorId(pedido.getIdCliente());
-        
+
         int valorFinal = 0;
         StringBuilder descricao = new StringBuilder();
-        
+
         for (Item item : pedido.getItens().keySet()) {
             descricao.append(item.getId() + " // " + item.getNome() + " // " + item.getPreco());
             valorFinal += pedido.getItens().get(item);
@@ -183,7 +189,7 @@ public class PedidoService implements PedidoUseCase {
     public List<PedidoStatus> buscarHistoricoStatus(UUID id) {
         List<PedidoStatus> pedidosStatus = pedidoStatusRepository.listarPorPedidoId(id);
 
-        Collections.sort(pedidosStatus, new Comparator<PedidoStatus> () {
+        Collections.sort(pedidosStatus, new Comparator<PedidoStatus>() {
             public int compare(PedidoStatus ped1, PedidoStatus ped2) {
                 return ped2.getData().compareTo(ped1.getData());
             }
