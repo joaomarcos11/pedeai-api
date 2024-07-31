@@ -1,3 +1,7 @@
+# Arquitetura de Infraestrutura
+
+![Alt text](./k8s.png)
+
 # Kubernetes Autoscale
 
 guia de como instalar minikube, [clique aqui](https://gist.github.com/wholroyd/748e09ca0b78897750791172b2abb051)!
@@ -10,15 +14,9 @@ carregar imagens do ambiente docker local:
 
 `minikube image rm pedeai-api-app:latest; minikube image load pedeai-api-app:latest`
 
-`minikube image rm postgres:16.3-alpine3.20; minikube image load postgres:16.3-alpine3.20`
-
 criar infra:
 
 `kubectl apply -f ./deployment`
-
-copiar imagens para acesso da aplicação:
-
-`kubectl cp ./deployment/imagens $(kubectl get pods | awk 'FNR == 2 {print $1}'):/var/app`
 
 habilitar túnel para acessar aplicações expostas dentro do cluster:
 

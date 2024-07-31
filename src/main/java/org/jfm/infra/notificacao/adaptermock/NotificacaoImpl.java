@@ -19,15 +19,5 @@ public class NotificacaoImpl implements Notificacao {
     public void notificacaoPagamento(UUID pedidoId, Status status) {
         this.resource.notificarPagamento(pedidoId, status);
     }
-
-    @Override
-    public void notificarClientes(UUID data) {
-        this.resource.notificarClientes(data);
-    }
-
-    @Override
-    public void notificarCozinha(UUID data) {
-        this.resource.notificarCozinha(data);
-    }
     
 }

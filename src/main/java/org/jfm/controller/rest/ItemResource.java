@@ -77,7 +77,7 @@ public class ItemResource {
     })
     @GET
     public Response buscar(
-            @QueryParam("categoria") @Parameter(description = "Categoria do item", example = "ELETRONICOS") Categoria categoria) {
+            @QueryParam("categoria") @Parameter(description = "Categoria do item") Categoria categoria) {
         if (categoria == null) {
             List<Item> itens = itemUseCase.listar();
             return Response.status(Response.Status.OK).entity(itens).build();

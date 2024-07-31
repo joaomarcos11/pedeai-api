@@ -1,0 +1,852 @@
+openapi: 3.0.3
+info:
+  title: PedeAi API
+  description: API de gerenciamento de pedidos para restaurantes/lanchonetes.
+  contact:
+    name: Suporte PedeAi API
+    url: http://pedeai-api.com/suporte
+    email: contato@pedeai-api.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+tags:
+  - name: Cliente
+    description: Operações relacionadas ao cliente
+  - name: Item
+    description: Operações relacionadas ao item
+  - name: Pagamento
+    description: Operações relacionadas ao pagamento
+  - name: Pedido
+    description: Operações relacionadas ao pedido
+paths:
+  /clientes:
+    get:
+      tags:
+        - Cliente
+      summary: Buscar cliente por CPF
+      description: Busca um cliente por CPF
+      parameters:
+        - name: cpf
+          in: query
+          description: CPF do cliente
+          schema:
+            type: string
+          example: 78978978978
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClienteDto'
+        '404':
+          description: Cliente não encontrado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Cliente não encontrado
+    post:
+      tags:
+        - Cliente
+      summary: Criar cliente
+      description: Cria um novo cliente
+      requestBody:
+        description: Dados para criação do cliente
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteDto'
+            examples:
+              cliente:
+                summary: Exemplo de dados de criação do cliente
+                value:
+                  nome: Jorge
+                  cpf: '12345678900'
+                  email: jorge@example.com
+                  ativo: true
+        required: true
+      responses:
+        '201':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UUID'
+        '404':
+          description: Cliente não encontrado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Cliente não encontrado
+        '409':
+          description: Conflito
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Conflito
+  /clientes/{id}:
+    get:
+      tags:
+        - Cliente
+      summary: Buscar cliente por Id
+      description: Busca um cliente por Id
+      parameters:
+        - name: id
+          in: path
+          description: Id do cliente
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+          example: 63a59178-39f8-4a28-a2c7-989a57ca7b54
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClienteDto'
+        '404':
+          description: Cliente não encontrado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Cliente não encontrado
+    put:
+      tags:
+        - Cliente
+      summary: Atualizar cliente
+      description: Atualiza um cliente
+      parameters:
+        - name: id
+          in: path
+          description: Id do cliente
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+          example: 63a59178-39f8-4a28-a2c7-989a57ca7b54
+      requestBody:
+        description: Dados do cliente para atualização
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClienteDto'
+            examples:
+              clienteAtualizacao:
+                summary: Exemplo de dados de atualização do cliente
+                value:
+                  nome: Jorge
+                  cpf: '12345678900'
+                  email: jorge@example.com
+                  ativo: true
+        required: true
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClienteDto'
+        '404':
+          description: Cliente não encontrado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Cliente não encontrado
+    delete:
+      tags:
+        - Cliente
+      summary: Deletar cliente
+      description: Remove um cliente
+      parameters:
+        - name: id
+          in: path
+          description: Id do cliente
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+          example: b57b4dcc-c47f-40f0-8331-6185bb343443
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClienteDto'
+        '404':
+          description: Cliente não encontrado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Cliente não encontrado
+        '502':
+          description: Usuário com pedidos
+          content:
+            application/json:
+              schema:
+                type: string
+                example: >-
+                  Não é possível remover um cliente que tenha pedidos
+                  registrados
+  /itens:
+    get:
+      tags:
+        - Item
+      summary: Buscar itens
+      description: Busca itens por categoria
+      parameters:
+        - name: categoria
+          in: query
+          description: Categoria do item
+          schema:
+            $ref: '#/components/schemas/Categoria'
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '404':
+          description: Itens não encontrados
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Itens não encontrados
+    post:
+      tags:
+        - Item
+      summary: Criar item
+      description: Cria um novo item
+      requestBody:
+        description: Dados do item para criação
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemCreateUpdateDto'
+        required: true
+      responses:
+        '201':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UUID'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Bad Request
+        '404':
+          description: Item não encontrado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Item não encontrado
+        '409':
+          description: Conflito
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Conflito
+  /itens/{id}:
+    get:
+      tags:
+        - Item
+      summary: Buscar item por ID
+      description: Busca um item pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID do item
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+          example: 257ae14b-8bb7-4a80-9a68-22197f72ff47
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '404':
+          description: Item não encontrado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Item não encontrado
+    put:
+      tags:
+        - Item
+      summary: Atualizar item
+      description: Atualiza um item existente
+      parameters:
+        - name: id
+          in: path
+          description: ID do item
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+          example: 63a59178-39f8-4a28-a2c7-989a57ca7b54
+      requestBody:
+        description: Dados do item para atualização
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ItemCreateUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '404':
+          description: Item não encontrado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Item não encontrado
+    delete:
+      tags:
+        - Item
+      summary: Remover item
+      description: Remove um item pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID do item
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+          example: 082db643-11a4-4bf8-8115-72148e24262d
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Item removido com sucesso
+        '404':
+          description: Item não encontrado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Item não encontrado
+  /pagamento:
+    post:
+      tags:
+        - Pagamento
+      summary: Webhook de pagamento
+      description: Recebe notificações de pagamento do gateway
+      parameters:
+        - name: data_id
+          in: query
+          description: ID dos dados de pagamento
+          schema:
+            type: string
+          example: 12345
+        - name: type
+          in: query
+          description: Tipo de notificação
+          schema:
+            type: string
+          example: payment
+      requestBody:
+        description: Dados do pagamento
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PagamentoGatewayWebhookDto'
+        required: true
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: string
+                example: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Bad Request
+        '404':
+          description: Pagamento não encontrado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Pagamento não encontrado
+        '409':
+          description: Conflito
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Conflito
+  /pedidos:
+    get:
+      tags:
+        - Pedido
+      summary: Buscar pedidos
+      description: Busca pedidos por status
+      parameters:
+        - name: status
+          in: query
+          description: Status do pedido
+          schema:
+            $ref: '#/components/schemas/Status'
+          example: PENDENTE
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PedidoDto'
+        '404':
+          description: Pedidos não encontrados
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Pedidos não encontrados
+    post:
+      tags:
+        - Pedido
+      summary: Criar pedido
+      description: Cria um novo pedido
+      requestBody:
+        description: Dados do pedido para criação
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PedidoCreateDto'
+        required: true
+      responses:
+        '201':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pagamento'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Bad Request
+        '404':
+          description: Cliente não encontrado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Cliente não encontrado
+        '409':
+          description: Conflito
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Conflito
+  /pedidos/em-andamento:
+    get:
+      tags:
+        - Pedido
+      summary: Buscar pedidos em andamento
+      description: Busca pedidos que estão em andamento
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PedidoDto'
+        '404':
+          description: Pedidos não encontrados
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Pedidos não encontrados
+  /pedidos/{id}:
+    get:
+      tags:
+        - Pedido
+      summary: Buscar pedido por ID
+      description: Busca um pedido pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID do pedido
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+          example: c215b5a1-9421-4cfd-982a-00f64f470252
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PedidoDto'
+        '404':
+          description: Pedido não encontrado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Pedido não encontrado
+    put:
+      tags:
+        - Pedido
+      summary: Atualizar pedido
+      description: Atualiza um pedido existente
+      parameters:
+        - name: id
+          in: path
+          description: ID do pedido
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+          example: c215b5a1-9421-4cfd-982a-00f64f470252
+      requestBody:
+        description: Dados do pedido para atualização
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PedidoUpdateDto'
+        required: true
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PedidoDto'
+        '404':
+          description: Pedido não encontrado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Pedido não encontrado
+  /pedidos/{id}/esta-pago:
+    get:
+      tags:
+        - Pedido
+      summary: Verificar se o pedido está pago
+      description: Verifica se um pedido está pago pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID do pedido
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+          example: c215b5a1-9421-4cfd-982a-00f64f470252
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                type: boolean
+                example: true
+        '404':
+          description: Pedido não encontrado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Pedido não encontrado
+  /pedidos/{id}/status:
+    get:
+      tags:
+        - Pedido
+      summary: Buscar histórico de status do pedido
+      description: Busca o histórico de status de um pedido pelo ID
+      parameters:
+        - name: id
+          in: path
+          description: ID do pedido
+          required: true
+          schema:
+            $ref: '#/components/schemas/UUID'
+          example: c215b5a1-9421-4cfd-982a-00f64f470252
+      responses:
+        '200':
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PedidoStatus'
+        '404':
+          description: Pedido não encontrado
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Pedido não encontrado
+components:
+  schemas:
+    Categoria:
+      enum:
+        - LANCHE
+        - ACOMPANHAMENTO
+        - BEBIDA
+        - SOBREMESA
+      type: string
+    ClienteDto:
+      required:
+        - nome
+        - cpf
+        - email
+        - ativo
+      type: object
+      properties:
+        nome:
+          type: string
+          example: Gabriel Medina
+        cpf:
+          type: string
+          example: '98798798798'
+        email:
+          type: string
+          example: gabrielmedina@surf.com
+        ativo:
+          type: boolean
+          example: true
+    DataPagamentoGatewayDto:
+      type: object
+      properties:
+        id:
+          type: string
+    Instant:
+      format: date-time
+      type: string
+      example: 2022-03-10T16:15:50.000Z
+    Item:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        nome:
+          type: string
+        preco:
+          format: int32
+          type: integer
+        categoria:
+          $ref: '#/components/schemas/Categoria'
+        descricao:
+          type: string
+        imagem:
+          type: string
+    ItemCreateUpdateDto:
+      required:
+        - nome
+        - preco
+        - categoria
+        - descricao
+        - imagem
+      type: object
+      properties:
+        nome:
+          type: string
+          example: '1'
+        preco:
+          format: int32
+          type: integer
+          example: 1
+        categoria:
+          type: string
+          allOf:
+            - $ref: '#/components/schemas/Categoria'
+          example: '1'
+        descricao:
+          type: string
+          example: '1'
+        imagem:
+          type: string
+          example: '1'
+    ItemPedidoCreateDto:
+      required:
+        - idItem
+        - quantidade
+      type: object
+      properties:
+        idItem:
+          type: string
+          allOf:
+            - $ref: '#/components/schemas/UUID'
+          example: 257ae14b-8bb7-4a80-9a68-22197f72ff47
+        quantidade:
+          format: int32
+          type: integer
+          example: 1
+    ItemPedidoDto:
+      required:
+        - nome
+        - categoria
+        - preco
+        - quantidade
+      type: object
+      properties:
+        nome:
+          type: string
+          example: '1'
+        categoria:
+          type: string
+          allOf:
+            - $ref: '#/components/schemas/Categoria'
+          example: '1'
+        preco:
+          format: int32
+          type: integer
+          example: 1
+        quantidade:
+          format: int32
+          type: integer
+          example: 1
+    Pagamento:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        paymentId:
+          format: int64
+          type: integer
+        qrCode:
+          type: string
+    PagamentoGatewayWebhookDto:
+      type: object
+      properties:
+        action:
+          type: string
+        data:
+          $ref: '#/components/schemas/DataPagamentoGatewayDto'
+        apiVersion:
+          type: string
+        dateCreated:
+          $ref: '#/components/schemas/Instant'
+        id:
+          $ref: '#/components/schemas/UUID'
+        liveMode:
+          type: boolean
+        type:
+          type: string
+        userId:
+          format: int32
+          type: integer
+    PedidoCreateDto:
+      required:
+        - idCliente
+        - itensPedidos
+      type: object
+      properties:
+        idCliente:
+          type: string
+          allOf:
+            - $ref: '#/components/schemas/UUID'
+          example: 63a59178-39f8-4a28-a2c7-989a57ca7b54
+        itensPedidos:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemPedidoCreateDto'
+          example:
+            - id: 6907dc62-e579-4178-ba30-3d7e4cea021d
+              quantidade: 2
+    PedidoDto:
+      required:
+        - idCliente
+        - status
+        - dataCriacao
+        - itens
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        idCliente:
+          type: string
+          allOf:
+            - $ref: '#/components/schemas/UUID'
+          example: '1'
+        status:
+          type: string
+          allOf:
+            - $ref: '#/components/schemas/Status'
+          example: '1'
+        dataCriacao:
+          type: string
+          allOf:
+            - $ref: '#/components/schemas/Instant'
+          example: 2024-05-27T20:48:15.064Z
+        itens:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemPedidoDto'
+          example:
+            - nome: SANDUICHEICHE
+              categoria: '0'
+              preco: '650'
+              quantidade: 2
+    PedidoStatus:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        idPedido:
+          $ref: '#/components/schemas/UUID'
+        anterior:
+          $ref: '#/components/schemas/Status'
+        atual:
+          $ref: '#/components/schemas/Status'
+        data:
+          $ref: '#/components/schemas/Instant'
+    PedidoUpdateDto:
+      required:
+        - status
+      type: object
+      properties:
+        status:
+          type: string
+          allOf:
+            - $ref: '#/components/schemas/Status'
+          example: '1'
+    Status:
+      enum:
+        - CANCELADO
+        - AGUARDANDO_PAGAMENTO
+        - PAGO
+        - PREPARANDO
+        - DISPONIVEL
+        - CONCLUIDO
+      type: string
+    UUID:
+      format: uuid
+      pattern: >-
+        [a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}
+      type: string

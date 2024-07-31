@@ -82,7 +82,7 @@ public class PedidoResource {
         })
         @GET
         public Response buscar(
-                        @QueryParam("status") @Parameter(description = "Status do pedido", example = "PENDENTE") Status status) {
+                        @QueryParam("status") @Parameter(description = "Status do pedido", example = "PAGO") Status status) {
                 List<Pedido> pedidos = new ArrayList<>();
 
                 if (status == null) {

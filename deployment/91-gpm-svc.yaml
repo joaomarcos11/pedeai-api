@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: gpm-svc
-spec:
-  selector:
-    app: gpm
-  ports:
-    - port: 3000

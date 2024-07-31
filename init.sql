@@ -12,7 +12,7 @@ CREATE TABLE "public"."clientes" (
 INSERT INTO "clientes" ("ativo", "id", "cpf", "email", "nome") VALUES
 ('t',	'63a59178-39f8-4a28-a2c7-989a57ca7b54',	'12312312312',	'filipe@email.com',	'FILIPE ANDRADE'),
 ('f',	'5793fc61-8d22-4183-9b20-079e624074a3',	'78978978978',	'murilo@email.com',	'MURILO MARTINS'),
-('t',	'b57b4dcc-c47f-40f0-8331-6185bb9b3568',	'45645645645',	'joao@email.com',	'JOAO MARCOS');
+('t',	'b57b4dcc-c47f-40f0-8331-6185bb9b3568',	'45645645645',	'joao@email.com',	'JOAO MARCOS'),
 ('t',	'b57b4dcc-c47f-40f0-8331-6185bb343443',	'35645645644',	'caio@email.com',	'CAIO MATOS');
 
 CREATE TABLE "public"."itens" (
@@ -33,7 +33,7 @@ INSERT INTO "itens" ("categoria", "preco", "id", "nome", "descricao", "imagem") 
 (0,	450,	'6907dc62-e579-4178-ba30-3d7e4cea021d',	'X-VEGETARIANO', 'um delicioso lanche vegetariano', '/var/app/imagens/x-vegetariano.jpg'),
 (2,	350,	'dd494312-7c6c-40c0-8449-0574c715325d',	'SUCO DE LARANJA', 'um suco feito da fruta fresca', '/var/app/imagens/suco-de-laranja.jpg'),
 (1,	650,	'4e1bb65c-b3c0-4229-964b-c10241b7aca4',	'DADINHO DE TAPIOCA', 'um lanche saboroso', '/var/app/imagens/dadinho-de-tapioca.jpg'),
-(3,	710,	'082db643-11a4-4bf8-8115-72148e24261d',	'PUDIM', 'uma sobremesa deliciosa', '/var/app/imagens/pudim.jpg');
+(3,	710,	'082db643-11a4-4bf8-8115-72148e24261d',	'PUDIM', 'uma sobremesa deliciosa', '/var/app/imagens/pudim.jpg'),
 (3,	210,	'082db643-11a4-4bf8-8115-72148e24262d',	'PASTEL DE BELEM', 'uma sobremesa deliciosa', '/var/app/imagens/belem.jpg');
 
 CREATE TABLE "public"."itens_pedidos" (
