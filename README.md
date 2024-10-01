@@ -1,9 +1,17 @@
-# Vídeo de apresentação
-<!-- BUILD TESTE 3 -->
+
+# Vídeo de apresentação - Fase 3
+[YouTube]()
+
+# Modelo Entidades e Relacionamento
+![Alt text](./MER.png)
+
+# Arquitetura de Infraestrutura - Fase 3
+![Alt text](./ARQUITETURA-INFRA-FASE-3.png)
+
+# Vídeo de apresentação - Fase 2
 [YouTube](https://www.youtube.com/watch?v=hrMI5-57YkM)
 
-# Arquitetura de Infraestrutura
-
+# Arquitetura de Infraestrutura - Fase 2
 ![Alt text](./k8s.png)
 
 # Kubernetes Autoscale
