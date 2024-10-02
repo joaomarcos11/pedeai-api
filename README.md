@@ -1,6 +1,6 @@
 
 # Vídeo de apresentação - Fase 3
-[YouTube]()
+[YouTube](https://www.youtube.com/watch?v=zugTuvw_500)
 
 # Modelo Entidades e Relacionamento
 ![Alt text](./MER.png)
